@@ -1,5 +1,9 @@
-package com.dineshworkspace.auth
+package com.dineshworkspace.auth.di
 
+import com.dineshworkspace.auth.useCases.LoginUseCase
+import com.dineshworkspace.auth.dataSource.AuthDataSource
+import com.dineshworkspace.auth.repository.AuthRepository
+import com.dineshworkspace.auth.repository.AuthRepositoryImpl
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.FirebaseAuth
 import dev.gitlive.firebase.auth.auth

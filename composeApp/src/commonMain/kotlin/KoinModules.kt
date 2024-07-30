@@ -1,4 +1,5 @@
-import com.dineshworkspace.auth.authModule
+import auth.AuthViewModel
+import com.dineshworkspace.auth.di.authModule
 import org.koin.compose.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 
