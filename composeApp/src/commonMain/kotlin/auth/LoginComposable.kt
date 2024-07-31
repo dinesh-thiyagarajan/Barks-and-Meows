@@ -30,13 +30,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
+import barksandmeows.composeapp.generated.resources.app_name
+import barksandmeows.composeapp.generated.resources.email
 import barksandmeows.composeapp.generated.resources.ic_app_logo
+import barksandmeows.composeapp.generated.resources.login
+import barksandmeows.composeapp.generated.resources.password
 import common.composables.LoadingComposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import navigation.BarksAndMeowsRouter
 import navigation.NavRouter
+import navigation.Router
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
@@ -47,7 +52,7 @@ fun LoginScreen(authViewModel: AuthViewModel = koinViewModel()) {
     val authUiState = authViewModel.authUiState.collectAsState()
     when (authUiState.value) {
         is AuthUiState.LoggedIn -> {
-            NavRouter.navigate(BarksAndMeowsRouter.HomeScreen.name)
+            NavRouter.navigate(Router.HomeRouter.route)
         }
 
         is AuthUiState.NotLoggedIn -> {
@@ -77,7 +82,7 @@ private fun LoginComposable(coroutineScope: CoroutineScope, authViewModel: AuthV
 
         Image(
             painterResource(Res.drawable.ic_app_logo),
-            "dog face",
+            stringResource(Res.string.app_name),
             modifier = Modifier.size(100.dp)
         )
 
@@ -85,7 +90,7 @@ private fun LoginComposable(coroutineScope: CoroutineScope, authViewModel: AuthV
             value = email,
             singleLine = true,
             onValueChange = { email = it },
-            label = { Text("Email") },
+            label = { Text(stringResource(Res.string.email)) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
@@ -99,7 +104,7 @@ private fun LoginComposable(coroutineScope: CoroutineScope, authViewModel: AuthV
             value = password,
             singleLine = true,
             onValueChange = { password = it },
-            label = { Text("Password") },
+            label = { Text(stringResource(Res.string.password)) },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
@@ -117,7 +122,7 @@ private fun LoginComposable(coroutineScope: CoroutineScope, authViewModel: AuthV
             enabled = email.isNotEmpty() && password.isNotEmpty(),
             modifier = Modifier.wrapContentSize()
         ) {
-            Text("Login")
+            Text(stringResource(Res.string.login))
         }
     }
 }

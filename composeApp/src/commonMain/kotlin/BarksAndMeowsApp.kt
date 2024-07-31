@@ -12,6 +12,7 @@ import androidx.navigation.compose.rememberNavController
 import auth.LoginScreen
 import common.composables.BarksAndMeowsAppBar
 import di.appModule
+import home.HomeScreen
 import navigation.BarksAndMeowsRouter
 import navigation.NavRouter
 import navigation.doNotShowTopAppBar
@@ -62,6 +63,10 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
 
                 composable(route = BarksAndMeowsRouter.LoginScreen.name) {
                     LoginScreen()
+                }
+
+                composable(route = BarksAndMeowsRouter.HomeScreen.name) {
+                    HomeScreen()
                 }
             }
         }

@@ -53,7 +53,7 @@ fun SplashScreen(splashViewModel: SplashViewModel = koinViewModel()) {
     }
     when (splashUiState.value) {
         is SplashUiState.LoggedIn -> {
-
+            NavRouter.navigate(Router.HomeRouter.route)
         }
 
         is SplashUiState.NotLoggedIn -> {
