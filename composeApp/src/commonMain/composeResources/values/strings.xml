@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">Barks and Meows</string>
+    <string name="splash_screen">Splash Screen</string>
+    <string name="splash_screen_img_description">Login Screen</string>
+    <string name="login_screen">Login Screen</string>
+</resources>

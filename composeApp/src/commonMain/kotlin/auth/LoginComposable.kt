@@ -35,9 +35,14 @@ import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
+@Composable
+fun LoginScreen() {
+    LoginComposable()
+}
+
 @OptIn(KoinExperimentalAPI::class)
 @Composable
-fun LoginComposable(authViewModel: AuthViewModel = koinViewModel()) {
+private fun LoginComposable(authViewModel: AuthViewModel = koinViewModel()) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val coroutineScope = rememberCoroutineScope()
