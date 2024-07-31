@@ -9,9 +9,13 @@ import org.jetbrains.compose.resources.StringResource
 enum class BarksAndMeowsRouter(val title: StringResource) {
     SplashScreen(title = Res.string.splash_screen),
     LoginScreen(title = Res.string.login_screen),
+    HomeScreen(title = Res.string.splash_screen),
 }
 
 sealed class Router(val route: String, val navArguments: List<NamedNavArgument> = emptyList()) {
     data object SplashRouter : Router(route = BarksAndMeowsRouter.SplashScreen.name)
     data object LoginRouter : Router(route = BarksAndMeowsRouter.LoginScreen.name)
+    data object HomeRouter : Router(route = BarksAndMeowsRouter.HomeScreen.name)
 }
+
+val doNotShowTopAppBar = listOf(BarksAndMeowsRouter.SplashScreen, BarksAndMeowsRouter.LoginScreen)

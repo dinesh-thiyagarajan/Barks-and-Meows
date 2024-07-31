@@ -4,6 +4,7 @@ import com.dineshworkspace.auth.useCases.LoginUseCase
 import com.dineshworkspace.auth.dataSource.AuthDataSource
 import com.dineshworkspace.auth.repository.AuthRepository
 import com.dineshworkspace.auth.repository.AuthRepositoryImpl
+import com.dineshworkspace.auth.useCases.IsLoggedInUseCase
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.FirebaseAuth
 import dev.gitlive.firebase.auth.auth
@@ -14,4 +15,5 @@ val authModule = module {
     single<AuthDataSource> { AuthDataSource(get()) }
     single<AuthRepository> { AuthRepositoryImpl(get()) }
     single<LoginUseCase> { LoginUseCase(get()) }
+    single<IsLoggedInUseCase> { IsLoggedInUseCase(get()) }
 }

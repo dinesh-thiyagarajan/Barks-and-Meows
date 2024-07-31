@@ -13,6 +13,8 @@ import auth.LoginScreen
 import common.composables.BarksAndMeowsAppBar
 import di.appModule
 import navigation.BarksAndMeowsRouter
+import navigation.NavRouter
+import navigation.doNotShowTopAppBar
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
 import splash.SplashScreen
@@ -30,6 +32,7 @@ fun BarksAndMeowsApp() {
 
 @Composable
 private fun BarksAndMeowsApp(navController: NavHostController = rememberNavController()) {
+    NavRouter.setNavController(navController = navController)
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = BarksAndMeowsRouter.valueOf(
         backStackEntry?.destination?.route ?: BarksAndMeowsRouter.SplashScreen.name
@@ -37,14 +40,15 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
     BarksAndMeowsTheme {
         Scaffold(
             topBar = {
-                BarksAndMeowsAppBar(
-                    currentScreen = currentScreen,
-                    canNavigateBack = navController.previousBackStackEntry != null,
-                    navigateUp = { navController.navigateUp() }
-                )
+                if (!doNotShowTopAppBar.contains(currentScreen)) {
+                    BarksAndMeowsAppBar(
+                        currentScreen = currentScreen,
+                        canNavigateBack = navController.previousBackStackEntry != null,
+                        navigateUp = { navController.navigateUp() }
+                    )
+                }
             }
         ) { innerPadding ->
-
             NavHost(
                 navController = navController,
                 startDestination = BarksAndMeowsRouter.SplashScreen.name,

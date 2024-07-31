@@ -29,6 +29,7 @@ kotlin {
         commonMain.dependencies {
             implementation(libs.bundles.koin)
             implementation(libs.firebase.gitlive.auth)
+            implementation(libs.kotlinx.coroutines.core)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

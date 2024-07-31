@@ -9,7 +9,7 @@ import splash.SplashViewModel
 
 val provideViewModels = module {
     viewModel { AuthViewModel(get()) }
-    viewModel { SplashViewModel() }
+    viewModel { SplashViewModel(get()) }
 }
 
 

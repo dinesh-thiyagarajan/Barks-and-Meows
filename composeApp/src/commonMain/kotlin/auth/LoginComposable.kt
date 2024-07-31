@@ -17,6 +17,7 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -30,23 +31,41 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.ic_app_logo
+import common.composables.LoadingComposable
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import navigation.BarksAndMeowsRouter
+import navigation.NavRouter
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
-@Composable
-fun LoginScreen() {
-    LoginComposable()
-}
-
 @OptIn(KoinExperimentalAPI::class)
 @Composable
-private fun LoginComposable(authViewModel: AuthViewModel = koinViewModel()) {
+fun LoginScreen(authViewModel: AuthViewModel = koinViewModel()) {
+    val coroutineScope = rememberCoroutineScope()
+    val authUiState = authViewModel.authUiState.collectAsState()
+    when (authUiState.value) {
+        is AuthUiState.LoggedIn -> {
+            NavRouter.navigate(BarksAndMeowsRouter.HomeScreen.name)
+        }
+
+        is AuthUiState.NotLoggedIn -> {
+            LoginComposable(coroutineScope = coroutineScope, authViewModel = authViewModel)
+        }
+
+        is AuthUiState.LoginInProgress -> {
+            LoadingComposable()
+        }
+
+        is AuthUiState.Error -> {}
+    }
+}
+
+@Composable
+private fun LoginComposable(coroutineScope: CoroutineScope, authViewModel: AuthViewModel) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    val coroutineScope = rememberCoroutineScope()
-
     Column(
         modifier = Modifier
             .fillMaxSize()
