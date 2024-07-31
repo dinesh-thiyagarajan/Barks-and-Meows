@@ -19,6 +19,8 @@ navigation = "2.7.0-alpha07"
 gitlive-firebase = "1.13.0"
 koin = "1.2.0-Beta4"
 firebase-bom = "33.1.1"
+playServicesAuth = "21.0.0"
+buildKonfig = "0.15.1"
 
 [libraries]
 jetbrains-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewmodel" }
@@ -37,6 +39,9 @@ kotlinx-coroutines-core = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-c
 # Firebase
 firebase-gitlive-common = { module = "dev.gitlive:firebase-common", version.ref = "gitlive-firebase" }
 firebase-gitlive-auth = { module = "dev.gitlive:firebase-auth", version.ref = "gitlive-firebase" }
+firebase-gitlive-firestore = { group = "dev.gitlive", name = "firebase-firestore", version.ref = "gitlive-firebase" }
+android-firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebase-bom" }
+play-services-auth = { module = "com.google.android.gms:play-services-auth", version.ref = "playServicesAuth" }
 
 #Koin - Dependency Injection
 koin-core = { group = "io.insert-koin", name = "koin-core", version.ref = "koin" }
@@ -53,3 +58,4 @@ androidLibrary = { id = "com.android.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+buildKonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildKonfig" }
