@@ -19,4 +19,8 @@ sealed class Router(val route: String, val navArguments: List<NamedNavArgument> 
     data object HomeRouter : Router(route = BarksAndMeowsRouter.HomeScreen.name)
 }
 
-val doNotShowTopAppBar = listOf(BarksAndMeowsRouter.SplashScreen, BarksAndMeowsRouter.LoginScreen)
+val doNotShowTopAppBar = listOf(
+    BarksAndMeowsRouter.SplashScreen,
+    BarksAndMeowsRouter.LoginScreen,
+    BarksAndMeowsRouter.HomeScreen
+)

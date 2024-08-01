@@ -1,4 +1,3 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -47,6 +46,7 @@ kotlin {
             implementation(libs.bundles.koin)
             implementation(libs.koin.compose.viewmodel)
             implementation(project(":auth"))
+            implementation(project(":database"))
         }
     }
 }
