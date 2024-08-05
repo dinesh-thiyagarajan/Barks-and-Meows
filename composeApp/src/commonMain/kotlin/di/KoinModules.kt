@@ -3,7 +3,7 @@ package di
 import auth.AuthViewModel
 import com.dineshworkspace.auth.di.authModule
 import com.dineshworkspace.database.di.databaseModule
-import home.HomeViewModel
+import home.viewModels.HomeViewModel
 import org.koin.compose.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 import splash.SplashViewModel

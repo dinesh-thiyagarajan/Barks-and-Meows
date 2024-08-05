@@ -3,6 +3,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
@@ -34,6 +35,7 @@ fun BarksAndMeowsApp() {
 @Composable
 private fun BarksAndMeowsApp(navController: NavHostController = rememberNavController()) {
     NavRouter.setNavController(navController = navController)
+    val coroutineScope = rememberCoroutineScope()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentScreen = BarksAndMeowsRouter.valueOf(
         backStackEntry?.destination?.route ?: BarksAndMeowsRouter.SplashScreen.name
@@ -66,7 +68,7 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                 }
 
                 composable(route = BarksAndMeowsRouter.HomeScreen.name) {
-                    HomeScreen()
+                    HomeScreen(coroutineScope = coroutineScope)
                 }
             }
         }

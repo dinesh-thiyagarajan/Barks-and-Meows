@@ -4,7 +4,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavOptions
 
 object NavRouter {
-    // possible memory leak ?? needs refactor
+    // possible memory leak ?? needs refactoring
     private var navController: NavController? = null
 
     // Set navController before initializing nav graph
