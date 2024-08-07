@@ -1,15 +1,12 @@
 package home
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import common.composables.LoadingComposable
 import home.composables.AddPetsComposable
+import home.composables.NoPetsFoundComposable
 import home.composables.PetsListComposable
 import home.viewModels.GetPetsUiState
 import home.viewModels.HomeViewModel
@@ -31,12 +28,16 @@ fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel(), coroutineScope: C
 
         is GetPetsUiState.Success -> {
             Column {
+                val pets = (getPetsUiState.value as GetPetsUiState.Success).pets
+                if (pets.isEmpty()) {
+                    NoPetsFoundComposable()
+                } else {
+                    PetsListComposable((getPetsUiState.value as GetPetsUiState.Success).pets)
+                }
                 AddPetsComposable(
                     coroutineScope = coroutineScope,
                     homeViewModel::addNewPet
                 )
-                Spacer(modifier = Modifier.padding(top = 20.dp))
-                PetsListComposable((getPetsUiState.value as GetPetsUiState.Success).pets)
             }
         }
 

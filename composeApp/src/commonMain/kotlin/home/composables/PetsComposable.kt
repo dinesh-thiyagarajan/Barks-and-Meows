@@ -13,9 +13,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.dineshworkspace.database.pet.dataModels.Pet
-import com.dineshworkspace.database.pet.dataModels.PetType
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.ui.tooling.preview.Preview
 
 @Composable
 fun PetsListComposable(pets: List<Pet>) {
@@ -42,12 +42,10 @@ fun AddPetsComposable(
             .wrapContentSize()
             .padding(16.dp)
     ) {
+
         Button(
             onClick = {
-                val pet = Pet(id = "", name = "Snowy", age = 1, image = "", petType = PetType.Dog)
-                coroutineScope.launch {
-                    onAddNewPetClicked.invoke(pet)
-                }
+                coroutineScope.launch {}
             },
         ) {
             Text("Submit")
