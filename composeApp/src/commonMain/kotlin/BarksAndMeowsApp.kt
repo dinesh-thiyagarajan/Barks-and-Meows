@@ -10,7 +10,6 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination.Companion.hierarchy
@@ -23,9 +22,10 @@ import androidx.navigation.compose.rememberNavController
 import auth.LoginScreen
 import di.appModule
 import home.HomeScreen
+import home.add.AddNewPetScreen
 import navigation.AppRouteActions
-import navigation.BottomNavItem
 import navigation.NavRouter
+import navigation.bottomNavItems
 import navigation.showBottomNavBar
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
@@ -46,22 +46,15 @@ fun BarksAndMeowsApp() {
 @Composable
 private fun BarksAndMeowsApp(navController: NavHostController = rememberNavController()) {
     NavRouter.setNavController(navController = navController)
-    val coroutineScope = rememberCoroutineScope()
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = backStackEntry?.destination
 
-    val screensList = listOf(
-        BottomNavItem.Home,
-        BottomNavItem.Profile
-    )
-
     BarksAndMeowsTheme {
         Scaffold(
-            bottomBar =
-            {
+            bottomBar = {
                 AnimatedVisibility(showBottomNavBar(currentDestination?.route ?: "")) {
                     NavigationBar {
-                        screensList.forEach { item ->
+                        bottomNavItems.forEach { item ->
                             NavigationBarItem(
                                 selected = currentDestination?.hierarchy?.any { it.route == item.route } == true,
                                 label = {},
@@ -139,6 +132,10 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
 
                 composable(route = AppRouteActions.ProfileScreen.route) {
                     ProfileScreen()
+                }
+
+                composable(route = AppRouteActions.AddNewPetScreen.route) {
+                    AddNewPetScreen()
                 }
             }
         }

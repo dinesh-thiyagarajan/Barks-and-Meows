@@ -31,3 +31,4 @@ dependencyResolutionManagement {
 include(":composeApp")
 include(":auth")
 include(":database")
+include(":uiComponents")

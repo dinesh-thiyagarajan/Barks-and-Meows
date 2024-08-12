@@ -1,11 +1,5 @@
 package navigation
 
-val doNotShowTopAppBar = listOf(
-    AppRouteActions.SplashScreen,
-    AppRouteActions.LoginScreen,
-    AppRouteActions.HomeScreen
-)
-
 enum class AppRouteActions(
     val route: String,
     val navArguments: List<String> = emptyList(),
@@ -14,6 +8,7 @@ enum class AppRouteActions(
     LoginScreen(route = "login/"),
     HomeScreen(route = "home/"),
     ProfileScreen(route = "profile/"),
+    AddNewPetScreen(route = "addNewPet/"),
 }
 
 fun AppRouteActions.path(): String {

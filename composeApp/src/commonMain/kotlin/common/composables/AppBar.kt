@@ -11,6 +11,8 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import barksandmeows.composeapp.generated.resources.Res
+import barksandmeows.composeapp.generated.resources.back
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -24,7 +26,7 @@ fun BarksAndMeowsAppBar(
 ) {
     TopAppBar(
         title = { Text(stringResource(titleKey)) },
-        colors = TopAppBarDefaults.mediumTopAppBarColors(
+        colors = TopAppBarDefaults.smallTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
         modifier = modifier,
@@ -33,7 +35,7 @@ fun BarksAndMeowsAppBar(
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = ""
+                        contentDescription = stringResource(Res.string.back)
                     )
                 }
             }

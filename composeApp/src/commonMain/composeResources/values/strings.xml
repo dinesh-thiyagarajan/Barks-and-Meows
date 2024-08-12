@@ -11,4 +11,5 @@
     <string name="login">Login</string>
     <string name="no_pets_msg">You don't have any pets as of yet, Please add a new pet to use this app</string>
     <string name="default_error_msg">Something went wrong</string>
+    <string name="add_pet_msg">Add New Pet</string>
 </resources>

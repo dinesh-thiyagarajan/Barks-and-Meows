@@ -19,3 +19,9 @@ sealed class BottomNavItem(
     data object Profile :
         BottomNavItem(AppRouteActions.ProfileScreen.route, Icons.Default.Face, "Profile")
 }
+
+
+val bottomNavItems = listOf(
+    BottomNavItem.Home,
+    BottomNavItem.Profile
+)

@@ -47,6 +47,7 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
             implementation(project(":auth"))
             implementation(project(":database"))
+            implementation(project(":uiComponents"))
         }
     }
 }

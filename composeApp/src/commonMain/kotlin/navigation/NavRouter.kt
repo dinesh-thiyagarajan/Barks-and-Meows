@@ -16,6 +16,8 @@ object NavRouter {
         navController?.navigate(route = route, navOptions = navOptions)
     }
 
+    fun getNavController() = navController
+
     fun popBackStack() {
         navController?.popBackStack()
     }
