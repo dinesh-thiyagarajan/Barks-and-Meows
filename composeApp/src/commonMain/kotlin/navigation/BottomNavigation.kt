@@ -1,0 +1,20 @@
+package navigation
+
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Face
+import androidx.compose.material.icons.filled.Home
+import androidx.compose.ui.graphics.vector.ImageVector
+
+fun showBottomNavBar(route: String) = listOf(
+    AppRouteActions.HomeScreen.route,
+).contains(route)
+
+sealed class BottomNavItem(
+    val route: String, val icon: ImageVector, val description: String
+) {
+    data object Home :
+        BottomNavItem(AppRouteActions.HomeScreen.route, Icons.Default.Home, "Home")
+
+    data object Profile :
+        BottomNavItem(AppRouteActions.ProfileScreen.route, Icons.Default.Face, "Profile")
+}

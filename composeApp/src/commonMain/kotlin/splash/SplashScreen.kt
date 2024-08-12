@@ -19,8 +19,8 @@ import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.ic_app_logo
 import barksandmeows.composeapp.generated.resources.splash_screen_img_description
+import navigation.AppRouteActions
 import navigation.NavRouter
-import navigation.Router
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -53,11 +53,11 @@ fun SplashScreen(splashViewModel: SplashViewModel = koinViewModel()) {
     }
     when (splashUiState.value) {
         is SplashUiState.LoggedIn -> {
-            NavRouter.navigate(Router.HomeRouter.route)
+            NavRouter.navigate(AppRouteActions.HomeScreen.route)
         }
 
         is SplashUiState.NotLoggedIn -> {
-            NavRouter.navigate(Router.LoginRouter.route)
+            NavRouter.navigate(AppRouteActions.LoginScreen.route)
         }
 
         is SplashUiState.FetchingLoginStatus -> {}

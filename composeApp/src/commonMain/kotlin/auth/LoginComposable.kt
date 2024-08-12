@@ -38,8 +38,8 @@ import barksandmeows.composeapp.generated.resources.password
 import common.composables.LoadingComposable
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import navigation.AppRouteActions
 import navigation.NavRouter
-import navigation.Router
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -52,7 +52,7 @@ fun LoginScreen(authViewModel: AuthViewModel = koinViewModel()) {
     val authUiState = authViewModel.authUiState.collectAsState()
     when (authUiState.value) {
         is AuthUiState.LoggedIn -> {
-            NavRouter.navigate(Router.HomeRouter.route)
+            NavRouter.navigate(AppRouteActions.HomeScreen.route)
         }
 
         is AuthUiState.NotLoggedIn -> {
