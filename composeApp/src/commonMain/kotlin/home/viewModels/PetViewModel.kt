@@ -55,6 +55,14 @@ class PetViewModel(
         }
     }
 
+    fun updateSelectedCategory(selectedId: Int) {
+        viewModelScope.launch(Dispatchers.Default) {
+            _petCategories.value = _petCategories.value.map { category ->
+                category.copy(selected = category.id == selectedId)
+            }
+        }
+    }
+
 }
 
 sealed interface GetPetsUiState {

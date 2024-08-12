@@ -21,7 +21,8 @@ class PetDataSource(private val firestore: FirebaseFirestore, private val userId
     suspend fun getPets() = flow {
         val petsList = mutableListOf<Pet>()
         firestore.collection(Config.BASE_ENV).document(Config.PETS_COLLECTION)
-            .collection(userId).snapshots.collect { querySnapshot ->
+            .collection(userId).snapshots
+            .collect { querySnapshot ->
                 petsList.clear()
                 querySnapshot.documents.forEach { documentSnapshot ->
                     val pet = documentSnapshot.data<Pet>()

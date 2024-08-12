@@ -9,5 +9,5 @@ data class Pet(
 
 @Serializable
 data class PetCategory(
-    val id: Int, val category: String
+    val id: Int, val category: String, var selected: Boolean = false
 )

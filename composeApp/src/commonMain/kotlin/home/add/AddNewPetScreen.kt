@@ -11,16 +11,16 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.back
-import com.dineshworkspace.database.pet.dataModels.PetCategory
 import com.dineshworkspace.uicomponents.composables.CategorySelectorChip
 import common.composables.BarksAndMeowsAppBar
 import home.viewModels.PetViewModel
+import kotlinx.coroutines.launch
 import navigation.NavRouter.getNavController
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -30,6 +30,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
 
     val petCategories = petViewModel.petCategories.collectAsState()
+    val coroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(petViewModel) {
         petViewModel.getPetCategories()
@@ -42,27 +43,27 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
             navigateUp = { getNavController()?.navigateUp() }
         )
     }) { innerPadding ->
-
         Column(
             modifier = Modifier.fillMaxSize().padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            PetCategoryComposable(petCategories)
-        }
-    }
-}
-
-@Composable
-fun PetCategoryComposable(petCategories: State<List<PetCategory>>) {
-    LazyRow(
-        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp) // Spacing between chips
-    ) {
-        items(petCategories.value.size) { index ->
-            CategorySelectorChip(
-                petCategories.value[index].category,
-                categoryId = petCategories.value[index].id
-            )
+            LazyRow(
+                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                horizontalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                items(petCategories.value.size) { index ->
+                    CategorySelectorChip(
+                        label = petCategories.value[index].category,
+                        categoryId = petCategories.value[index].id,
+                        selected = petCategories.value[index].selected,
+                        onChipSelected = {
+                            coroutineScope.launch {
+                                petViewModel.updateSelectedCategory(it)
+                            }
+                        }
+                    )
+                }
+            }
         }
     }
 }
