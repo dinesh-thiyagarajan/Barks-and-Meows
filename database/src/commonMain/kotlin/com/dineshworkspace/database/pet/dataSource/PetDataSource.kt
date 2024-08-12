@@ -2,6 +2,7 @@ package com.dineshworkspace.database.pet.dataSource
 
 import com.dineshworkspace.common.Config
 import com.dineshworkspace.database.pet.dataModels.Pet
+import com.dineshworkspace.database.pet.dataModels.PetCategory
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.flow
 
@@ -28,5 +29,16 @@ class PetDataSource(private val firestore: FirebaseFirestore, private val userId
                 }
                 emit(petsList)
             }
+    }
+
+    suspend fun getPetCategories() = flow {
+        val petCategories = listOf(
+            PetCategory(1, "Dog"),
+            PetCategory(2, "Cat"),
+            PetCategory(3, "Fish"),
+            PetCategory(4, "Bird"),
+            PetCategory(5, "Parrot"),
+        )
+        emit(petCategories)
     }
 }

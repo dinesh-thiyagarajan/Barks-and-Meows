@@ -4,6 +4,7 @@ import com.dineshworkspace.database.pet.dataSource.PetDataSource
 import com.dineshworkspace.database.pet.repository.PetRepository
 import com.dineshworkspace.database.pet.repository.PetRepositoryImpl
 import com.dineshworkspace.database.pet.useCases.AddPetUseCase
+import com.dineshworkspace.database.pet.useCases.GetPetCategoriesUseCase
 import com.dineshworkspace.database.pet.useCases.GetPetsUseCase
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.FirebaseFirestore
@@ -16,4 +17,5 @@ val databaseModule = module {
     single<GetPetsUseCase> { GetPetsUseCase(get()) }
     single<PetDataSource> { PetDataSource(get(), get()) }
     single<PetRepository> { PetRepositoryImpl(get()) }
+    single<GetPetCategoriesUseCase> { GetPetCategoriesUseCase(get()) }
 }
