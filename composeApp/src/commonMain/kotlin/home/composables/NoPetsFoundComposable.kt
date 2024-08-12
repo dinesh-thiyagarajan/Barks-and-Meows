@@ -10,9 +10,11 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.ic_app_logo
+import barksandmeows.composeapp.generated.resources.no_pets_msg
 import barksandmeows.composeapp.generated.resources.splash_screen_img_description
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
@@ -26,6 +28,9 @@ fun NoPetsFoundComposable() {
             modifier = Modifier.size(100.dp).align(Alignment.CenterHorizontally),
         )
         Spacer(modifier = Modifier.height(20.dp))
-        Text("You don't have any pets as of yet, Please add a new pet to use this app")
+        Text(
+            stringResource(Res.string.no_pets_msg),
+            textAlign = TextAlign.Center
+        )
     }
 }

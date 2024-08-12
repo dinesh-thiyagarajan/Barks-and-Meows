@@ -134,7 +134,7 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                 }
 
                 composable(route = AppRouteActions.HomeScreen.route) {
-                    HomeScreen(coroutineScope = coroutineScope)
+                    HomeScreen()
                 }
 
                 composable(route = AppRouteActions.ProfileScreen.route) {

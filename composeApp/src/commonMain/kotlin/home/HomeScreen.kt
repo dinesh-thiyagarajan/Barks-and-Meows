@@ -1,11 +1,13 @@
 package home
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.ui.Alignment
+import common.composables.ErrorComposable
 import common.composables.LoadingComposable
-import home.composables.AddPetsComposable
 import home.composables.NoPetsFoundComposable
 import home.composables.PetsListComposable
 import home.viewModels.GetPetsUiState
@@ -16,32 +18,32 @@ import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
-fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel(), coroutineScope: CoroutineScope) {
+fun HomeScreen(homeViewModel: HomeViewModel = koinViewModel()) {
     val getPetsUiState = homeViewModel.getPetsUiState.collectAsState()
+
     LaunchedEffect(homeViewModel) {
         homeViewModel.getPets()
     }
-    when (getPetsUiState.value) {
+
+    when (val petState = getPetsUiState.value) {
         is GetPetsUiState.Loading -> {
             LoadingComposable()
         }
 
         is GetPetsUiState.Success -> {
-            Column {
-                val pets = (getPetsUiState.value as GetPetsUiState.Success).pets
-                if (pets.isEmpty()) {
-                    NoPetsFoundComposable()
-                } else {
-                    PetsListComposable((getPetsUiState.value as GetPetsUiState.Success).pets)
-                }
-                AddPetsComposable(
-                    coroutineScope = coroutineScope,
-                    homeViewModel::addNewPet
-                )
+            Column(
+                verticalArrangement = Arrangement.Center,
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                petState.pets.takeIf { it.isNotEmpty() }
+                    ?.let { PetsListComposable(it) }
+                    ?: NoPetsFoundComposable()
             }
         }
 
-        is GetPetsUiState.Error -> {}
+        is GetPetsUiState.Error -> {
+            ErrorComposable()
+        }
     }
 }
 
