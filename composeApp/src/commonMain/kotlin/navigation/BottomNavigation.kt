@@ -7,6 +7,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 
 fun showBottomNavBar(route: String) = listOf(
     AppRouteActions.HomeScreen.route,
+    AppRouteActions.ProfileScreen.route,
 ).contains(route)
 
 sealed class BottomNavItem(

@@ -19,5 +19,10 @@ class AuthDataSource(private val firebaseAuth: FirebaseAuth) {
         emit(firebaseAuth.currentUser != null)
     }
 
+    suspend fun logout() = flow {
+        firebaseAuth.signOut()
+        emit(true)
+    }
+
 
 }

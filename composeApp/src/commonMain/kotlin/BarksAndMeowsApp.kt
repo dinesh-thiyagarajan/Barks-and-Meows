@@ -21,18 +21,15 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import auth.LoginScreen
-import barksandmeows.composeapp.generated.resources.Res
-import barksandmeows.composeapp.generated.resources.back
-import common.composables.BarksAndMeowsAppBar
 import di.appModule
 import home.HomeScreen
 import navigation.AppRouteActions
 import navigation.BottomNavItem
 import navigation.NavRouter
-import navigation.doNotShowTopAppBar
 import navigation.showBottomNavBar
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
+import profile.ProfileScreen
 import splash.SplashScreen
 import theme.BarksAndMeowsTheme
 
@@ -138,6 +135,10 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
 
                 composable(route = AppRouteActions.HomeScreen.route) {
                     HomeScreen(coroutineScope = coroutineScope)
+                }
+
+                composable(route = AppRouteActions.ProfileScreen.route) {
+                    ProfileScreen()
                 }
             }
         }
