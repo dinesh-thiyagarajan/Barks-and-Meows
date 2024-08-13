@@ -19,7 +19,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.add_pet_msg
-import barksandmeows.composeapp.generated.resources.ic_add_pet
+import barksandmeows.composeapp.generated.resources.ic_add
 import common.composables.ErrorComposable
 import common.composables.LoadingComposable
 import home.composables.NoPetsFoundComposable
@@ -49,7 +49,7 @@ fun HomeScreen(petViewModel: PetViewModel = koinViewModel()) {
                 modifier = Modifier.padding(20.dp).fillMaxWidth()
             ) {
                 Image(
-                    painterResource(Res.drawable.ic_add_pet),
+                    painterResource(Res.drawable.ic_add),
                     stringResource(Res.string.add_pet_msg),
                     modifier = Modifier.size(32.dp).clickable {
                         NavRouter.navigate(AppRouteActions.AddNewPetScreen.route)
