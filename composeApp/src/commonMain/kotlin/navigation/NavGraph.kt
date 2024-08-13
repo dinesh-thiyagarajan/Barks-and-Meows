@@ -8,7 +8,8 @@ enum class AppRouteActions(
     LoginScreen(route = "login/"),
     HomeScreen(route = "home/"),
     ProfileScreen(route = "profile/"),
-    AddNewPetScreen(route = "addNewPet/"),
+    AddNewPetScreen(route = "add-new-pet/"),
+    PetDetailScreen(route = "pet-details/", listOf(NavConstants.PET_ID)),
 }
 
 fun AppRouteActions.path(): String {
@@ -18,4 +19,8 @@ fun AppRouteActions.path(): String {
         completePath += "{${argument}}/"
     }
     return completePath.removeSuffix("/")
+}
+
+object NavConstants {
+    const val PET_ID = "pet_id"
 }

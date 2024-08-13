@@ -10,10 +10,16 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 
 @Composable
-fun PetCardComposable(name: String, petCategory: String, age: Int) {
+fun PetCardComposable(
+    petId: String,
+    name: String,
+    petCategory: String,
+    age: Int,
+    onPetCardClicked: (String) -> Unit
+) {
     Card(
         modifier = Modifier.padding(horizontal = 20.dp).fillMaxWidth().clickable {
-
+            onPetCardClicked.invoke(petId)
         }
     ) {
         Text(name)

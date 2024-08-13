@@ -15,20 +15,25 @@ import androidx.compose.ui.graphics.Color
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import auth.LoginScreen
 import di.appModule
 import home.HomeScreen
-import home.add.AddNewPetScreen
 import navigation.AppRouteActions
+import navigation.NavConstants
 import navigation.NavRouter
 import navigation.bottomNavItems
+import navigation.path
 import navigation.showBottomNavBar
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
+import pet.PetDetailScreen
+import pet.composables.AddNewPetScreen
 import profile.ProfileScreen
 import splash.SplashScreen
 import theme.BarksAndMeowsTheme
@@ -118,24 +123,36 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                     )
                 }
             ) {
-                composable(route = AppRouteActions.SplashScreen.route) {
+                composable(route = AppRouteActions.SplashScreen.path()) {
                     SplashScreen()
                 }
 
-                composable(route = AppRouteActions.LoginScreen.route) {
+                composable(route = AppRouteActions.LoginScreen.path()) {
                     LoginScreen()
                 }
 
-                composable(route = AppRouteActions.HomeScreen.route) {
+                composable(route = AppRouteActions.HomeScreen.path()) {
                     HomeScreen()
                 }
 
-                composable(route = AppRouteActions.ProfileScreen.route) {
+                composable(route = AppRouteActions.ProfileScreen.path()) {
                     ProfileScreen()
                 }
 
-                composable(route = AppRouteActions.AddNewPetScreen.route) {
+                composable(route = AppRouteActions.AddNewPetScreen.path()) {
                     AddNewPetScreen()
+                }
+
+                composable(
+                    route = AppRouteActions.PetDetailScreen.path(),
+                    arguments = AppRouteActions.PetDetailScreen.navArguments.map {
+                        navArgument(it) {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        }
+                    }) {
+                    val petId = it.arguments?.getString(NavConstants.PET_ID)
+                    PetDetailScreen(petId = petId ?: "none passed")
                 }
             }
         }

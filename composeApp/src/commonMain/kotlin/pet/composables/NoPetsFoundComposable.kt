@@ -1,4 +1,4 @@
-package home.composables
+package pet.composables
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column

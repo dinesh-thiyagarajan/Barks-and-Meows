@@ -22,16 +22,16 @@ import barksandmeows.composeapp.generated.resources.add_pet_msg
 import barksandmeows.composeapp.generated.resources.ic_add
 import common.composables.ErrorComposable
 import common.composables.LoadingComposable
-import home.composables.NoPetsFoundComposable
-import home.composables.PetsListComposable
-import home.viewModels.GetPetsUiState
-import home.viewModels.PetViewModel
 import navigation.AppRouteActions
 import navigation.NavRouter
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
+import pet.viewModels.GetPetsUiState
+import pet.composables.NoPetsFoundComposable
+import pet.viewModels.PetViewModel
+import pet.composables.PetsListComposable
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable

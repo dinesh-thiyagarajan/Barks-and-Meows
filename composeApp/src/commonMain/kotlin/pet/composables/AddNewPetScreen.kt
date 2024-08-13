@@ -1,4 +1,4 @@
-package home.add
+package pet.composables
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -28,12 +28,12 @@ import com.dineshworkspace.uicomponents.composables.chips.CategorySelectorChip
 import com.dineshworkspace.uicomponents.composables.textFields.PetInputTextFieldComposable
 import common.composables.BarksAndMeowsAppBar
 import common.utils.generateUUID
-import home.viewModels.PetViewModel
 import kotlinx.coroutines.launch
 import navigation.NavRouter.getNavController
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
+import pet.viewModels.PetViewModel
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
