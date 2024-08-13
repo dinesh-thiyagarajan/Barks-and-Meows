@@ -38,7 +38,6 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
 
     Scaffold(topBar = {
         BarksAndMeowsAppBar(
-            titleKey = Res.string.back,
             canNavigateBack = getNavController()?.previousBackStackEntry != null,
             navigateUp = { getNavController()?.navigateUp() }
         )

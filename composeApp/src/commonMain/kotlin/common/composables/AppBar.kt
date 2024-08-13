@@ -19,14 +19,14 @@ import org.jetbrains.compose.resources.stringResource
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun BarksAndMeowsAppBar(
-    titleKey: StringResource,
+    titleKey: StringResource? = null,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     TopAppBar(
-        title = { Text(stringResource(titleKey)) },
-        colors = TopAppBarDefaults.smallTopAppBarColors(
+        title = { titleKey?.let { Text(stringResource(it)) } },
+        colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
         modifier = modifier,
