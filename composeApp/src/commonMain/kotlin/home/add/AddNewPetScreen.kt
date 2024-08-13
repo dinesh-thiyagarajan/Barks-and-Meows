@@ -21,11 +21,13 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
-import barksandmeows.composeapp.generated.resources.password
 import barksandmeows.composeapp.generated.resources.pet_name
+import com.dineshworkspace.database.pet.dataModels.Pet
+import com.dineshworkspace.uicomponents.composables.buttons.PrimaryActionButtonComposable
 import com.dineshworkspace.uicomponents.composables.chip.CategorySelectorChip
 import com.dineshworkspace.uicomponents.composables.textFields.PetInputTextFieldComposable
 import common.composables.BarksAndMeowsAppBar
+import common.utils.generateUUID
 import home.viewModels.PetViewModel
 import kotlinx.coroutines.launch
 import navigation.NavRouter.getNavController
@@ -78,6 +80,25 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
                 onValueChange = { petName = it },
                 label = { Text(stringResource(Res.string.pet_name)) },
                 modifier = Modifier,
+            )
+
+            PrimaryActionButtonComposable(
+                coroutineScope = coroutineScope,
+                onButtonClick = {
+                    coroutineScope.launch {
+                        val pet = Pet(
+                            id = generateUUID(),
+                            name = petName,
+                            age = 0,
+                            petCategory = petCategories.value.first { it.selected }
+                        )
+                        petViewModel.addNewPet(pet)
+                    }
+                },
+                enabled = petName.isNotEmpty() && petCategories.value.any { it.selected },
+                buttonLabel = {
+                    Text("Submit")
+                }
             )
         }
     }
