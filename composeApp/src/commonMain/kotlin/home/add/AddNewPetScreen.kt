@@ -24,7 +24,7 @@ import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.pet_name
 import com.dineshworkspace.database.pet.dataModels.Pet
 import com.dineshworkspace.uicomponents.composables.buttons.PrimaryActionButtonComposable
-import com.dineshworkspace.uicomponents.composables.chip.CategorySelectorChip
+import com.dineshworkspace.uicomponents.composables.chips.CategorySelectorChip
 import com.dineshworkspace.uicomponents.composables.textFields.PetInputTextFieldComposable
 import common.composables.BarksAndMeowsAppBar
 import common.utils.generateUUID

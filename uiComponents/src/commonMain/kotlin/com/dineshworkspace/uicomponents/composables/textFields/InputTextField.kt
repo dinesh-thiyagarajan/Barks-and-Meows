@@ -30,7 +30,9 @@ fun PetInputTextFieldComposable(
     )
 }
 
-
+/**
+ * Use this as a base composable for all Text Input fields
+ */
 @Composable
 internal fun InputTextFieldComposable(
     textFieldValue: String,

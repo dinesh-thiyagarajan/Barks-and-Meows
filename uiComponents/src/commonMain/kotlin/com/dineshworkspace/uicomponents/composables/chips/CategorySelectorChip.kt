@@ -1,4 +1,4 @@
-package com.dineshworkspace.uicomponents.composables.chip
+package com.dineshworkspace.uicomponents.composables.chips
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
