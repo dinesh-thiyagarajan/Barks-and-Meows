@@ -1,5 +1,6 @@
-package com.dineshworkspace.uicomponents.composables
+package com.dineshworkspace.uicomponents.composables.chip
 
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Check
@@ -22,14 +23,16 @@ fun CategorySelectorChip(
         label = { Text(label) },
         leadingIcon = {
             if (selected) {
-                Icon(
-                    Icons.Filled.Check,
-                    contentDescription = null
-                )
-                Icon(
-                    Icons.Default.Add,
-                    contentDescription = null
-                )
+                Row {
+                    Icon(
+                        Icons.Filled.Check,
+                        contentDescription = null
+                    )
+                    Icon(
+                        Icons.Default.Add,
+                        contentDescription = null
+                    )
+                }
             } else {
                 Icon(
                     Icons.Filled.Create,
