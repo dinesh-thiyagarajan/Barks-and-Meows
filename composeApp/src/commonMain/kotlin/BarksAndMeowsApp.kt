@@ -32,8 +32,8 @@ import navigation.path
 import navigation.showBottomNavBar
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
-import pet.PetDetailScreen
-import pet.composables.AddNewPetScreen
+import pet.details.PetDetailScreen
+import pet.add.composables.AddNewPetScreen
 import profile.ProfileScreen
 import splash.SplashScreen
 import theme.BarksAndMeowsTheme

@@ -9,14 +9,14 @@ import kotlinx.coroutines.flow.flow
 
 class PetDataSource(private val firestore: FirebaseFirestore, private val userId: String) {
 
-    suspend fun addPet(pet: Pet) {
+    suspend fun addPet(pet: Pet) =
         firestore.collection(Config.BASE_ENV).document(Config.PETS_COLLECTION)
             .collection(userId)
             .document
             .set(data = pet, buildSettings = {
                 encodeDefaults = true
             })
-    }
+
 
     suspend fun getPets() = flow {
         val petsList = mutableListOf<Pet>()
@@ -29,6 +29,15 @@ class PetDataSource(private val firestore: FirebaseFirestore, private val userId
                     petsList.add(pet)
                 }
                 emit(petsList)
+            }
+    }
+
+    suspend fun getPetDetails(petId: String) = flow {
+        firestore.collection(Config.BASE_ENV).document(Config.PETS_COLLECTION).collection(userId)
+            .document(petId).snapshots
+            .collect { documentSnapshot ->
+                val pet = documentSnapshot.data<Pet>()
+                emit(pet)
             }
     }
 

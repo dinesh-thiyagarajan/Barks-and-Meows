@@ -1,4 +1,4 @@
-package pet.composables
+package pet.add.composables
 
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth

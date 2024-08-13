@@ -1,4 +1,4 @@
-package pet.composables
+package pet.add.composables
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,21 +27,25 @@ import com.dineshworkspace.uicomponents.composables.buttons.PrimaryActionButtonC
 import com.dineshworkspace.uicomponents.composables.chips.CategorySelectorChip
 import com.dineshworkspace.uicomponents.composables.textFields.PetInputTextFieldComposable
 import common.composables.BarksAndMeowsAppBar
+import common.composables.LoadingComposable
 import common.utils.generateUUID
+import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import navigation.NavRouter
 import navigation.NavRouter.getNavController
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
-import pet.viewModels.PetViewModel
+import pet.add.viewModels.AddPetUiState
+import pet.add.viewModels.PetViewModel
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
 fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
 
-    val petCategories = petViewModel.petCategories.collectAsState()
+    val addPetUiState = petViewModel.addPetUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
-    var petName by remember { mutableStateOf("") }
+
 
     LaunchedEffect(petViewModel) {
         petViewModel.getPetCategories()
@@ -57,49 +61,72 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
             modifier = Modifier.fillMaxSize().padding(innerPadding)
                 .verticalScroll(rememberScrollState())
         ) {
-            LazyRow(
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
-            ) {
-                items(petCategories.value.size) { index ->
-                    CategorySelectorChip(
-                        label = petCategories.value[index].category,
-                        categoryId = petCategories.value[index].id,
-                        selected = petCategories.value[index].selected,
-                        onChipSelected = {
-                            coroutineScope.launch {
-                                petViewModel.updateSelectedCategory(it)
-                            }
-                        }
-                    )
+            when (addPetUiState.value) {
+                is AddPetUiState.Loading -> {
+                    LoadingComposable()
+                }
+
+                is AddPetUiState.Success -> {
+                    NavRouter.popBackStack()
+                }
+
+                is AddPetUiState.NotStarted -> {
+                    AddNewPetComposable(coroutineScope, petViewModel)
                 }
             }
+        }
+    }
+}
 
-            PetInputTextFieldComposable(
-                textFieldValue = petName,
-                onValueChange = { petName = it },
-                label = { Text(stringResource(Res.string.pet_name)) },
-                modifier = Modifier,
-            )
+@Composable
+internal fun AddNewPetComposable(
+    coroutineScope: CoroutineScope,
+    petViewModel: PetViewModel,
+) {
+    val petCategories = petViewModel.petCategories.collectAsState()
+    var petName by remember { mutableStateOf("") }
 
-            PrimaryActionButtonComposable(
-                coroutineScope = coroutineScope,
-                onButtonClick = {
+    LazyRow(
+        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        items(petCategories.value.size) { index ->
+            CategorySelectorChip(
+                label = petCategories.value[index].category,
+                categoryId = petCategories.value[index].id,
+                selected = petCategories.value[index].selected,
+                onChipSelected = {
                     coroutineScope.launch {
-                        val pet = Pet(
-                            id = generateUUID(),
-                            name = petName,
-                            age = 0,
-                            petCategory = petCategories.value.first { it.selected }
-                        )
-                        petViewModel.addNewPet(pet)
+                        petViewModel.updateSelectedCategory(it)
                     }
-                },
-                enabled = petName.isNotEmpty() && petCategories.value.any { it.selected },
-                buttonLabel = {
-                    Text("Submit")
                 }
             )
         }
     }
+
+    PetInputTextFieldComposable(
+        textFieldValue = petName,
+        onValueChange = { petName = it },
+        label = { Text(stringResource(Res.string.pet_name)) },
+        modifier = Modifier,
+    )
+
+    PrimaryActionButtonComposable(
+        coroutineScope = coroutineScope,
+        onButtonClick = {
+            coroutineScope.launch {
+                val pet = Pet(
+                    id = generateUUID(),
+                    name = petName,
+                    age = 0,
+                    petCategory = petCategories.value.first { it.selected }
+                )
+                petViewModel.addNewPet(pet)
+            }
+        },
+        enabled = petName.isNotEmpty() && petCategories.value.any { it.selected },
+        buttonLabel = {
+            Text("Submit")
+        }
+    )
 }

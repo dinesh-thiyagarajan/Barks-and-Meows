@@ -28,17 +28,17 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
-import pet.viewModels.GetPetsUiState
-import pet.composables.NoPetsFoundComposable
-import pet.viewModels.PetViewModel
-import pet.composables.PetsListComposable
+import pet.add.composables.NoPetsFoundComposable
+import pet.add.composables.PetsListComposable
+import pet.add.viewModels.GetPetsUiState
+import pet.add.viewModels.PetViewModel
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
 fun HomeScreen(petViewModel: PetViewModel = koinViewModel()) {
     val getPetsUiState = petViewModel.getPetsUiState.collectAsState()
 
-    LaunchedEffect(petViewModel) {
+    LaunchedEffect(Unit) {
         petViewModel.getPets()
     }
 

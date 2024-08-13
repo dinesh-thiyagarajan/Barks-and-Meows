@@ -1,4 +1,4 @@
-package pet.viewModels
+package pet.add.viewModels
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -30,9 +30,16 @@ class PetViewModel(
         listOf()
     )
 
+    val addPetUiState: StateFlow<AddPetUiState> get() = _addPetUiState
+    private val _addPetUiState: MutableStateFlow<AddPetUiState> = MutableStateFlow(
+        AddPetUiState.NotStarted
+    )
+
     suspend fun addNewPet(pet: Pet) {
+        _addPetUiState.value = AddPetUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             addPetUseCase.invoke(pet)
+            _addPetUiState.value = AddPetUiState.Success
         }
     }
 
@@ -69,4 +76,10 @@ sealed interface GetPetsUiState {
     data class Success(val pets: List<Pet>) : GetPetsUiState
     data object Loading : GetPetsUiState
     data object Error : GetPetsUiState
+}
+
+sealed interface AddPetUiState {
+    data object Success : AddPetUiState
+    data object Loading : AddPetUiState
+    data object NotStarted : AddPetUiState
 }
