@@ -16,7 +16,7 @@ class PetDetailsViewModel(private val getPetDetailsUseCase: GetPetDetailsUseCase
 
     suspend fun getPetDetails(petId: String) {
         getPetDetailsUseCase.invoke(petId = petId).catch {
-            _petDetailsUiState.value = GetPetDetailsUiState.Error
+            _petDetailsUiState.value = GetPetDetailsUiState.Error(it.message)
         }.collect {
             _petDetailsUiState.value = GetPetDetailsUiState.Success(pet = it)
         }
@@ -26,5 +26,5 @@ class PetDetailsViewModel(private val getPetDetailsUseCase: GetPetDetailsUseCase
 sealed interface GetPetDetailsUiState {
     data class Success(val pet: Pet) : GetPetDetailsUiState
     data object Loading : GetPetDetailsUiState
-    data object Error : GetPetDetailsUiState
+    data class Error(val errorMessage: String?) : GetPetDetailsUiState
 }

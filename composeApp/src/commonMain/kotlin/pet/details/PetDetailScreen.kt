@@ -1,6 +1,7 @@
 package pet.details
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
@@ -37,8 +38,8 @@ fun PetDetailScreen(petId: String, petDetailsViewModel: PetDetailsViewModel = ko
     }) { innerPadding ->
         Column(modifier = Modifier.padding(paddingValues = innerPadding).fillMaxSize()) {
             when (val petResponse = petDetailsUiState.value) {
-                GetPetDetailsUiState.Error -> {
-                    ErrorComposable()
+                is GetPetDetailsUiState.Error -> {
+                    ErrorComposable(errorMessage = petResponse.errorMessage)
                 }
 
                 GetPetDetailsUiState.Loading -> {
@@ -46,7 +47,7 @@ fun PetDetailScreen(petId: String, petDetailsViewModel: PetDetailsViewModel = ko
                 }
 
                 is GetPetDetailsUiState.Success -> {
-                    PetDetailsComposable(pet = petResponse.pet)
+                    PetDetailsComposable(pet = petResponse.pet, this)
                 }
             }
         }
@@ -54,9 +55,9 @@ fun PetDetailScreen(petId: String, petDetailsViewModel: PetDetailsViewModel = ko
 }
 
 @Composable
-internal fun PetDetailsComposable(pet: Pet) {
-    Column {
-        HelloPetCardComposable(petData = pet.toPetData())
+internal fun PetDetailsComposable(pet: Pet, columnScope: ColumnScope) {
+    columnScope.apply {
+        //HelloPetCardComposable(petData = pet.toPetData())
     }
 }
 
