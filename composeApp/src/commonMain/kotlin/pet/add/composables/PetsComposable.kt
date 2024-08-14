@@ -11,6 +11,7 @@ import com.dineshworkspace.database.pet.dataModels.Pet
 import com.dineshworkspace.uicomponents.composables.cards.PetCardComposable
 import navigation.AppRouteActions
 import navigation.NavRouter
+import pet.toPetData
 
 @Composable
 fun PetsListComposable(pets: List<Pet>) {
@@ -22,10 +23,7 @@ fun PetsListComposable(pets: List<Pet>) {
                 modifier = Modifier.fillMaxWidth().padding(top = 10.dp),
             ) {
                 PetCardComposable(
-                    petId = pets[index].id,
-                    name = pets[index].name,
-                    petCategory = pets[index].petCategory.category,
-                    age = pets[index].age,
+                    petData = pets[index].toPetData(),
                     onPetCardClicked = { petId ->
                         NavRouter.navigate("${AppRouteActions.PetDetailScreen.route}$petId")
                     }
