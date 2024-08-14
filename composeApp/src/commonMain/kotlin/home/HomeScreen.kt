@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -20,6 +21,8 @@ import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.add_pet_msg
 import barksandmeows.composeapp.generated.resources.ic_add
+import com.dineshworkspace.database.pet.dataModels.Pet
+import com.dineshworkspace.uicomponents.composables.cards.PetCardComposable
 import common.composables.ErrorComposable
 import common.composables.LoadingComposable
 import navigation.AppRouteActions
@@ -29,9 +32,9 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 import pet.add.composables.NoPetsFoundComposable
-import pet.add.composables.PetsListComposable
 import pet.add.viewModels.GetPetsUiState
 import pet.add.viewModels.PetViewModel
+import pet.toPetData
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
@@ -46,7 +49,7 @@ fun HomeScreen(petViewModel: PetViewModel = koinViewModel()) {
         Column(modifier = Modifier.fillMaxSize()) {
             Row(
                 horizontalArrangement = Arrangement.End,
-                modifier = Modifier.padding(20.dp).fillMaxWidth()
+                modifier = Modifier.padding(end = 10.dp).fillMaxWidth()
             ) {
                 Image(
                     painterResource(Res.drawable.ic_add),
@@ -66,6 +69,26 @@ fun HomeScreen(petViewModel: PetViewModel = koinViewModel()) {
                 }
 
                 is GetPetsUiState.Error -> ErrorComposable()
+            }
+        }
+    }
+}
+
+@Composable
+fun PetsListComposable(pets: List<Pet>) {
+    LazyColumn(
+        modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp)
+    ) {
+        items(pets.size) { index ->
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+            ) {
+                PetCardComposable(
+                    petData = pets[index].toPetData(),
+                    onPetCardClicked = { petId ->
+                        NavRouter.navigate("${AppRouteActions.PetDetailScreen.route}$petId")
+                    }
+                )
             }
         }
     }

@@ -1,11 +1,13 @@
 package com.dineshworkspace.uicomponents.dataModels
 
+import org.jetbrains.compose.resources.DrawableResource
+
 
 data class PetData(
     val id: String,
     val name: String,
     val age: Int,
-    val image: String? = null,
+    var image: DrawableResource,
     val petCategory: PetCategory
 )
 

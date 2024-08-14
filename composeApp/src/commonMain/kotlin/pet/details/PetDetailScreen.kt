@@ -9,6 +9,8 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
+import barksandmeows.composeapp.generated.resources.Res
+import barksandmeows.composeapp.generated.resources.ic_app_logo
 import com.dineshworkspace.database.pet.dataModels.Pet
 import com.dineshworkspace.uicomponents.composables.cards.HelloPetCardComposable
 import common.composables.BarksAndMeowsAppBar
@@ -57,7 +59,7 @@ fun PetDetailScreen(petId: String, petDetailsViewModel: PetDetailsViewModel = ko
 @Composable
 internal fun PetDetailsComposable(pet: Pet, columnScope: ColumnScope) {
     columnScope.apply {
-        //HelloPetCardComposable(petData = pet.toPetData())
+        HelloPetCardComposable(petData = pet.toPetData())
     }
 }
 
