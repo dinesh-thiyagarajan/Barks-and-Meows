@@ -21,7 +21,6 @@ class PetDetailsViewModel(private val getPetDetailsUseCase: GetPetDetailsUseCase
             _petDetailsUiState.value = GetPetDetailsUiState.Success(pet = it)
         }
     }
-
 }
 
 sealed interface GetPetDetailsUiState {
