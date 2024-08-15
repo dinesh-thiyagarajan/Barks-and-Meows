@@ -30,5 +30,6 @@ dependencyResolutionManagement {
 
 include(":composeApp")
 include(":auth")
-include(":database")
+include(":pet")
 include(":uiComponents")
+include(":vaccine")

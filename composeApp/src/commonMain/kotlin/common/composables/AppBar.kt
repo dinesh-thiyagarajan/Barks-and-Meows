@@ -11,8 +11,6 @@ import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import barksandmeows.composeapp.generated.resources.Res
-import barksandmeows.composeapp.generated.resources.back
 import org.jetbrains.compose.resources.StringResource
 import org.jetbrains.compose.resources.stringResource
 
@@ -35,7 +33,7 @@ fun BarksAndMeowsAppBar(
                 IconButton(onClick = navigateUp) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.ArrowBack,
-                        contentDescription = stringResource(Res.string.back)
+                        contentDescription = "stringResource(Res.string.back)"
                     )
                 }
             }

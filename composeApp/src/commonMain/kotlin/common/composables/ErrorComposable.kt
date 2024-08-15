@@ -11,7 +11,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
-import barksandmeows.composeapp.generated.resources.default_error_msg
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
@@ -22,6 +21,6 @@ fun ErrorComposable(errorMessage: String? = null) {
         verticalArrangement = Arrangement.Center
     ) {
         Spacer(modifier = Modifier.height(10.dp))
-        Text(errorMessage ?: stringResource(Res.string.default_error_msg))
+        Text(errorMessage ?: "stringResource(Res.string.default_error_msg)")
     }
 }

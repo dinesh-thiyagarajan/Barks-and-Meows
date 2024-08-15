@@ -19,22 +19,20 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
-import barksandmeows.composeapp.generated.resources.add_pet_msg
 import barksandmeows.composeapp.generated.resources.ic_add
-import com.dineshworkspace.database.pet.dataModels.Pet
+import com.dineshworkspace.composables.NoPetsFoundComposable
+import com.dineshworkspace.dataModels.Pet
 import com.dineshworkspace.uicomponents.composables.cards.PetCardComposable
+import com.dineshworkspace.viewModels.GetPetsUiState
+import com.dineshworkspace.viewModels.PetViewModel
 import common.composables.ErrorComposable
 import common.composables.LoadingComposable
 import navigation.AppRouteActions
 import navigation.NavRouter
 import org.jetbrains.compose.resources.painterResource
-import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
-import pet.add.composables.NoPetsFoundComposable
-import pet.add.viewModels.GetPetsUiState
-import pet.add.viewModels.PetViewModel
-import pet.toPetData
+import pets.extensions.toPetData
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
@@ -53,7 +51,7 @@ fun HomeScreen(petViewModel: PetViewModel = koinViewModel()) {
             ) {
                 Image(
                     painterResource(Res.drawable.ic_add),
-                    stringResource(Res.string.add_pet_msg),
+                    "stringResource(Res.string.add_pet_msg)",
                     modifier = Modifier.size(32.dp).clickable {
                         NavRouter.navigate(AppRouteActions.AddNewPetScreen.route)
                     }

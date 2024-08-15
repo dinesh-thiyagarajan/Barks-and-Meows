@@ -22,6 +22,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import auth.LoginScreen
+import pets.screens.AddNewPetScreen
 import di.appModule
 import home.HomeScreen
 import navigation.AppRouteActions
@@ -32,8 +33,7 @@ import navigation.path
 import navigation.showBottomNavBar
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
-import pet.details.PetDetailScreen
-import pet.add.composables.AddNewPetScreen
+import pets.screens.PetDetailScreen
 import profile.ProfileScreen
 import splash.SplashScreen
 import theme.BarksAndMeowsTheme

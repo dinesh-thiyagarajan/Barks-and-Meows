@@ -6,9 +6,11 @@ import com.dineshworkspace.auth.repository.AuthRepositoryImpl
 import com.dineshworkspace.auth.useCases.IsLoggedInUseCase
 import com.dineshworkspace.auth.useCases.LoginUseCase
 import com.dineshworkspace.auth.useCases.LogoutUseCase
+import com.dineshworkspace.auth.viewModels.AuthViewModel
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.FirebaseAuth
 import dev.gitlive.firebase.auth.auth
+import org.koin.compose.viewmodel.dsl.viewModel
 import org.koin.dsl.module
 
 val authModule = module {
@@ -19,4 +21,5 @@ val authModule = module {
     single<LoginUseCase> { LoginUseCase(get()) }
     single<IsLoggedInUseCase> { IsLoggedInUseCase(get()) }
     single<LogoutUseCase> { LogoutUseCase(get()) }
+    viewModel { AuthViewModel(get()) }
 }

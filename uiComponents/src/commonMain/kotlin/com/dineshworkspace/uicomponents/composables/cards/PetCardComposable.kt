@@ -63,7 +63,7 @@ fun PetCardComposable(
                         )
                     )
                     Text(
-                        petData.age.toString(), style = TextStyle(
+                        "Age: ${petData.age}", style = TextStyle(
                             fontSize = 14.sp,
                             fontWeight = FontWeight.Normal,
                             fontFamily = FontFamily.SansSerif

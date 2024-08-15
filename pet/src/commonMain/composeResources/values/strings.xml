@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Barks and Meows</string>
+    <string name="app_logo_description">App logo</string>
+    <string name="back">back</string>
+    <string name="login_screen">Login Screen</string>
+    <string name="splash_screen">Splash Screen</string>
+    <string name="home_screen">Home Screen</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="no_pets_msg">You don't have any pets as of yet, Please add a new pet to use this app</string>
+    <string name="default_error_msg">Something went wrong</string>
+    <string name="add_pet_msg">Add New Pet</string>
+    <string name="pet_name">Pet Name</string>
+</resources>
