@@ -10,7 +10,7 @@ import splash.SplashViewModel
 
 
 val splashModule = module {
-    viewModel { SplashViewModel(get()) }
+    viewModel { SplashViewModel(isLoggedInUseCase = get()) }
 }
 
 val envModule = module {

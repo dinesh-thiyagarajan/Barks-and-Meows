@@ -18,19 +18,25 @@ import org.koin.dsl.module
 
 val petModule = module {
     single<FirebaseFirestore> { Firebase.firestore }
-    single<AddPetUseCase> { AddPetUseCase(get()) }
-    single<GetPetsUseCase> { GetPetsUseCase(get()) }
+    single<AddPetUseCase> { AddPetUseCase(petRepository = get()) }
+    single<GetPetsUseCase> { GetPetsUseCase(petRepository = get()) }
     single<PetDataSource> {
         PetDataSource(
-            get(),
-            get(named("user_id")),
-            get(named("base_env")),
-            get(named("pets_collection"))
+            firestore = get(),
+            userId = get(named("user_id")),
+            baseEnv = get(named("base_env")),
+            petCollection = get(named("pets_collection"))
         )
     }
-    single<PetRepository> { PetRepositoryImpl(get()) }
-    single<GetPetCategoriesUseCase> { GetPetCategoriesUseCase(get()) }
-    single<GetPetDetailsUseCase> { GetPetDetailsUseCase(get()) }
-    viewModel { PetViewModel(get(), get(), get()) }
-    viewModel { PetDetailsViewModel(get()) }
+    single<PetRepository> { PetRepositoryImpl(petDataSource = get()) }
+    single<GetPetCategoriesUseCase> { GetPetCategoriesUseCase(petRepository = get()) }
+    single<GetPetDetailsUseCase> { GetPetDetailsUseCase(petRepository = get()) }
+    viewModel {
+        PetViewModel(
+            addPetUseCase = get(),
+            getPetsUseCase = get(),
+            getPetCategoriesUseCase = get()
+        )
+    }
+    viewModel { PetDetailsViewModel(getPetDetailsUseCase = get()) }
 }

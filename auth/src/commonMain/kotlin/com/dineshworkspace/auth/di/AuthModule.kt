@@ -17,10 +17,10 @@ import org.koin.dsl.module
 val authModule = module {
     single<FirebaseAuth> { Firebase.auth }
     single<String>(named("user_id")) { Firebase.auth.currentUser?.uid ?: "" }
-    single<AuthDataSource> { AuthDataSource(get()) }
-    single<AuthRepository> { AuthRepositoryImpl(get()) }
-    single<LoginUseCase> { LoginUseCase(get()) }
-    single<IsLoggedInUseCase> { IsLoggedInUseCase(get()) }
-    single<LogoutUseCase> { LogoutUseCase(get()) }
-    viewModel { AuthViewModel(get()) }
+    single<AuthDataSource> { AuthDataSource(firebaseAuth = get()) }
+    single<AuthRepository> { AuthRepositoryImpl(authDataSource = get()) }
+    single<LoginUseCase> { LoginUseCase(authRepository = get()) }
+    single<IsLoggedInUseCase> { IsLoggedInUseCase(authRepository = get()) }
+    single<LogoutUseCase> { LogoutUseCase(authRepository = get()) }
+    viewModel { AuthViewModel(loginUseCase = get()) }
 }
