@@ -11,11 +11,12 @@ import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.FirebaseAuth
 import dev.gitlive.firebase.auth.auth
 import org.koin.compose.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val authModule = module {
     single<FirebaseAuth> { Firebase.auth }
-    single<String> { Firebase.auth.currentUser?.uid ?: "" }
+    single<String>(named("user_id")) { Firebase.auth.currentUser?.uid ?: "" }
     single<AuthDataSource> { AuthDataSource(get()) }
     single<AuthRepository> { AuthRepositoryImpl(get()) }
     single<LoginUseCase> { LoginUseCase(get()) }

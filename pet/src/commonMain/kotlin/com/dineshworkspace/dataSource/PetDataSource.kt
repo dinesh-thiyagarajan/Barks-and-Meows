@@ -1,16 +1,20 @@
 package com.dineshworkspace.dataSource
 
-import com.dineshworkspace.env.Config
 import com.dineshworkspace.dataModels.Pet
 import com.dineshworkspace.dataModels.PetCategory
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.flow
 
 
-class PetDataSource(private val firestore: FirebaseFirestore, private val userId: String) {
+class PetDataSource(
+    private val firestore: FirebaseFirestore,
+    private val userId: String,
+    private val baseEnv: String,
+    private val petCollection: String
+) {
 
     suspend fun addPet(pet: Pet) =
-        firestore.collection(Config.BASE_ENV).document(Config.PETS_COLLECTION)
+        firestore.collection(baseEnv).document(petCollection)
             .collection(userId)
             .document(pet.id)
             .set(data = pet, buildSettings = {
@@ -20,7 +24,7 @@ class PetDataSource(private val firestore: FirebaseFirestore, private val userId
 
     suspend fun getPets() = flow {
         val petsList = mutableListOf<Pet>()
-        firestore.collection(Config.BASE_ENV).document(Config.PETS_COLLECTION)
+        firestore.collection(baseEnv).document(petCollection)
             .collection(userId)
             .snapshots.collect { querySnapshot ->
                 petsList.clear()
@@ -33,7 +37,7 @@ class PetDataSource(private val firestore: FirebaseFirestore, private val userId
     }
 
     suspend fun getPetDetails(petId: String) = flow {
-        firestore.collection(Config.BASE_ENV).document(Config.PETS_COLLECTION).collection(userId)
+        firestore.collection(baseEnv).document(petCollection).collection(userId)
             .document(petId)
             .snapshots.collect { documentSnapshot ->
                 val pet = documentSnapshot.data<Pet>()

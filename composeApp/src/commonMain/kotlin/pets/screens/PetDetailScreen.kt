@@ -1,6 +1,7 @@
 package pets.screens
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,10 +27,13 @@ import com.dineshworkspace.viewModels.PetDetailsViewModel
 import common.composables.BarksAndMeowsAppBar
 import common.composables.ErrorComposable
 import common.composables.LoadingComposable
+import navigation.AppRouteActions
+import navigation.NavRouter
 import navigation.NavRouter.getNavController
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
+
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
@@ -88,13 +92,13 @@ internal fun PetDetailsComposable(pet: Pet) {
         Text("Vaccine Notes")
         Spacer(modifier = Modifier.padding(top = 10.dp))
 
-        // Vaccine Notes Composable
         Image(
             painterResource(Res.drawable.ic_add),
             "add",
-            modifier = Modifier.size(32.dp)
+            modifier = Modifier.size(32.dp).clickable {
+                NavRouter.navigate("${AppRouteActions.AddVaccineNoteScreen.route}${pet.id}")
+            }
         )
-
     }
 }
 

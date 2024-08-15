@@ -13,13 +13,21 @@ import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import dev.gitlive.firebase.firestore.firestore
 import org.koin.compose.viewmodel.dsl.viewModel
+import org.koin.core.qualifier.named
 import org.koin.dsl.module
 
 val petModule = module {
     single<FirebaseFirestore> { Firebase.firestore }
     single<AddPetUseCase> { AddPetUseCase(get()) }
     single<GetPetsUseCase> { GetPetsUseCase(get()) }
-    single<PetDataSource> { PetDataSource(get(), get()) }
+    single<PetDataSource> {
+        PetDataSource(
+            get(),
+            get(named("user_id")),
+            get(named("base_env")),
+            get(named("pets_collection"))
+        )
+    }
     single<PetRepository> { PetRepositoryImpl(get()) }
     single<GetPetCategoriesUseCase> { GetPetCategoriesUseCase(get()) }
     single<GetPetDetailsUseCase> { GetPetDetailsUseCase(get()) }

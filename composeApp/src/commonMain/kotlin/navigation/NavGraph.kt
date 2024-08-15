@@ -10,6 +10,7 @@ enum class AppRouteActions(
     ProfileScreen(route = "profile/"),
     AddNewPetScreen(route = "add-new-pet/"),
     PetDetailScreen(route = "pet-details/", listOf(NavConstants.PET_ID)),
+    AddVaccineNoteScreen(route = "add-vaccine-note/", listOf(NavConstants.PET_ID)),
 }
 
 fun AppRouteActions.path(): String {

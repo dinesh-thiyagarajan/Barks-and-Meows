@@ -22,7 +22,6 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import auth.LoginScreen
-import pets.screens.AddNewPetScreen
 import di.appModule
 import home.HomeScreen
 import navigation.AppRouteActions
@@ -33,10 +32,12 @@ import navigation.path
 import navigation.showBottomNavBar
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
+import pets.screens.AddNewPetScreen
 import pets.screens.PetDetailScreen
 import profile.ProfileScreen
 import splash.SplashScreen
 import theme.BarksAndMeowsTheme
+import vaccine.AddVaccineNoteScreen
 
 @Composable
 @Preview
@@ -153,6 +154,18 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                     }) {
                     val petId = it.arguments?.getString(NavConstants.PET_ID)
                     PetDetailScreen(petId = petId ?: "none passed")
+                }
+
+                composable(
+                    route = AppRouteActions.AddVaccineNoteScreen.path(),
+                    arguments = AppRouteActions.AddVaccineNoteScreen.navArguments.map {
+                        navArgument(it) {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        }
+                    }) {
+                    val petId = it.arguments?.getString(NavConstants.PET_ID)
+                    AddVaccineNoteScreen(petId = petId ?: "none passed")
                 }
             }
         }
