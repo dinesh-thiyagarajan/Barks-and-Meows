@@ -22,10 +22,10 @@ import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.ic_add
 import com.dineshworkspace.composables.NoPetsFoundComposable
 import com.dineshworkspace.uicomponents.composables.cards.PetCardComposable
+import com.dineshworkspace.uicomponents.composables.error.ErrorComposable
+import com.dineshworkspace.uicomponents.composables.loading.LoadingComposable
 import com.dineshworkspace.viewModels.GetPetsUiState
 import com.dineshworkspace.viewModels.PetViewModel
-import common.composables.ErrorComposable
-import common.composables.LoadingComposable
 import navigation.AppRouteActions
 import navigation.NavRouter
 import org.jetbrains.compose.resources.painterResource

@@ -2,7 +2,8 @@ package vaccine
 
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
-import common.composables.BarksAndMeowsAppBar
+import com.dineshworkspace.uicomponents.composables.appBar.BarksAndMeowsAppBar
+
 import navigation.NavRouter.getNavController
 
 @Composable

@@ -6,7 +6,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import com.dineshworkspace.auth.composables.LoginComposable
 import com.dineshworkspace.auth.viewModels.AuthUiState
 import com.dineshworkspace.auth.viewModels.AuthViewModel
-import common.composables.LoadingComposable
+import com.dineshworkspace.uicomponents.composables.loading.LoadingComposable
 import navigation.AppRouteActions
 import navigation.NavRouter
 import org.koin.compose.viewmodel.koinViewModel

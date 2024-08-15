@@ -1,0 +1,4 @@
+<resources>
+    <string name="default_error_msg">Something went wrong</string>
+    <string name="default_loading_msg">Please wait for snowy to fetch data for you</string>
+</resources>

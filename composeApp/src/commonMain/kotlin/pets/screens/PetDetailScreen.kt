@@ -22,11 +22,11 @@ import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.ic_add
 import barksandmeows.composeapp.generated.resources.ic_app_logo
 import com.dineshworkspace.dataModels.Pet
+import com.dineshworkspace.uicomponents.composables.appBar.BarksAndMeowsAppBar
+import com.dineshworkspace.uicomponents.composables.error.ErrorComposable
+import com.dineshworkspace.uicomponents.composables.loading.LoadingComposable
 import com.dineshworkspace.viewModels.GetPetDetailsUiState
 import com.dineshworkspace.viewModels.PetDetailsViewModel
-import common.composables.BarksAndMeowsAppBar
-import common.composables.ErrorComposable
-import common.composables.LoadingComposable
 import navigation.AppRouteActions
 import navigation.NavRouter
 import navigation.NavRouter.getNavController
