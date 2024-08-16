@@ -1,4 +1,4 @@
-package com.dineshworkspace.vaccine
+package com.dineshworkspace.vaccine.composables
 
 import androidx.compose.runtime.Composable
 

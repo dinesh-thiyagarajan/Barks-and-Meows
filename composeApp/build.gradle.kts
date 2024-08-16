@@ -48,6 +48,7 @@ kotlin {
             implementation(project(":auth"))
             implementation(project(":pet"))
             implementation(project(":uiComponents"))
+            implementation(project(":vaccine"))
         }
     }
 }

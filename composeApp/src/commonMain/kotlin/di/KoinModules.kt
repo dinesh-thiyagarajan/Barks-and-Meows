@@ -3,6 +3,7 @@ package di
 import com.dineshworkspace.auth.di.authModule
 import com.dineshworkspace.di.petModule
 import com.dineshworkspace.env.Config
+import com.dineshworkspace.vaccine.di.vaccineModule
 import org.koin.compose.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
@@ -18,4 +19,4 @@ val envModule = module {
     single<String>(named("pets_collection")) { Config.PETS_COLLECTION }
 }
 
-fun appModule() = listOf(authModule, envModule, petModule, splashModule)
+fun appModule() = listOf(authModule, envModule, petModule, splashModule, vaccineModule)
