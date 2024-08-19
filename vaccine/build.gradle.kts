@@ -4,6 +4,7 @@ import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
     alias(libs.plugins.androidLibrary)
+    alias(libs.plugins.kotlinxSerialization)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
 }
@@ -30,6 +31,7 @@ kotlin {
 
     sourceSets {
         commonMain.dependencies {
+            implementation(libs.firebase.gitlive.firestore)
             implementation(libs.bundles.koin)
             implementation(libs.kotlinx.coroutines.core)
             implementation(compose.runtime)

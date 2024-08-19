@@ -1,3 +1,6 @@
 package com.dineshworkspace.vaccine.dataModels
 
-data class Vaccine(val id: String,val petId: String)
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class Vaccine(val vaccineId: String, val vaccineName: String)
