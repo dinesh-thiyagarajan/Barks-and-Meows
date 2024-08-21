@@ -1,5 +1,6 @@
 package com.dineshworkspace.auth.composables
 
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -7,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
@@ -25,9 +27,16 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
+import barksandmeows.auth.generated.resources.Res
+import barksandmeows.auth.generated.resources.email
+import barksandmeows.auth.generated.resources.ic_app_logo
+import barksandmeows.auth.generated.resources.login
+import barksandmeows.auth.generated.resources.password
 import com.dineshworkspace.auth.viewModels.AuthViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun LoginComposable(coroutineScope: CoroutineScope, authViewModel: AuthViewModel) {
@@ -42,17 +51,17 @@ fun LoginComposable(coroutineScope: CoroutineScope, authViewModel: AuthViewModel
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
-//        Image(
-//            painterResource(Res.drawable.ic_app_logo),
-//            null,
-//            modifier = Modifier.size(100.dp)
-//        )
+        Image(
+            painterResource(Res.drawable.ic_app_logo),
+            null,
+            modifier = Modifier.size(100.dp)
+        )
 
         OutlinedTextField(
             value = email,
             singleLine = true,
             onValueChange = { email = it },
-            label = { Text("stringResource(Res.string.email)") },
+            label = { Text(stringResource(Res.string.email)) },
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Email,
                 imeAction = ImeAction.Next
@@ -66,7 +75,7 @@ fun LoginComposable(coroutineScope: CoroutineScope, authViewModel: AuthViewModel
             value = password,
             singleLine = true,
             onValueChange = { password = it },
-            label = { Text("stringResource(Res.string.password)") },
+            label = { Text(stringResource(Res.string.password)) },
             visualTransformation = PasswordVisualTransformation(),
             keyboardOptions = KeyboardOptions(
                 keyboardType = KeyboardType.Password,
@@ -84,7 +93,7 @@ fun LoginComposable(coroutineScope: CoroutineScope, authViewModel: AuthViewModel
             enabled = email.isNotEmpty() && password.isNotEmpty(),
             modifier = Modifier.wrapContentSize()
         ) {
-            Text("stringResource(Res.string.login)")
+            Text(stringResource(Res.string.login))
         }
     }
 }
