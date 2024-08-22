@@ -27,10 +27,10 @@ class VaccineNoteViewModel(
         MutableStateFlow(GetVaccineNotesUiState.Loading)
 
 
-    suspend fun addVaccineNote(petId: String, vaccineNote: VaccineNote) {
+    suspend fun addVaccineNote(vaccineNote: VaccineNote) {
         _addVaccineNoteUiState.value = AddVaccineNoteUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
-            addVaccineNoteUseCase.invoke(petId = petId, vaccineNote = vaccineNote)
+            addVaccineNoteUseCase.invoke(vaccineNote = vaccineNote)
                 .catch {
                     _addVaccineNoteUiState.value = AddVaccineNoteUiState.Error(it.message)
                 }

@@ -25,9 +25,10 @@ class VaccineDataSource(
             }
     }
 
-    suspend fun addVaccineNoteForPet(petId: String, vaccineNote: VaccineNote) = flow {
+    suspend fun addVaccineNoteForPet(vaccineNote: VaccineNote) = flow {
         val docId =
-            firestore.collection(baseEnv).document(petCollection).collection(userId).document(petId)
+            firestore.collection(baseEnv).document(petCollection).collection(userId)
+                .document(vaccineNote.petId)
                 .collection(vaccineNotesCollection).add(vaccineNote, buildSettings = {
                     encodeDefaults = true
                 }).id

@@ -30,6 +30,28 @@ fun PetInputTextFieldComposable(
     )
 }
 
+
+@Composable
+fun GenericInputTextFieldComposable(
+    textFieldValue: String,
+    onValueChange: (String) -> Unit,
+    label: @Composable (() -> Unit)? = null,
+    keyboardOptions: KeyboardOptions = KeyboardOptions(
+        keyboardType = KeyboardType.Text,
+        imeAction = ImeAction.Next
+    ),
+    modifier: Modifier,
+) {
+    InputTextFieldComposable(
+        textFieldValue = textFieldValue,
+        onValueChange = onValueChange,
+        label = label,
+        keyboardOptions = keyboardOptions,
+        modifier = modifier,
+        colors = TextFieldDefaults.colors()
+    )
+}
+
 /**
  * Use this as a base composable for all Text Input fields
  */
@@ -39,7 +61,7 @@ internal fun InputTextFieldComposable(
     onValueChange: (String) -> Unit,
     label: @Composable (() -> Unit)? = null,
     keyboardOptions: KeyboardOptions = KeyboardOptions(
-        keyboardType = KeyboardType.Email,
+        keyboardType = KeyboardType.Text,
         imeAction = ImeAction.Next
     ),
     modifier: Modifier,

@@ -9,5 +9,5 @@ data class VaccineNote(
     val petId: String,
     val vaccine: Vaccine,
     val note: String,
-    val timestamp: Timestamp = Timestamp.now()
+    val timestamp: String,
 )

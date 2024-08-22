@@ -9,8 +9,7 @@ class VaccineRepositoryImpl(private val vaccineDataSource: VaccineDataSource) : 
         vaccineDataSource.getVaccineNotesForPet(petId = petId)
 
     override suspend fun addVaccineNoteForPet(
-        petId: String,
         vaccineNote: VaccineNote
     ): Flow<String> =
-        vaccineDataSource.addVaccineNoteForPet(petId = petId, vaccineNote = vaccineNote)
+        vaccineDataSource.addVaccineNoteForPet(vaccineNote = vaccineNote)
 }
