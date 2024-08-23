@@ -3,10 +3,16 @@ package vaccine
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.material3.Button
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.OutlinedTextField
+import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -21,15 +27,15 @@ import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.add_vaccine_note
 import com.dineshworkspace.uicomponents.composables.appBar.BarksAndMeowsAppBar
+import com.dineshworkspace.uicomponents.composables.error.ErrorComposable
 import com.dineshworkspace.uicomponents.composables.loading.LoadingComposable
 import com.dineshworkspace.uicomponents.composables.textFields.GenericInputTextFieldComposable
 import com.dineshworkspace.vaccine.dataModels.VaccineNote
-import com.dineshworkspace.vaccine.viewModels.AddVaccineNoteUiState
+import com.dineshworkspace.vaccine.viewModels.VaccineNoteUiState
 import com.dineshworkspace.vaccine.viewModels.VaccineNoteViewModel
 import common.utils.generateUUID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import navigation.NavRouter
 import navigation.NavRouter.getNavController
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -50,14 +56,18 @@ fun AddVaccineNoteScreen(
         )
     }) { innerPadding ->
 
-        val addVaccineNoteUiState = vaccineNoteViewModel.addVaccineNoteUiState.collectAsState()
+        val vaccineNoteUiState = vaccineNoteViewModel.vaccineNoteUiState.collectAsState()
 
-        when (addVaccineNoteUiState.value) {
-            is AddVaccineNoteUiState.Loading -> {
+        when (vaccineNoteUiState.value) {
+            is VaccineNoteUiState.FetchingVaccines -> {
                 LoadingComposable()
             }
 
-            is AddVaccineNoteUiState.NotStarted -> {
+            VaccineNoteUiState.AddingVaccineNote -> {
+                LoadingComposable()
+            }
+
+            VaccineNoteUiState.Default -> {
                 AddNewVaccineNoteComposable(
                     petId = petId,
                     vaccineNoteViewModel = vaccineNoteViewModel,
@@ -66,17 +76,24 @@ fun AddVaccineNoteScreen(
                 )
             }
 
-            is AddVaccineNoteUiState.Success -> {
-                NavRouter.popBackStack()
+            is VaccineNoteUiState.Error -> {
+                ErrorComposable()
             }
 
-            is AddVaccineNoteUiState.Error -> {}
+            VaccineNoteUiState.VaccineNotesAddedSuccessfully -> {
+
+            }
+
+            VaccineNoteUiState.VaccinesFetchedSuccessfully -> {
+
+            }
         }
 
 
     }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun AddNewVaccineNoteComposable(
     petId: String,
@@ -84,10 +101,10 @@ internal fun AddNewVaccineNoteComposable(
     innerPadding: PaddingValues,
     coroutineScope: CoroutineScope
 ) {
-
     var vaccineName by remember { mutableStateOf("") }
     var dateTimeStamp by remember { mutableStateOf("") }
     var injectedByDoctor by remember { mutableStateOf("") }
+    var isDropDownExpanded by remember { mutableStateOf(false) }
     lateinit var selectedVaccine: com.dineshworkspace.vaccine.dataModels.Vaccine
 
     Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
@@ -96,6 +113,36 @@ internal fun AddNewVaccineNoteComposable(
             onValueChange = { vaccineName = it },
             label = { Text("") },
             modifier = Modifier,
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        ExposedDropdownMenuBox(
+            expanded = isDropDownExpanded,
+            onExpandedChange = {
+                isDropDownExpanded = !it
+            },
+            content = {
+                OutlinedTextField(
+                    readOnly = true,
+                    value = selectedVaccine.vaccineName,
+                    onValueChange = {},
+                    label = { Text(text = "Select Vaccine") },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = isDropDownExpanded)
+                    },
+                    colors = OutlinedTextFieldDefaults.colors(),
+                    modifier = Modifier
+                        .menuAnchor()
+                        .fillMaxWidth()
+                )
+
+                ExposedDropdownMenu(
+                    expanded = isDropDownExpanded,
+                    onDismissRequest = { isDropDownExpanded = false }) {
+
+                }
+            }
         )
 
         Spacer(modifier = Modifier.height(16.dp))

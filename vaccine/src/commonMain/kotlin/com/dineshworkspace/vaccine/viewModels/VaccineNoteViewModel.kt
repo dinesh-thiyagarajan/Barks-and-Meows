@@ -18,54 +18,45 @@ class VaccineNoteViewModel(
     private val getVaccineNoteUseCase: GetVaccineNoteUseCase
 ) : ViewModel() {
 
-    val addVaccineNoteUiState: StateFlow<AddVaccineNoteUiState> get() = _addVaccineNoteUiState
-    private val _addVaccineNoteUiState: MutableStateFlow<AddVaccineNoteUiState> =
-        MutableStateFlow(AddVaccineNoteUiState.NotStarted)
-
-    val getVaccineNotesUiState: StateFlow<GetVaccineNotesUiState> get() = _getVaccineNotesUiState
-    private val _getVaccineNotesUiState: MutableStateFlow<GetVaccineNotesUiState> =
-        MutableStateFlow(GetVaccineNotesUiState.Loading)
+    val vaccineNoteUiState: StateFlow<VaccineNoteUiState> get() = _vaccineNoteUiState
+    private val _vaccineNoteUiState: MutableStateFlow<VaccineNoteUiState> =
+        MutableStateFlow(VaccineNoteUiState.Default)
 
 
     suspend fun addVaccineNote(vaccineNote: VaccineNote) {
-        _addVaccineNoteUiState.value = AddVaccineNoteUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             addVaccineNoteUseCase.invoke(vaccineNote = vaccineNote)
                 .catch {
-                    _addVaccineNoteUiState.value = AddVaccineNoteUiState.Error(it.message)
+                    _vaccineNoteUiState.value = VaccineNoteUiState.Error(it.message)
                 }
                 .collect {
-                    _addVaccineNoteUiState.value = AddVaccineNoteUiState.Success
+                    _vaccineNoteUiState.value = VaccineNoteUiState.VaccineNotesAddedSuccessfully
                 }
         }
     }
 
 
     suspend fun getVaccineNotes(petId: String) {
-        _getVaccineNotesUiState.value = GetVaccineNotesUiState.Loading
+        _vaccineNoteUiState.value = VaccineNoteUiState.FetchingVaccines
         viewModelScope.launch(Dispatchers.IO) {
             getVaccineNoteUseCase.invoke(petId = petId)
                 .flowOn(Dispatchers.IO)
                 .catch {
-                    _getVaccineNotesUiState.value = GetVaccineNotesUiState.Error(it.message)
+                    _vaccineNoteUiState.value = VaccineNoteUiState.Error(it.message)
                 }
                 .collect {
-                    _getVaccineNotesUiState.value = GetVaccineNotesUiState.Success(it)
+                    _vaccineNoteUiState.value = VaccineNoteUiState.VaccinesFetchedSuccessfully
                 }
         }
     }
 
 }
 
-sealed interface AddVaccineNoteUiState {
-    data object Success : AddVaccineNoteUiState
-    data object Loading : AddVaccineNoteUiState
-    data object NotStarted : AddVaccineNoteUiState
-    data class Error(val errorMessage: String?) : AddVaccineNoteUiState
-}
-
-sealed interface GetVaccineNotesUiState {
-    data class Success(val vaccineNotesList: List<VaccineNote>) : GetVaccineNotesUiState
-    data object Loading : GetVaccineNotesUiState
-    data class Error(val errorMessage: String?) : GetVaccineNotesUiState
+sealed interface VaccineNoteUiState {
+    data object Default : VaccineNoteUiState
+    data object FetchingVaccines : VaccineNoteUiState
+    data object VaccinesFetchedSuccessfully : VaccineNoteUiState
+    data object AddingVaccineNote : VaccineNoteUiState
+    data object VaccineNotesAddedSuccessfully : VaccineNoteUiState
+    data class Error(val errorMessage: String?) : VaccineNoteUiState
 }
