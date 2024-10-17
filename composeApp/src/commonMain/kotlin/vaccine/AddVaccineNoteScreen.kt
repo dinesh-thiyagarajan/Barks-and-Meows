@@ -28,6 +28,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.add_vaccine_note
+import barksandmeows.composeapp.generated.resources.doctor_name
 import barksandmeows.composeapp.generated.resources.select_vaccine
 import com.dineshworkspace.uicomponents.composables.appBar.BarksAndMeowsAppBar
 import com.dineshworkspace.uicomponents.composables.error.ErrorComposable
@@ -35,11 +36,12 @@ import com.dineshworkspace.uicomponents.composables.loading.LoadingComposable
 import com.dineshworkspace.uicomponents.composables.textFields.GenericInputTextFieldComposable
 import com.dineshworkspace.vaccine.dataModels.Vaccine
 import com.dineshworkspace.vaccine.dataModels.VaccineNote
-import com.dineshworkspace.vaccine.viewModels.VaccineNoteUiState
+import com.dineshworkspace.vaccine.viewModels.AddVaccineNoteUiState
 import com.dineshworkspace.vaccine.viewModels.VaccineNoteViewModel
 import common.utils.generateUUID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import navigation.NavRouter
 import navigation.NavRouter.getNavController
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -64,51 +66,35 @@ fun AddVaccineNoteScreen(
         )
     }) { innerPadding ->
 
-        val vaccineNoteUiState = vaccineNoteViewModel.vaccineNoteUiState.collectAsState()
+        val getVaccineNoteUiState = vaccineNoteViewModel.addVaccineNoteUiState.collectAsState()
 
-        when (val vaccineNoteUiState = vaccineNoteUiState.value) {
-            is VaccineNoteUiState.FetchingVaccines -> {
+        when (val uiState = getVaccineNoteUiState.value) {
+            is AddVaccineNoteUiState.FetchingVaccines -> {
                 LoadingComposable()
             }
 
-            VaccineNoteUiState.AddingVaccineNote -> {
+            AddVaccineNoteUiState.AddingVaccineNote -> {
                 LoadingComposable()
             }
 
-            VaccineNoteUiState.Default -> {
-
+            is AddVaccineNoteUiState.Error -> {
+                ErrorComposable(uiState.errorMessage)
             }
 
-            is VaccineNoteUiState.Error -> {
-                ErrorComposable()
+            AddVaccineNoteUiState.VaccineNotesAddedSuccessfully -> {
+                NavRouter.popBackStack()
             }
 
-            VaccineNoteUiState.VaccineNotesAddedSuccessfully -> {
-
-            }
-
-            is VaccineNoteUiState.VaccinesFetchedSuccessfully -> {
+            is AddVaccineNoteUiState.VaccinesFetchedSuccessfully -> {
                 AddNewVaccineNoteComposable(
                     petId = petId,
                     vaccineNoteViewModel = vaccineNoteViewModel,
                     innerPadding = innerPadding,
                     coroutineScope = coroutineScope,
-                    vaccines = vaccineNoteUiState.vaccineList
-                )
-            }
-
-            is VaccineNoteUiState.VaccineNotesFetchedSuccessfully -> {
-                AddNewVaccineNoteComposable(
-                    petId = petId,
-                    vaccineNoteViewModel = vaccineNoteViewModel,
-                    innerPadding = innerPadding,
-                    coroutineScope = coroutineScope,
-                    vaccines = emptyList()
+                    vaccines = uiState.vaccineList
                 )
             }
         }
-
-
     }
 }
 
@@ -121,17 +107,16 @@ internal fun AddNewVaccineNoteComposable(
     coroutineScope: CoroutineScope,
     vaccines: List<Vaccine>
 ) {
-    var vaccineName by remember { mutableStateOf("") }
     var dateTimeStamp by remember { mutableStateOf("") }
-    var injectedByDoctor by remember { mutableStateOf("") }
+    var doctorName by remember { mutableStateOf("") }
     var dropDownExpanded by remember { mutableStateOf(false) }
     var selectedVaccine: Vaccine? by remember { mutableStateOf(null) }
 
     Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
         GenericInputTextFieldComposable(
-            textFieldValue = vaccineName,
-            onValueChange = { vaccineName = it },
-            label = { Text("") },
+            textFieldValue = doctorName,
+            onValueChange = { doctorName = it },
+            label = { Text(stringResource(Res.string.doctor_name)) },
             modifier = Modifier,
         )
 
@@ -186,12 +171,13 @@ internal fun AddNewVaccineNoteComposable(
                             vaccine = selectedVaccine
                                 ?: return@launch, // Ensure vaccine is selected
                             note = "",
-                            timestamp = ""
+                            timestamp = "",
+                            doctorName = ""
                         )
                     )
                 }
             },
-            enabled = vaccineName.isNotEmpty(),
+            enabled = selectedVaccine != null,
             modifier = Modifier.wrapContentSize()
         ) {
             Text(stringResource(Res.string.add_vaccine_note))

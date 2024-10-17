@@ -58,9 +58,5 @@ fun PetDetailsComposable(pet: Pet, onAddVaccineNoteClicked: (String) -> Unit) {
                 }
             )
         }
-
-        LazyColumn {
-
-        }
     }
 }

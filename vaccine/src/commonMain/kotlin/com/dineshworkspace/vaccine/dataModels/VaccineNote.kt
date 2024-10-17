@@ -10,4 +10,5 @@ data class VaccineNote(
     val vaccine: Vaccine,
     val note: String,
     val timestamp: String,
+    val doctorName: String
 )

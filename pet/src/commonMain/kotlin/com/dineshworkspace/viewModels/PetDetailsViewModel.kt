@@ -7,7 +7,9 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 
-class PetDetailsViewModel(private val getPetDetailsUseCase: GetPetDetailsUseCase) : ViewModel() {
+class PetDetailsViewModel(
+    private val getPetDetailsUseCase: GetPetDetailsUseCase,
+) : ViewModel() {
 
     val petDetailsUiState: StateFlow<GetPetDetailsUiState> get() = _petDetailsUiState
     private val _petDetailsUiState: MutableStateFlow<GetPetDetailsUiState> = MutableStateFlow(
