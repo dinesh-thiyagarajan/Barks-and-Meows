@@ -22,7 +22,6 @@ import com.dineshworkspace.vaccine.viewModels.GetVaccineNotesUiState
 import com.dineshworkspace.vaccine.viewModels.VaccineNoteViewModel
 import com.dineshworkspace.viewModels.GetPetDetailsUiState
 import com.dineshworkspace.viewModels.PetDetailsViewModel
-import kotlinx.coroutines.async
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import navigation.AppRouteActions
