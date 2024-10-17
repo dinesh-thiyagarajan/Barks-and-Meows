@@ -16,6 +16,7 @@ import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -49,6 +50,10 @@ fun AddVaccineNoteScreen(
 ) {
     val coroutineScope = rememberCoroutineScope()
 
+    LaunchedEffect(vaccineNoteViewModel) {
+        vaccineNoteViewModel.getVaccinesList()
+    }
+
     Scaffold(topBar = {
         BarksAndMeowsAppBar(
             canNavigateBack = getNavController()?.previousBackStackEntry != null,
@@ -58,7 +63,7 @@ fun AddVaccineNoteScreen(
 
         val vaccineNoteUiState = vaccineNoteViewModel.vaccineNoteUiState.collectAsState()
 
-        when (vaccineNoteUiState.value) {
+        when (val vaccineNoteUiState = vaccineNoteUiState.value) {
             is VaccineNoteUiState.FetchingVaccines -> {
                 LoadingComposable()
             }
@@ -68,12 +73,7 @@ fun AddVaccineNoteScreen(
             }
 
             VaccineNoteUiState.Default -> {
-                AddNewVaccineNoteComposable(
-                    petId = petId,
-                    vaccineNoteViewModel = vaccineNoteViewModel,
-                    innerPadding = innerPadding,
-                    coroutineScope = coroutineScope
-                )
+
             }
 
             is VaccineNoteUiState.Error -> {
@@ -84,8 +84,22 @@ fun AddVaccineNoteScreen(
 
             }
 
-            VaccineNoteUiState.VaccinesFetchedSuccessfully -> {
+            is VaccineNoteUiState.VaccinesFetchedSuccessfully -> {
+                AddNewVaccineNoteComposable(
+                    petId = petId,
+                    vaccineNoteViewModel = vaccineNoteViewModel,
+                    innerPadding = innerPadding,
+                    coroutineScope = coroutineScope
+                )
+            }
 
+            is VaccineNoteUiState.VaccineNotesFetchedSuccessfully -> {
+                AddNewVaccineNoteComposable(
+                    petId = petId,
+                    vaccineNoteViewModel = vaccineNoteViewModel,
+                    innerPadding = innerPadding,
+                    coroutineScope = coroutineScope
+                )
             }
         }
 
@@ -125,7 +139,7 @@ internal fun AddNewVaccineNoteComposable(
             content = {
                 OutlinedTextField(
                     readOnly = true,
-                    value = selectedVaccine.vaccineName,
+                    value = "",
                     onValueChange = {},
                     label = { Text(text = "Select Vaccine") },
                     trailingIcon = {

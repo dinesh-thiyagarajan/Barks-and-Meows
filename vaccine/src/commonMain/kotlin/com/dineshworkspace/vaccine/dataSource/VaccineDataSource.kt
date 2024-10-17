@@ -1,5 +1,6 @@
 package com.dineshworkspace.vaccine.dataSource
 
+import com.dineshworkspace.vaccine.dataModels.Vaccine
 import com.dineshworkspace.vaccine.dataModels.VaccineNote
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.flow
@@ -33,6 +34,14 @@ class VaccineDataSource(
                     encodeDefaults = true
                 }).id
         emit(docId)
+    }
+
+    suspend fun getVaccines() = flow {
+        val vaccineList: MutableList<Vaccine> = mutableListOf()
+        vaccineList.add(Vaccine(vaccineId = "gene", "Vaccine 1"))
+        vaccineList.add(Vaccine(vaccineId = "gene1", "Vaccine 2"))
+        vaccineList.add(Vaccine(vaccineId = "gene2", "Vaccine 3"))
+        emit(vaccineList)
     }
 
 

@@ -4,7 +4,8 @@ import com.dineshworkspace.vaccine.dataSource.VaccineDataSource
 import com.dineshworkspace.vaccine.repository.VaccineRepository
 import com.dineshworkspace.vaccine.repository.VaccineRepositoryImpl
 import com.dineshworkspace.vaccine.useCases.AddVaccineNoteUseCase
-import com.dineshworkspace.vaccine.useCases.GetVaccineNoteUseCase
+import com.dineshworkspace.vaccine.useCases.GetVaccineNotesUseCase
+import com.dineshworkspace.vaccine.useCases.GetVaccinesUseCase
 import com.dineshworkspace.vaccine.viewModels.VaccineNoteViewModel
 import org.koin.compose.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -24,7 +25,14 @@ val vaccineModule = module {
             )
         )
     }
-    single { GetVaccineNoteUseCase(vaccineRepository = get()) }
+    single { GetVaccineNotesUseCase(vaccineRepository = get()) }
     single { AddVaccineNoteUseCase(vaccineRepository = get()) }
-    viewModel { VaccineNoteViewModel(addVaccineNoteUseCase = get(), getVaccineNoteUseCase = get()) }
+    single { GetVaccinesUseCase(vaccineRepository = get()) }
+    viewModel {
+        VaccineNoteViewModel(
+            addVaccineNoteUseCase = get(),
+            getVaccineNotesUseCase = get(),
+            getVaccinesUseCase = get()
+        )
+    }
 }
