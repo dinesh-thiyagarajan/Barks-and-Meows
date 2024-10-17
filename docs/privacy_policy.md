@@ -16,9 +16,10 @@ We collect the following types of information from users:
 
 2. Media and Photos
    Our App may access your device’s camera or photo gallery to allow you to:
-   Capture images using the camera 
-   Select images from your gallery
-   We only access these features when you specifically choose to use them (e.g., uploading or editing a pet picture). The images are used solely for the intended purpose within the App and are not shared or stored without your consent.
+   1. Capture images using the camera 
+   2. Select images from your gallery
+
+We only access these features when you specifically choose to use them (e.g., uploading or editing a pet picture). The images are used solely for the intended purpose within the App and are not shared or stored without your consent.
 
 How We Use Your Information
 
