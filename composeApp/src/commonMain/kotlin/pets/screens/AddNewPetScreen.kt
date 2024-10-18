@@ -21,7 +21,6 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.dineshworkspace.dataModels.Pet
-import com.dineshworkspace.uicomponents.composables.appBar.BarksAndMeowsAppBar
 import com.dineshworkspace.uicomponents.composables.buttons.PrimaryActionButtonComposable
 import com.dineshworkspace.uicomponents.composables.chips.CategorySelectorChip
 import com.dineshworkspace.uicomponents.composables.loading.LoadingComposable
@@ -31,7 +30,6 @@ import com.dineshworkspace.viewModels.PetViewModel
 import common.utils.generateUUID
 import kotlinx.coroutines.launch
 import navigation.NavRouter
-import navigation.NavRouter.getNavController
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
@@ -47,10 +45,7 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
         petViewModel.getPetCategories()
     }
 
-    Scaffold(topBar = {
-        BarksAndMeowsAppBar(canNavigateBack = getNavController()?.previousBackStackEntry != null,
-            navigateUp = { getNavController()?.navigateUp() })
-    }) { innerPadding ->
+    Scaffold { innerPadding ->
         Column(
             modifier = Modifier.fillMaxSize().padding(innerPadding)
                 .verticalScroll(rememberScrollState())

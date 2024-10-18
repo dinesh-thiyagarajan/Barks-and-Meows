@@ -22,14 +22,17 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import auth.LoginScreen
+import com.dineshworkspace.uicomponents.composables.appBar.BarksAndMeowsAppBar
 import di.appModule
 import home.HomeScreen
 import navigation.AppRouteActions
 import navigation.NavConstants
 import navigation.NavRouter
+import navigation.NavRouter.getNavController
 import navigation.bottomNavItems
 import navigation.path
 import navigation.showBottomNavBar
+import navigation.showTopAppBar
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
 import pets.screens.AddNewPetScreen
@@ -57,6 +60,16 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
 
     BarksAndMeowsTheme {
         Scaffold(
+            topBar = {
+                currentDestination?.route?.let {
+                    AnimatedVisibility(showTopAppBar(it.substringBefore("{"))) {
+                        BarksAndMeowsAppBar(
+                            canNavigateBack = getNavController()?.previousBackStackEntry != null,
+                            navigateUp = { getNavController()?.navigateUp() }
+                        )
+                    }
+                }
+            },
             bottomBar = {
                 AnimatedVisibility(showBottomNavBar(currentDestination?.route ?: "")) {
                     NavigationBar {

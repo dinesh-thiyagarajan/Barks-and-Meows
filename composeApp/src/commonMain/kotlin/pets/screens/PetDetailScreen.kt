@@ -15,7 +15,6 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.dineshworkspace.composables.PetDetailsComposable
-import com.dineshworkspace.uicomponents.composables.appBar.BarksAndMeowsAppBar
 import com.dineshworkspace.uicomponents.composables.error.ErrorComposable
 import com.dineshworkspace.uicomponents.composables.loading.LoadingComposable
 import com.dineshworkspace.vaccine.viewModels.GetVaccineNotesUiState
@@ -26,7 +25,6 @@ import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import navigation.AppRouteActions
 import navigation.NavRouter
-import navigation.NavRouter.getNavController
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
@@ -54,12 +52,7 @@ fun PetDetailScreen(
     val petDetailsUiState = petDetailsViewModel.petDetailsUiState.collectAsState()
     val getVaccineNotesUiState = vaccineNoteViewModel.getVaccineNoteUiState.collectAsState()
 
-    Scaffold(topBar = {
-        BarksAndMeowsAppBar(
-            canNavigateBack = getNavController()?.previousBackStackEntry != null,
-            navigateUp = { getNavController()?.navigateUp() }
-        )
-    }) { innerPadding ->
+    Scaffold { innerPadding ->
         Column(
             modifier = Modifier.padding(paddingValues = innerPadding).fillMaxSize()
         ) {

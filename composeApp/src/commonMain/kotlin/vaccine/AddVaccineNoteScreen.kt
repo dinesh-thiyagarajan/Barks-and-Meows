@@ -30,7 +30,6 @@ import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.add_vaccine_note
 import barksandmeows.composeapp.generated.resources.doctor_name
 import barksandmeows.composeapp.generated.resources.select_vaccine
-import com.dineshworkspace.uicomponents.composables.appBar.BarksAndMeowsAppBar
 import com.dineshworkspace.uicomponents.composables.error.ErrorComposable
 import com.dineshworkspace.uicomponents.composables.loading.LoadingComposable
 import com.dineshworkspace.uicomponents.composables.textFields.GenericInputTextFieldComposable
@@ -42,7 +41,6 @@ import common.utils.generateUUID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import navigation.NavRouter
-import navigation.NavRouter.getNavController
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -59,12 +57,7 @@ fun AddVaccineNoteScreen(
         vaccineNoteViewModel.getVaccinesList()
     }
 
-    Scaffold(topBar = {
-        BarksAndMeowsAppBar(
-            canNavigateBack = getNavController()?.previousBackStackEntry != null,
-            navigateUp = { getNavController()?.navigateUp() }
-        )
-    }) { innerPadding ->
+    Scaffold { innerPadding ->
 
         val getVaccineNoteUiState = vaccineNoteViewModel.addVaccineNoteUiState.collectAsState()
 

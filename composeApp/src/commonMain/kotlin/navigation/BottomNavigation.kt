@@ -10,6 +10,11 @@ fun showBottomNavBar(route: String) = listOf(
     AppRouteActions.ProfileScreen.route,
 ).contains(route)
 
+fun showTopAppBar(route: String) = listOf(
+    AppRouteActions.PetDetailScreen.route,
+    AppRouteActions.AddVaccineNoteScreen.route,
+).contains(route)
+
 sealed class BottomNavItem(
     val route: String, val icon: ImageVector, val description: String
 ) {
