@@ -1,12 +1,12 @@
 package vaccine
 
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -24,6 +24,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
@@ -57,8 +58,7 @@ fun AddVaccineNoteScreen(
         vaccineNoteViewModel.getVaccinesList()
     }
 
-    Scaffold { innerPadding ->
-
+    Scaffold {
         val getVaccineNoteUiState = vaccineNoteViewModel.addVaccineNoteUiState.collectAsState()
 
         when (val uiState = getVaccineNoteUiState.value) {
@@ -82,7 +82,6 @@ fun AddVaccineNoteScreen(
                 AddNewVaccineNoteComposable(
                     petId = petId,
                     vaccineNoteViewModel = vaccineNoteViewModel,
-                    innerPadding = innerPadding,
                     coroutineScope = coroutineScope,
                     vaccines = uiState.vaccineList
                 )
@@ -96,7 +95,6 @@ fun AddVaccineNoteScreen(
 internal fun AddNewVaccineNoteComposable(
     petId: String,
     vaccineNoteViewModel: VaccineNoteViewModel,
-    innerPadding: PaddingValues,
     coroutineScope: CoroutineScope,
     vaccines: List<Vaccine>
 ) {
@@ -105,12 +103,12 @@ internal fun AddNewVaccineNoteComposable(
     var dropDownExpanded by remember { mutableStateOf(false) }
     var selectedVaccine: Vaccine? by remember { mutableStateOf(null) }
 
-    Column(modifier = Modifier.padding(paddingValues = innerPadding)) {
+    Column(modifier = Modifier.padding(all = 10.dp)) {
         GenericInputTextFieldComposable(
             textFieldValue = doctorName,
             onValueChange = { doctorName = it },
             label = { Text(stringResource(Res.string.doctor_name)) },
-            modifier = Modifier,
+            modifier = Modifier.fillMaxWidth(),
         )
 
         Spacer(modifier = Modifier.height(16.dp))
@@ -155,6 +153,7 @@ internal fun AddNewVaccineNoteComposable(
         Spacer(modifier = Modifier.height(16.dp))
 
         Button(
+            shape = RoundedCornerShape(4.dp),
             onClick = {
                 coroutineScope.launch {
                     vaccineNoteViewModel.addVaccineNote(
@@ -171,7 +170,7 @@ internal fun AddNewVaccineNoteComposable(
                 }
             },
             enabled = selectedVaccine != null,
-            modifier = Modifier.wrapContentSize()
+            modifier = Modifier.wrapContentSize().align(Alignment.CenterHorizontally)
         ) {
             Text(stringResource(Res.string.add_vaccine_note))
         }
