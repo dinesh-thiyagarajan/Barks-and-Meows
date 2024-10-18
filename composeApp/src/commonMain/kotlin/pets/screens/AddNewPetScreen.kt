@@ -4,7 +4,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -39,16 +38,16 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
 
     val addPetUiState = petViewModel.addPetUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
-
+    val scrollState = rememberScrollState()
 
     LaunchedEffect(petViewModel) {
         petViewModel.getPetCategories()
     }
 
-    Scaffold { innerPadding ->
+    Scaffold {
         Column(
-            modifier = Modifier.fillMaxSize().padding(innerPadding)
-                .verticalScroll(rememberScrollState())
+            modifier = Modifier.fillMaxSize()
+                .verticalScroll(scrollState)
         ) {
             when (addPetUiState.value) {
                 is AddPetUiState.Loading -> {
@@ -71,6 +70,7 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
                             CategorySelectorChip(label = petCategories.value[index].category,
                                 categoryId = petCategories.value[index].id,
                                 selected = petCategories.value[index].selected,
+                                drawableResource = petCategories.value[index].drawableResource,
                                 onChipSelected = {
                                     coroutineScope.launch {
                                         petViewModel.updateSelectedCategory(it)

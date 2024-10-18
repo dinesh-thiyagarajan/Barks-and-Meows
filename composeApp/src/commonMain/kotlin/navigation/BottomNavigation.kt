@@ -13,6 +13,7 @@ fun showBottomNavBar(route: String) = listOf(
 fun showTopAppBar(route: String) = listOf(
     AppRouteActions.PetDetailScreen.route,
     AppRouteActions.AddVaccineNoteScreen.route,
+    AppRouteActions.AddNewPetScreen.route,
 ).contains(route)
 
 sealed class BottomNavItem(

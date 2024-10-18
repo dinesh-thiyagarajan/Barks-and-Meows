@@ -52,9 +52,9 @@ fun PetDetailScreen(
     val petDetailsUiState = petDetailsViewModel.petDetailsUiState.collectAsState()
     val getVaccineNotesUiState = vaccineNoteViewModel.getVaccineNoteUiState.collectAsState()
 
-    Scaffold { innerPadding ->
+    Scaffold {
         Column(
-            modifier = Modifier.padding(paddingValues = innerPadding).fillMaxSize()
+            modifier = Modifier.padding().fillMaxSize()
         ) {
             Box(
                 modifier = Modifier

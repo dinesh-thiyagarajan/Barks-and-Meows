@@ -1,6 +1,8 @@
 package com.dineshworkspace.dataModels
 
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.Transient
+import org.jetbrains.compose.resources.DrawableResource
 
 @Serializable
 data class Pet(
@@ -13,5 +15,9 @@ data class Pet(
 
 @Serializable
 data class PetCategory(
-    val id: Int, val category: String, var selected: Boolean = false
+    val id: Int,
+    val category: String,
+    @Transient
+    val drawableResource: DrawableResource? = null,
+    var selected: Boolean = false
 )

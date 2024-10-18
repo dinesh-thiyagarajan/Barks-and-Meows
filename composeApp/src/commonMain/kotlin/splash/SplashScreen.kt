@@ -18,6 +18,7 @@ import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.ic_app_logo
+import barksandmeows.composeapp.generated.resources.splash_screen_img_description
 import navigation.AppRouteActions
 import navigation.NavRouter
 import org.jetbrains.compose.resources.painterResource
@@ -45,7 +46,7 @@ fun SplashScreen(splashViewModel: SplashViewModel = koinViewModel()) {
         ) {
             Image(
                 painter = painterResource(Res.drawable.ic_app_logo),
-                contentDescription = "stringResource(Res.string.splash_screen_img_description)",
+                contentDescription = stringResource(Res.string.splash_screen_img_description),
                 modifier = Modifier.size(100.dp).align(Alignment.CenterHorizontally),
             )
         }

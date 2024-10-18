@@ -1,5 +1,8 @@
 package com.dineshworkspace.dataSource
 
+import barksandmeows.pet.generated.resources.Res
+import barksandmeows.pet.generated.resources.ic_cat
+import barksandmeows.pet.generated.resources.ic_dog
 import com.dineshworkspace.dataModels.Pet
 import com.dineshworkspace.dataModels.PetCategory
 import dev.gitlive.firebase.firestore.FirebaseFirestore
@@ -47,11 +50,8 @@ class PetDataSource(
 
     suspend fun getPetCategories() = flow {
         val petCategories = listOf(
-            PetCategory(1, "Dog"),
-            PetCategory(2, "Cat"),
-            PetCategory(3, "Fish"),
-            PetCategory(4, "Bird"),
-            PetCategory(5, "Parrot"),
+            PetCategory(1, "Dog", drawableResource = Res.drawable.ic_dog),
+            PetCategory(2, "Cat", drawableResource = Res.drawable.ic_cat)
         )
         emit(petCategories)
     }
