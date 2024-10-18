@@ -2,6 +2,7 @@
     <string name="splash_screen">Splash Screen</string>
     <string name="splash_screen_img_description">Splash Image</string>
     <string name="pet_name">Pet Name</string>
+    <string name="pet_age">Pet Age</string>
     <string name="add_vaccine_note">Add Vaccine Note</string>
     <string name="select_vaccine">Select Vaccine</string>
     <string name="doctor_name">Doctor name</string>
