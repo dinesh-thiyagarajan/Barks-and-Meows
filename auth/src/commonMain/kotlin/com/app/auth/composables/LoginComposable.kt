@@ -123,36 +123,37 @@ fun LoginComposable(
             Text(stringResource(Res.string.login))
         }
 
-        Spacer(modifier = Modifier.height(16.dp))
+        // Disabling Google sign in for now
+        //Spacer(modifier = Modifier.height(16.dp))
 
-        Row(
-            modifier = Modifier.fillMaxWidth(0.8f),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-            HorizontalDivider(modifier = Modifier.weight(1f))
-            Text(
-                text = "  OR  ",
-                style = MaterialTheme.typography.bodySmall,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
-            )
-            HorizontalDivider(modifier = Modifier.weight(1f))
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        OutlinedButton(
-            onClick = onGoogleSignInClick,
-            modifier = Modifier.fillMaxWidth(0.8f),
-            colors = ButtonDefaults.outlinedButtonColors()
-        ) {
-            Icon(
-                imageVector = Icons.Default.Email,
-                contentDescription = "Google",
-                modifier = Modifier.size(20.dp)
-            )
-            Spacer(modifier = Modifier.width(8.dp))
-            Text("Sign in with Google")
-        }
+//        Row(
+//            modifier = Modifier.fillMaxWidth(0.8f),
+//            verticalAlignment = Alignment.CenterVertically
+//        ) {
+//            HorizontalDivider(modifier = Modifier.weight(1f))
+//            Text(
+//                text = "  OR  ",
+//                style = MaterialTheme.typography.bodySmall,
+//                color = MaterialTheme.colorScheme.onSurfaceVariant
+//            )
+//            HorizontalDivider(modifier = Modifier.weight(1f))
+//        }
+//
+//        Spacer(modifier = Modifier.height(16.dp))
+//
+//        OutlinedButton(
+//            onClick = onGoogleSignInClick,
+//            modifier = Modifier.fillMaxWidth(0.8f),
+//            colors = ButtonDefaults.outlinedButtonColors()
+//        ) {
+//            Icon(
+//                imageVector = Icons.Default.Email,
+//                contentDescription = "Google",
+//                modifier = Modifier.size(20.dp)
+//            )
+//            Spacer(modifier = Modifier.width(8.dp))
+//            Text("Sign in with Google")
+//        }
 
         Spacer(modifier = Modifier.height(24.dp))
 
