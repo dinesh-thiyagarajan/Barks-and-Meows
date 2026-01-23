@@ -1,6 +1,5 @@
 package home
 
-import androidx.activity.compose.BackHandler
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -26,7 +25,6 @@ import com.dineshworkspace.uicomponents.composables.error.ErrorComposable
 import com.dineshworkspace.uicomponents.composables.loading.LoadingComposable
 import com.dineshworkspace.viewModels.GetPetsUiState
 import com.dineshworkspace.viewModels.PetViewModel
-import common.platform.rememberExitApp
 import navigation.AppRouteActions
 import navigation.NavRouter
 import org.jetbrains.compose.resources.stringResource
@@ -38,23 +36,11 @@ import pets.extensions.toPetData
 @Composable
 fun HomeScreen(petViewModel: PetViewModel = koinViewModel()) {
     val getPetsUiState = petViewModel.getPetsUiState.collectAsState()
-    val exitApp = rememberExitApp()
 
     LaunchedEffect(Unit) {
         petViewModel.getPets()
     }
 
-    // Handle back button press - exit app if at the start of navigation
-    BackHandler(enabled = true) {
-        val navController = NavRouter.getNavController()
-        if (navController?.previousBackStackEntry == null) {
-            // At the start destination, exit the app
-            exitApp()
-        } else {
-            // There's something in backstack, navigate back normally
-            navController.popBackStack()
-        }
-    }
 
     Scaffold(
         floatingActionButton = {
