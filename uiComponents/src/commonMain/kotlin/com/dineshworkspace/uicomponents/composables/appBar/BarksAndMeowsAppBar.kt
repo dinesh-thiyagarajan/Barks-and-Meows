@@ -1,5 +1,6 @@
 package com.dineshworkspace.uicomponents.composables.appBar
 
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -21,7 +22,8 @@ fun BarksAndMeowsAppBar(
     titleKey: StringResource? = null,
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    actions: @Composable RowScope.() -> Unit = {}
 ) {
     TopAppBar(
         title = { titleKey?.let { Text(stringResource(it)) } },
@@ -38,6 +40,7 @@ fun BarksAndMeowsAppBar(
                     )
                 }
             }
-        }
+        },
+        actions = actions
     )
 }

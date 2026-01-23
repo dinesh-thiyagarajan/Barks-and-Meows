@@ -2,4 +2,18 @@
     <string name="email">Email</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
+
+    <!-- Login Composable -->
+    <string name="or_separator">  OR  </string>
+    <string name="google_icon_description">Google</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="no_account_signup">Don\'t have an account? Sign Up</string>
+
+    <!-- Sign Up Composable -->
+    <string name="create_account">Create Account</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="all_fields_required">All fields are required</string>
+    <string name="passwords_do_not_match">Passwords do not match</string>
+    <string name="password_min_length">Password must be at least 6 characters</string>
+    <string name="sign_up">Sign Up</string>
 </resources>

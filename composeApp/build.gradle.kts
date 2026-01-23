@@ -45,6 +45,7 @@ kotlin {
             implementation(libs.jetbrains.navigation)
             implementation(libs.bundles.koin)
             implementation(libs.koin.compose.viewmodel)
+            implementation(libs.kotlinx.datetime)
             implementation(project(":auth"))
             implementation(project(":pet"))
             implementation(project(":uiComponents"))

@@ -24,6 +24,13 @@ class PetDataSource(
                 encodeDefaults = true
             })
 
+    suspend fun updatePet(pet: Pet) =
+        firestore.collection(baseEnv).document(petCollection)
+            .collection(userId)
+            .document(pet.id)
+            .set(data = pet, buildSettings = {
+                encodeDefaults = true
+            })
 
     suspend fun getPets() = flow {
         val petsList = mutableListOf<Pet>()
@@ -46,6 +53,14 @@ class PetDataSource(
                 val pet = documentSnapshot.data<Pet>()
                 emit(pet)
             }
+    }
+
+    suspend fun deletePet(petId: String) = flow {
+        firestore.collection(baseEnv).document(petCollection)
+            .collection(userId)
+            .document(petId)
+            .delete()
+        emit(true)
     }
 
     suspend fun getPetCategories() = flow {

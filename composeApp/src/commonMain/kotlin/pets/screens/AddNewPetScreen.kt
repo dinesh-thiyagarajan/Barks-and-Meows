@@ -12,6 +12,9 @@ import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -58,7 +61,7 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
     Scaffold {
         Column(
             modifier = Modifier.fillMaxSize()
-                .padding(start = 16.dp, end = 16.dp)
+                .padding(24.dp)
                 .verticalScroll(scrollState)
         ) {
             when (addPetUiState.value) {
@@ -75,22 +78,64 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
                     var petName by remember { mutableStateOf("") }
                     var petAge by remember { mutableStateOf("0") }
 
-                    LazyRow(
-                        contentPadding = PaddingValues(vertical = 8.dp),
-                        horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    // Header Section
+                    Text(
+                        text = "Add Your Pet",
+                        style = MaterialTheme.typography.headlineMedium,
+                        color = MaterialTheme.colorScheme.onSurface,
+                        modifier = Modifier.padding(bottom = 8.dp)
+                    )
+
+                    Text(
+                        text = "Tell us about your furry friend",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(bottom = 24.dp)
+                    )
+
+                    // Category Section
+                    Card(
+                        colors = CardDefaults.cardColors(
+                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
+                        ),
+                        modifier = Modifier.fillMaxWidth()
                     ) {
-                        items(petCategories.value.size) { index ->
-                            CategorySelectorChip(label = petCategories.value[index].category,
-                                categoryId = petCategories.value[index].id,
-                                selected = petCategories.value[index].selected,
-                                drawableResource = petCategories.value[index].drawableResource,
-                                onChipSelected = {
-                                    coroutineScope.launch {
-                                        petViewModel.updateSelectedCategory(it)
-                                    }
-                                })
+                        Column(modifier = Modifier.padding(16.dp)) {
+                            Text(
+                                text = "Pet Type",
+                                style = MaterialTheme.typography.titleSmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                modifier = Modifier.padding(bottom = 12.dp)
+                            )
+
+                            LazyRow(
+                                horizontalArrangement = Arrangement.spacedBy(12.dp)
+                            ) {
+                                items(petCategories.value.size) { index ->
+                                    CategorySelectorChip(
+                                        label = petCategories.value[index].category,
+                                        categoryId = petCategories.value[index].id,
+                                        selected = petCategories.value[index].selected,
+                                        drawableResource = petCategories.value[index].drawableResource,
+                                        onChipSelected = {
+                                            coroutineScope.launch {
+                                                petViewModel.updateSelectedCategory(it)
+                                            }
+                                        })
+                                }
+                            }
                         }
                     }
+
+                    Spacer(modifier = Modifier.height(24.dp))
+
+                    // Pet Details Section
+                    Text(
+                        text = "Pet Details",
+                        style = MaterialTheme.typography.titleSmall,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant,
+                        modifier = Modifier.padding(bottom = 12.dp)
+                    )
 
                     PetInputTextFieldComposable(
                         textFieldValue = petName,
@@ -103,7 +148,7 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
                         modifier = Modifier.fillMaxWidth(),
                     )
 
-                    Spacer(modifier = Modifier.height(10.dp))
+                    Spacer(modifier = Modifier.height(16.dp))
 
                     PetInputTextFieldComposable(
                         textFieldValue = petAge,
@@ -116,17 +161,22 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
                         modifier = Modifier.fillMaxWidth(),
                     )
 
-                    PrimaryActionButtonComposable(coroutineScope = coroutineScope,
+                    Spacer(modifier = Modifier.height(32.dp))
+
+                    PrimaryActionButtonComposable(
+                        coroutineScope = coroutineScope,
                         onButtonClick = {
                             coroutineScope.launch {
-                                val pet = Pet(id = generateUUID(),
+                                val pet = Pet(
+                                    id = generateUUID(),
                                     name = petName,
                                     age = petAge.toInt(),
-                                    petCategory = petCategories.value.first { it.selected })
+                                    petCategory = petCategories.value.first { it.selected }
+                                )
                                 petViewModel.addNewPet(pet)
                             }
                         },
-                        modifier = Modifier.padding(top = 10.dp).fillMaxWidth(),
+                        modifier = Modifier.fillMaxWidth(),
                         enabled = petName.isNotEmpty() && petCategories.value.any { it.selected },
                         buttonLabel = {
                             Text("Submit")

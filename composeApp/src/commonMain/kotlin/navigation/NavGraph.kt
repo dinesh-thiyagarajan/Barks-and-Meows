@@ -6,9 +6,11 @@ enum class AppRouteActions(
 ) {
     SplashScreen(route = "splash/"),
     LoginScreen(route = "login/"),
+    SignUpScreen(route = "signup/"),
     HomeScreen(route = "home/"),
     ProfileScreen(route = "profile/"),
     AddNewPetScreen(route = "add-new-pet/"),
+    EditPetScreen(route = "edit-pet/", listOf(NavConstants.PET_ID)),
     PetDetailScreen(route = "pet-details/", listOf(NavConstants.PET_ID)),
     AddVaccineNoteScreen(route = "add-vaccine-note/", listOf(NavConstants.PET_ID)),
 }

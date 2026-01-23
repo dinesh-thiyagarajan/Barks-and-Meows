@@ -28,6 +28,9 @@ kotlin {
     }
 
     sourceSets {
+        androidMain.dependencies {
+            implementation(libs.play.services.auth)
+        }
         commonMain.dependencies {
             implementation(libs.bundles.koin)
             implementation(libs.firebase.gitlive.auth)

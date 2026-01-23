@@ -21,3 +21,4 @@ captures
 /iosApp/iosApp/GoogleService-Info.plist
 /keystore/
 /composeApp/release/
+/composeApp/src/google-services.json

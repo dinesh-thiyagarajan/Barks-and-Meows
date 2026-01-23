@@ -4,6 +4,7 @@ import com.dineshworkspace.vaccine.dataSource.VaccineDataSource
 import com.dineshworkspace.vaccine.repository.VaccineRepository
 import com.dineshworkspace.vaccine.repository.VaccineRepositoryImpl
 import com.dineshworkspace.vaccine.useCases.AddVaccineNoteUseCase
+import com.dineshworkspace.vaccine.useCases.DeleteVaccineNoteUseCase
 import com.dineshworkspace.vaccine.useCases.GetVaccineNotesUseCase
 import com.dineshworkspace.vaccine.useCases.GetVaccinesUseCase
 import com.dineshworkspace.vaccine.viewModels.VaccineNoteViewModel
@@ -27,12 +28,14 @@ val vaccineModule = module {
     }
     single { GetVaccineNotesUseCase(vaccineRepository = get()) }
     single { AddVaccineNoteUseCase(vaccineRepository = get()) }
+    single { DeleteVaccineNoteUseCase(vaccineRepository = get()) }
     single { GetVaccinesUseCase(vaccineRepository = get()) }
     viewModel {
         VaccineNoteViewModel(
             addVaccineNoteUseCase = get(),
             getVaccineNotesUseCase = get(),
-            getVaccinesUseCase = get()
+            getVaccinesUseCase = get(),
+            deleteVaccineNoteUseCase = get()
         )
     }
 }

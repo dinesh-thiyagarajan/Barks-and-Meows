@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.dineshworkspace.vaccine.dataModels.Vaccine
 import com.dineshworkspace.vaccine.dataModels.VaccineNote
 import com.dineshworkspace.vaccine.useCases.AddVaccineNoteUseCase
+import com.dineshworkspace.vaccine.useCases.DeleteVaccineNoteUseCase
 import com.dineshworkspace.vaccine.useCases.GetVaccineNotesUseCase
 import com.dineshworkspace.vaccine.useCases.GetVaccinesUseCase
 import kotlinx.coroutines.Dispatchers
@@ -19,6 +20,7 @@ class VaccineNoteViewModel(
     private val addVaccineNoteUseCase: AddVaccineNoteUseCase,
     private val getVaccineNotesUseCase: GetVaccineNotesUseCase,
     private val getVaccinesUseCase: GetVaccinesUseCase,
+    private val deleteVaccineNoteUseCase: DeleteVaccineNoteUseCase,
 ) : ViewModel() {
 
     val addVaccineNoteUiState: StateFlow<AddVaccineNoteUiState> get() = _addVaccineNoteUiState
@@ -66,6 +68,18 @@ class VaccineNoteViewModel(
             getVaccinesUseCase.invoke().collect {
                 _addVaccineNoteUiState.value = AddVaccineNoteUiState.VaccinesFetchedSuccessfully(it)
             }
+        }
+    }
+
+    suspend fun deleteVaccineNote(petId: String, vaccineNoteId: String) {
+        viewModelScope.launch(Dispatchers.IO) {
+            deleteVaccineNoteUseCase.invoke(petId = petId, vaccineNoteId = vaccineNoteId)
+                .catch {
+                    // Handle error if needed
+                }
+                .collect {
+                    // Successfully deleted, the getVaccineNotes flow will automatically update
+                }
         }
     }
 

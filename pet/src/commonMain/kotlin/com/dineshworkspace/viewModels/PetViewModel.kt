@@ -7,6 +7,7 @@ import com.dineshworkspace.dataModels.PetCategory
 import com.dineshworkspace.useCases.AddPetUseCase
 import com.dineshworkspace.useCases.GetPetCategoriesUseCase
 import com.dineshworkspace.useCases.GetPetsUseCase
+import com.dineshworkspace.useCases.UpdatePetUseCase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,6 +17,7 @@ import kotlinx.coroutines.launch
 
 class PetViewModel(
     private val addPetUseCase: AddPetUseCase,
+    private val updatePetUseCase: UpdatePetUseCase,
     private val getPetsUseCase: GetPetsUseCase,
     private val getPetCategoriesUseCase: GetPetCategoriesUseCase
 ) : ViewModel() {
@@ -35,12 +37,29 @@ class PetViewModel(
         AddPetUiState.NotStarted
     )
 
+    val updatePetUiState: StateFlow<UpdatePetUiState> get() = _updatePetUiState
+    private val _updatePetUiState: MutableStateFlow<UpdatePetUiState> = MutableStateFlow(
+        UpdatePetUiState.NotStarted
+    )
+
     suspend fun addNewPet(pet: Pet) {
         _addPetUiState.value = AddPetUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             addPetUseCase.invoke(pet)
             _addPetUiState.value = AddPetUiState.Success
         }
+    }
+
+    suspend fun updatePet(pet: Pet) {
+        _updatePetUiState.value = UpdatePetUiState.Loading
+        viewModelScope.launch(Dispatchers.IO) {
+            updatePetUseCase.invoke(pet)
+            _updatePetUiState.value = UpdatePetUiState.Success
+        }
+    }
+
+    fun resetUpdatePetUiState() {
+        _updatePetUiState.value = UpdatePetUiState.NotStarted
     }
 
     suspend fun getPets() {
@@ -53,7 +72,7 @@ class PetViewModel(
         }
     }
 
-    suspend fun getPetCategories() {
+    fun getPetCategories() {
         viewModelScope.launch(Dispatchers.IO) {
             getPetCategoriesUseCase.invoke().flowOn(Dispatchers.IO)
                 .collect {
@@ -82,4 +101,10 @@ sealed interface AddPetUiState {
     data object Success : AddPetUiState
     data object Loading : AddPetUiState
     data object NotStarted : AddPetUiState
+}
+
+sealed interface UpdatePetUiState {
+    data object Success : UpdatePetUiState
+    data object Loading : UpdatePetUiState
+    data object NotStarted : UpdatePetUiState
 }

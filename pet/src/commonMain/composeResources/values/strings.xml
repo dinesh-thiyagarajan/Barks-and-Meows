@@ -12,4 +12,18 @@
     <string name="default_error_msg">Something went wrong</string>
     <string name="add_new_pet">Add New Pet</string>
     <string name="pet_name">Pet Name</string>
+
+    <!-- Pet Details Composable -->
+    <string name="pet_description">pet</string>
+    <string name="delete_pet_description">Delete pet</string>
+    <string name="delete_pet_title">Delete Pet</string>
+    <string name="years_old">years old</string>
+    <string name="vaccine_records">Vaccine Records</string>
+    <string name="track_vaccination_history">Track vaccination history</string>
+    <string name="add_vaccine_note_description">Add vaccine note</string>
+
+    <!-- No Pets Found Composable -->
+    <string name="no_pet_image_description">no pet image</string>
+    <string name="empty_state_title">No Pets Yet</string>
+    <string name="empty_state_subtitle">Start your pet care journey by adding your first furry friend!</string>
 </resources>

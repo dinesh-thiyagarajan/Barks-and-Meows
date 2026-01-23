@@ -24,5 +24,24 @@ class AuthDataSource(private val firebaseAuth: FirebaseAuth) {
         emit(true)
     }
 
+    suspend fun signUpWithEmailAndPassword(email: String, password: String): AuthResponse {
+        try {
+            val authResult =
+                firebaseAuth.createUserWithEmailAndPassword(email = email, password = password)
+            return AuthResponse(userEmail = authResult.user?.email)
+        } catch (ex: Exception) {
+            return AuthResponse(message = ex.message)
+        }
+    }
+
+    suspend fun signInWithGoogle(idToken: String): AuthResponse {
+        try {
+            val credential = dev.gitlive.firebase.auth.GoogleAuthProvider.credential(idToken, null)
+            val authResult = firebaseAuth.signInWithCredential(credential)
+            return AuthResponse(userEmail = authResult.user?.email)
+        } catch (ex: Exception) {
+            return AuthResponse(message = ex.message)
+        }
+    }
 
 }

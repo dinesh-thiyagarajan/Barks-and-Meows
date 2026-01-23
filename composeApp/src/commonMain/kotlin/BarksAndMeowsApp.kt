@@ -36,8 +36,10 @@ import navigation.showTopAppBar
 import org.jetbrains.compose.ui.tooling.preview.Preview
 import org.koin.compose.KoinApplication
 import pets.screens.AddNewPetScreen
+import pets.screens.EditPetScreen
 import pets.screens.PetDetailScreen
 import profile.ProfileScreen
+import signup.SignUpScreen
 import splash.SplashScreen
 import theme.BarksAndMeowsTheme
 import vaccine.AddVaccineNoteScreen
@@ -142,7 +144,11 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                 }
 
                 composable(route = AppRouteActions.LoginScreen.path()) {
-                    LoginScreen()
+                    LoginScreen(onSignUpClicked = { NavRouter.navigate(AppRouteActions.SignUpScreen.route) })
+                }
+
+                composable(route = AppRouteActions.SignUpScreen.path()) {
+                    SignUpScreen()
                 }
 
                 composable(route = AppRouteActions.HomeScreen.path()) {
@@ -155,6 +161,18 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
 
                 composable(route = AppRouteActions.AddNewPetScreen.path()) {
                     AddNewPetScreen()
+                }
+
+                composable(
+                    route = AppRouteActions.EditPetScreen.path(),
+                    arguments = AppRouteActions.EditPetScreen.navArguments.map {
+                        navArgument(it) {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        }
+                    }) {
+                    val petId = it.arguments?.getString(NavConstants.PET_ID)
+                    EditPetScreen(petId = petId ?: "none passed")
                 }
 
                 composable(

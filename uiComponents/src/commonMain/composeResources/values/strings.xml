@@ -1,4 +1,24 @@
 <resources>
     <string name="default_error_msg">Something went wrong</string>
     <string name="default_loading_msg">Please wait for snowy to fetch data for you</string>
+
+    <!-- Pet Card Composable -->
+    <string name="pet_image_description">%s image</string>
+    <string name="year_singular">year</string>
+    <string name="years_plural">years</string>
+    <string name="years_old">old</string>
+    <string name="view_details_description">View details</string>
+
+    <!-- Confirmation Dialog -->
+    <string name="confirm">Confirm</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Hello Pet Card -->
+    <string name="hello_pet">Hello %s</string>
+
+    <!-- Date Picker -->
+    <string name="select_date">Select date</string>
+    <string name="date_format">date %s</string>
+    <string name="select_date_button">Select Date</string>
+    <string name="ok">Ok</string>
 </resources>

@@ -1,0 +1,5 @@
+<resources>
+    <!-- Vaccine Module Strings -->
+    <string name="vaccine">Vaccine</string>
+    <string name="vaccine_note">Vaccine Note</string>
+</resources>

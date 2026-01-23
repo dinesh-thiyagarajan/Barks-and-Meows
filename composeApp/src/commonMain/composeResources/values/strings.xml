@@ -6,4 +6,50 @@
     <string name="add_vaccine_note">Add Vaccine Note</string>
     <string name="select_vaccine">Select Vaccine</string>
     <string name="doctor_name">Doctor name</string>
+
+    <!-- Profile Screen -->
+    <string name="profile_icon_description">Profile Icon</string>
+    <string name="profile">Profile</string>
+    <string name="logout">Logout</string>
+    <string name="email_label">Email</string>
+    <string name="dog_singular">Dog</string>
+    <string name="dog_plural">Dogs</string>
+    <string name="cat_singular">Cat</string>
+    <string name="cat_plural">Cats</string>
+
+    <!-- Pet Detail Screen -->
+    <string name="delete_pet_title">Delete Pet</string>
+    <string name="delete_pet_message">Are you sure you want to delete this pet? This action cannot be undone and will remove all vaccine notes associated with this pet.</string>
+    <string name="delete_vaccine_note_title">Delete Vaccine Note</string>
+    <string name="delete_vaccine_note_message">Are you sure you want to delete this vaccine note? This action cannot be undone.</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="no_vaccine_notes">No vaccine notes yet</string>
+    <string name="no_vaccine_notes_description">Start tracking your pet\'s vaccination history by adding the first vaccine note</string>
+    <string name="doctor_prefix">Doctor: </string>
+    <string name="date_prefix">Date: </string>
+    <string name="notes_label">Notes:</string>
+    <string name="not_available">N/A</string>
+    <string name="delete_vaccine_note_description">Delete vaccine note</string>
+
+    <!-- Add Vaccine Note Screen -->
+    <string name="ok">OK</string>
+    <string name="date_label">Date</string>
+    <string name="select_date_description">Select date</string>
+    <string name="notes">Notes</string>
+
+    <!-- Home Screen -->
+    <string name="add_pet_description">Add pet</string>
+
+    <!-- Add New Pet Screen -->
+    <string name="submit">Submit</string>
+
+    <!-- Edit Pet Screen -->
+    <string name="edit_pet">Edit Pet</string>
+    <string name="edit_pet_description">Edit pet</string>
+    <string name="update">Update</string>
+
+    <!-- Menu Options -->
+    <string name="more_options">More options</string>
+    <string name="edit">Edit</string>
 </resources>

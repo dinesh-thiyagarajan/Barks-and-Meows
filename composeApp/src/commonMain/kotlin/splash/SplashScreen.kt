@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLayoutDirection
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavOptions
 import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.ic_app_logo
 import barksandmeows.composeapp.generated.resources.splash_screen_img_description
@@ -30,9 +31,28 @@ import org.koin.core.annotation.KoinExperimentalAPI
 @Composable
 fun SplashScreen(splashViewModel: SplashViewModel = koinViewModel()) {
     val splashUiState = splashViewModel.splashUiState.collectAsState()
+
     LaunchedEffect(splashViewModel) {
         splashViewModel.isLoggedIn()
     }
+
+    LaunchedEffect(splashUiState.value) {
+        // NavOptions to remove splash screen from backstack
+        val navOptions = NavOptions.Builder()
+            .setPopUpTo(AppRouteActions.SplashScreen.route, inclusive = true)
+            .build()
+
+        when (splashUiState.value) {
+            is SplashUiState.LoggedIn -> {
+                NavRouter.navigate(AppRouteActions.HomeScreen.route, navOptions)
+            }
+            is SplashUiState.NotLoggedIn -> {
+                NavRouter.navigate(AppRouteActions.LoginScreen.route, navOptions)
+            }
+            is SplashUiState.FetchingLoginStatus -> {}
+        }
+    }
+
     Scaffold {
         Column(
             modifier = Modifier.fillMaxSize().padding(
@@ -50,16 +70,5 @@ fun SplashScreen(splashViewModel: SplashViewModel = koinViewModel()) {
                 modifier = Modifier.size(100.dp).align(Alignment.CenterHorizontally),
             )
         }
-    }
-    when (splashUiState.value) {
-        is SplashUiState.LoggedIn -> {
-            NavRouter.navigate(AppRouteActions.HomeScreen.route)
-        }
-
-        is SplashUiState.NotLoggedIn -> {
-            NavRouter.navigate(AppRouteActions.LoginScreen.route)
-        }
-
-        is SplashUiState.FetchingLoginStatus -> {}
     }
 }

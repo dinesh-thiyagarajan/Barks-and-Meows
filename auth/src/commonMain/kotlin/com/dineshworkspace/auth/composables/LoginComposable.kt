@@ -3,19 +3,29 @@ package com.dineshworkspace.auth.composables
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Email
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -39,7 +49,13 @@ import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
 @Composable
-fun LoginComposable(coroutineScope: CoroutineScope, authViewModel: AuthViewModel) {
+fun LoginComposable(
+    coroutineScope: CoroutineScope,
+    authViewModel: AuthViewModel,
+    errorMessage: String? = null,
+    onGoogleSignInClick: () -> Unit = {},
+    onSignUpClicked: () -> Unit = {},
+) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     Column(
@@ -83,6 +99,17 @@ fun LoginComposable(coroutineScope: CoroutineScope, authViewModel: AuthViewModel
             ),
             modifier = Modifier.fillMaxWidth(0.8f)
         )
+
+        if (errorMessage != null) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Text(
+                text = errorMessage,
+                color = MaterialTheme.colorScheme.error,
+                style = MaterialTheme.typography.bodySmall,
+                modifier = Modifier.padding(vertical = 8.dp)
+            )
+        }
+
         Spacer(modifier = Modifier.height(16.dp))
         Button(
             onClick = {
@@ -91,9 +118,49 @@ fun LoginComposable(coroutineScope: CoroutineScope, authViewModel: AuthViewModel
                 }
             },
             enabled = email.isNotEmpty() && password.isNotEmpty(),
-            modifier = Modifier.wrapContentSize()
+            modifier = Modifier.fillMaxWidth(0.8f)
         ) {
             Text(stringResource(Res.string.login))
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(0.8f),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            HorizontalDivider(modifier = Modifier.weight(1f))
+            Text(
+                text = "  OR  ",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            HorizontalDivider(modifier = Modifier.weight(1f))
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedButton(
+            onClick = onGoogleSignInClick,
+            modifier = Modifier.fillMaxWidth(0.8f),
+            colors = ButtonDefaults.outlinedButtonColors()
+        ) {
+            Icon(
+                imageVector = Icons.Default.Email,
+                contentDescription = "Google",
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.width(8.dp))
+            Text("Sign in with Google")
+        }
+
+        Spacer(modifier = Modifier.height(24.dp))
+
+        TextButton(
+            onClick = { onSignUpClicked.invoke() },
+            modifier = Modifier.wrapContentSize()
+        ) {
+            Text("Don't have an account? Sign Up", style = MaterialTheme.typography.bodyMedium)
         }
     }
 }

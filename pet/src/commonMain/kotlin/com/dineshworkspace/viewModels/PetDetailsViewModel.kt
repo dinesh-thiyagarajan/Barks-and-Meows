@@ -1,14 +1,21 @@
 package com.dineshworkspace.viewModels
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.dineshworkspace.dataModels.Pet
+import com.dineshworkspace.useCases.DeletePetUseCase
 import com.dineshworkspace.useCases.GetPetDetailsUseCase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.IO
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class PetDetailsViewModel(
     private val getPetDetailsUseCase: GetPetDetailsUseCase,
+    private val deletePetUseCase: DeletePetUseCase,
 ) : ViewModel() {
 
     val petDetailsUiState: StateFlow<GetPetDetailsUiState> get() = _petDetailsUiState
@@ -21,6 +28,20 @@ class PetDetailsViewModel(
             _petDetailsUiState.value = GetPetDetailsUiState.Error(it.message)
         }.collect {
             _petDetailsUiState.value = GetPetDetailsUiState.Success(pet = it)
+        }
+    }
+
+    suspend fun deletePet(petId: String, onSuccess: () -> Unit) {
+        viewModelScope.launch(Dispatchers.IO) {
+            deletePetUseCase.invoke(petId = petId)
+                .catch {
+                    // Handle error if needed
+                }
+                .collect {
+                    withContext(Dispatchers.Main) {
+                        onSuccess()
+                    }
+                }
         }
     }
 }

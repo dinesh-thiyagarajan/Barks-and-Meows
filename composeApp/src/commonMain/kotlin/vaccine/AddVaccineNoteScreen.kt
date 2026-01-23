@@ -1,5 +1,7 @@
 package vaccine
 
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -7,15 +9,23 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.DatePickerDialog
 import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.rememberDatePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -41,6 +51,9 @@ import com.dineshworkspace.vaccine.viewModels.VaccineNoteViewModel
 import common.utils.generateUUID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import navigation.NavRouter
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
@@ -100,8 +113,39 @@ internal fun AddNewVaccineNoteComposable(
 ) {
     var dateTimeStamp by remember { mutableStateOf("") }
     var doctorName by remember { mutableStateOf("") }
+    var note by remember { mutableStateOf("") }
     var dropDownExpanded by remember { mutableStateOf(false) }
     var selectedVaccine: Vaccine? by remember { mutableStateOf(null) }
+    var showDatePicker by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
+
+    // Date Picker Dialog
+    if (showDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { showDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        datePickerState.selectedDateMillis?.let { millis ->
+                            val instant = Instant.fromEpochMilliseconds(millis)
+                            val localDate = instant.toLocalDateTime(TimeZone.UTC).date
+                            dateTimeStamp = "${localDate.year}-${localDate.monthNumber.toString().padStart(2, '0')}-${localDate.dayOfMonth.toString().padStart(2, '0')}"
+                        }
+                        showDatePicker = false
+                    }
+                ) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDatePicker = false }) {
+                    Text("Cancel")
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
 
     Column(modifier = Modifier.padding(all = 10.dp)) {
         GenericInputTextFieldComposable(
@@ -110,6 +154,35 @@ internal fun AddNewVaccineNoteComposable(
             label = { Text(stringResource(Res.string.doctor_name)) },
             modifier = Modifier.fillMaxWidth(),
         )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Box(
+            modifier = Modifier
+                .fillMaxWidth()
+                .clickable { showDatePicker = true }
+        ) {
+            OutlinedTextField(
+                value = dateTimeStamp,
+                onValueChange = {},
+                label = { Text("Date") },
+                readOnly = true,
+                enabled = false,
+                trailingIcon = {
+                    Icon(
+                        imageVector = Icons.Default.DateRange,
+                        contentDescription = "Select date"
+                    )
+                },
+                modifier = Modifier.fillMaxWidth(),
+                colors = OutlinedTextFieldDefaults.colors(
+                    disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                    disabledBorderColor = MaterialTheme.colorScheme.outline,
+                    disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                    disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            )
+        }
 
         Spacer(modifier = Modifier.height(16.dp))
 
@@ -152,6 +225,15 @@ internal fun AddNewVaccineNoteComposable(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        GenericInputTextFieldComposable(
+            textFieldValue = note,
+            onValueChange = { note = it },
+            label = { Text("Notes") },
+            modifier = Modifier.fillMaxWidth(),
+        )
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         Button(
             shape = RoundedCornerShape(4.dp),
             onClick = {
@@ -162,14 +244,14 @@ internal fun AddNewVaccineNoteComposable(
                             petId = petId,
                             vaccine = selectedVaccine
                                 ?: return@launch, // Ensure vaccine is selected
-                            note = "",
-                            timestamp = "",
-                            doctorName = ""
+                            note = note,
+                            timestamp = dateTimeStamp,
+                            doctorName = doctorName
                         )
                     )
                 }
             },
-            enabled = selectedVaccine != null,
+            enabled = selectedVaccine != null && doctorName.isNotEmpty() && dateTimeStamp.isNotEmpty(),
             modifier = Modifier.wrapContentSize().align(Alignment.CenterHorizontally)
         ) {
             Text(stringResource(Res.string.add_vaccine_note))

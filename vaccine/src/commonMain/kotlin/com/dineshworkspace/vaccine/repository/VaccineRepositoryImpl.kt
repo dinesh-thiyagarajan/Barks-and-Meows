@@ -14,5 +14,8 @@ class VaccineRepositoryImpl(private val vaccineDataSource: VaccineDataSource) : 
     ): Flow<String> =
         vaccineDataSource.addVaccineNoteForPet(vaccineNote = vaccineNote)
 
+    override suspend fun deleteVaccineNote(petId: String, vaccineNoteId: String): Flow<Boolean> =
+        vaccineDataSource.deleteVaccineNote(petId = petId, vaccineNoteId = vaccineNoteId)
+
     override suspend fun getVaccines(): Flow<List<Vaccine>> = vaccineDataSource.getVaccines()
 }
