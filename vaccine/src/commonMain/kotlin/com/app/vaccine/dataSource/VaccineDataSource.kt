@@ -19,8 +19,10 @@ class VaccineDataSource(
             .collection(vaccineNotesCollection).snapshots.collect { querySnapshot ->
                 vaccineNotes.clear()
                 querySnapshot.documents.forEach { documentSnapshot ->
-                    val pet = documentSnapshot.data<VaccineNote>()
-                    vaccineNotes.add(pet)
+                    val vaccineNote = documentSnapshot.data<VaccineNote>()
+                    // Use Firestore document ID instead of the id field in the data
+                    val vaccineNoteWithFirestoreId = vaccineNote.copy(id = documentSnapshot.id)
+                    vaccineNotes.add(vaccineNoteWithFirestoreId)
                 }
                 emit(vaccineNotes.toList())
             }
