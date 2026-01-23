@@ -33,26 +33,36 @@ class PetDataSource(
             })
 
     suspend fun getPets() = flow {
-        val petsList = mutableListOf<Pet>()
-        firestore.collection(baseEnv).document(petCollection)
-            .collection(userId)
-            .snapshots.collect { querySnapshot ->
-                petsList.clear()
-                querySnapshot.documents.forEach { documentSnapshot ->
-                    val pet = documentSnapshot.data<Pet>()
-                    petsList.add(pet)
+        try {
+            val petsList = mutableListOf<Pet>()
+            firestore.collection(baseEnv).document(petCollection)
+                .collection(userId)
+                .snapshots.collect { querySnapshot ->
+                    petsList.clear()
+                    querySnapshot.documents.forEach { documentSnapshot ->
+                        val pet = documentSnapshot.data<Pet>()
+                        petsList.add(pet)
+                    }
+                    emit(petsList)
                 }
-                emit(petsList)
-            }
+        } catch (e: Exception) {
+            // Handle Firestore permission errors gracefully (e.g., after logout)
+            emit(emptyList())
+        }
     }
 
     suspend fun getPetDetails(petId: String) = flow {
-        firestore.collection(baseEnv).document(petCollection).collection(userId)
-            .document(petId)
-            .snapshots.collect { documentSnapshot ->
-                val pet = documentSnapshot.data<Pet>()
-                emit(pet)
-            }
+        try {
+            firestore.collection(baseEnv).document(petCollection).collection(userId)
+                .document(petId)
+                .snapshots.collect { documentSnapshot ->
+                    val pet = documentSnapshot.data<Pet>()
+                    emit(pet)
+                }
+        } catch (e: Exception) {
+            // Handle Firestore permission errors gracefully (e.g., after logout)
+            // Flow will complete without emitting
+        }
     }
 
     suspend fun deletePet(petId: String) = flow {

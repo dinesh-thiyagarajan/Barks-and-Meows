@@ -30,6 +30,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavOptions
 import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.cancel
 import barksandmeows.composeapp.generated.resources.cat_plural
@@ -87,7 +88,11 @@ fun ProfileScreen(
         }
 
         is ProfileUiState.NotLoggedIn, is ProfileUiState.LoggedOut -> {
-            NavRouter.navigate(AppRouteActions.LoginScreen.route)
+            // Clear entire backstack when logging out to remove all screens with active Firestore listeners
+            val navOptions = NavOptions.Builder()
+                .setPopUpTo(AppRouteActions.HomeScreen.route, inclusive = true)
+                .build()
+            NavRouter.navigate(AppRouteActions.LoginScreen.route, navOptions)
         }
     }
 }
