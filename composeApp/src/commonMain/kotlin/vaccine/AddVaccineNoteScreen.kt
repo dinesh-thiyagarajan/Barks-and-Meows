@@ -37,6 +37,9 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.add_vaccine_note
 import barksandmeows.composeapp.generated.resources.doctor_name
@@ -51,9 +54,6 @@ import com.dineshworkspace.vaccine.viewModels.VaccineNoteViewModel
 import common.utils.generateUUID
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
-import kotlinx.datetime.Instant
-import kotlinx.datetime.TimeZone
-import kotlinx.datetime.toLocalDateTime
 import navigation.NavRouter
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel

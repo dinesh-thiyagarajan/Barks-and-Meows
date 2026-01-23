@@ -34,7 +34,8 @@ fun LoginScreen(authViewModel: AuthViewModel = koinViewModel(),
             LoginComposable(
                 coroutineScope = coroutineScope,
                 authViewModel = authViewModel,
-                onGoogleSignInClick = googleSignInHandler
+                onGoogleSignInClick = googleSignInHandler,
+                onSignUpClicked = onSignUpClicked
             )
         }
 

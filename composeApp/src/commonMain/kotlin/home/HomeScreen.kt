@@ -41,7 +41,6 @@ fun HomeScreen(petViewModel: PetViewModel = koinViewModel()) {
         petViewModel.getPets()
     }
 
-
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(
