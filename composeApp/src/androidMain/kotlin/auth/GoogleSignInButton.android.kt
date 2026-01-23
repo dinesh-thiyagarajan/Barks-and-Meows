@@ -2,9 +2,9 @@ package auth
 
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.rememberCoroutineScope
-import com.dineshworkspace.auth.platform.rememberGoogleSignInHelper
-import com.dineshworkspace.auth.platform.rememberGoogleSignInLauncher
-import com.dineshworkspace.auth.viewModels.AuthViewModel
+import com.app.auth.platform.rememberGoogleSignInHelper
+import com.app.auth.platform.rememberGoogleSignInLauncher
+import com.app.auth.viewModels.AuthViewModel
 import kotlinx.coroutines.launch
 
 /**

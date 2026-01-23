@@ -1,9 +1,9 @@
 package di
 
-import com.dineshworkspace.auth.di.authModule
-import com.dineshworkspace.di.petModule
+import com.app.auth.di.authModule
+import com.app.di.petModule
 import env.Config
-import com.dineshworkspace.vaccine.di.vaccineModule
+import com.app.vaccine.di.vaccineModule
 import org.koin.compose.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module

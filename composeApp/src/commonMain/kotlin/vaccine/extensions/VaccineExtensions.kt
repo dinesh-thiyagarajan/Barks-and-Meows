@@ -1,8 +1,8 @@
 package vaccine.extensions
 
-import com.dineshworkspace.uicomponents.dataModels.Vaccine
-import com.dineshworkspace.uicomponents.dataModels.VaccineNoteData
-import com.dineshworkspace.vaccine.dataModels.VaccineNote
+import com.app.uicomponents.dataModels.Vaccine
+import com.app.uicomponents.dataModels.VaccineNoteData
+import com.app.vaccine.dataModels.VaccineNote
 
 fun VaccineNote.toVaccineData(): VaccineNoteData {
     return VaccineNoteData(

@@ -1,7 +1,7 @@
 package auth
 
 import androidx.compose.runtime.Composable
-import com.dineshworkspace.auth.viewModels.AuthViewModel
+import com.app.auth.viewModels.AuthViewModel
 
 /**
  * iOS-specific Google Sign-In integration

@@ -22,7 +22,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import auth.LoginScreen
-import com.dineshworkspace.uicomponents.composables.appBar.BarksAndMeowsAppBar
+import com.app.uicomponents.composables.appBar.BarksAndMeowsAppBar
 import di.appModule
 import home.HomeScreen
 import navigation.AppRouteActions

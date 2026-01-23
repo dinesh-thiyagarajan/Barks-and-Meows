@@ -1,7 +1,7 @@
 package splash
 
 import androidx.lifecycle.ViewModel
-import com.dineshworkspace.auth.useCases.IsLoggedInUseCase
+import com.app.auth.useCases.IsLoggedInUseCase
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

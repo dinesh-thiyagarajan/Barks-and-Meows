@@ -1,9 +1,9 @@
 package pets.extensions
 
-import com.dineshworkspace.dataModels.Pet
-import com.dineshworkspace.extensions.getPetIcon
-import com.dineshworkspace.uicomponents.dataModels.PetCategory
-import com.dineshworkspace.uicomponents.dataModels.PetData
+import com.app.dataModels.Pet
+import com.app.extensions.getPetIcon
+import com.app.uicomponents.dataModels.PetCategory
+import com.app.uicomponents.dataModels.PetData
 
 /**
  * Extension function to convert Pet domain model to PetData UI model.

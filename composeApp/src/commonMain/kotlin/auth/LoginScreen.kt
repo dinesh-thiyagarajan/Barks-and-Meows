@@ -4,10 +4,10 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.navigation.NavOptions
-import com.dineshworkspace.auth.composables.LoginComposable
-import com.dineshworkspace.auth.viewModels.AuthUiState
-import com.dineshworkspace.auth.viewModels.AuthViewModel
-import com.dineshworkspace.uicomponents.composables.loading.LoadingComposable
+import com.app.auth.composables.LoginComposable
+import com.app.auth.viewModels.AuthUiState
+import com.app.auth.viewModels.AuthViewModel
+import com.app.uicomponents.composables.loading.LoadingComposable
 import navigation.AppRouteActions
 import navigation.NavRouter
 import org.koin.compose.viewmodel.koinViewModel
