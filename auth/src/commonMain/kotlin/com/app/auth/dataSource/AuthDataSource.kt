@@ -20,8 +20,12 @@ class AuthDataSource(private val firebaseAuth: FirebaseAuth) {
     }
 
     suspend fun logout() = flow {
-        firebaseAuth.signOut()
-        emit(true)
+        try {
+            firebaseAuth.signOut()
+            emit(true)
+        } catch (ex: Exception) {
+            throw Exception("Failed to logout: ${ex.message ?: "Unknown error"}")
+        }
     }
 
     suspend fun signUpWithEmailAndPassword(email: String, password: String): AuthResponse {
@@ -41,6 +45,19 @@ class AuthDataSource(private val firebaseAuth: FirebaseAuth) {
             return AuthResponse(userEmail = authResult.user?.email)
         } catch (ex: Exception) {
             return AuthResponse(message = ex.message)
+        }
+    }
+
+    suspend fun deleteAccount() = flow {
+        try {
+            val currentUser = firebaseAuth.currentUser
+            if (currentUser == null) {
+                throw Exception("No user is currently signed in")
+            }
+            currentUser.delete()
+            emit(true)
+        } catch (ex: Exception) {
+            throw Exception("Failed to delete account: ${ex.message ?: "Unknown error"}")
         }
     }
 

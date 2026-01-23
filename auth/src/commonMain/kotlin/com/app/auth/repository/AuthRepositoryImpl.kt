@@ -15,4 +15,5 @@ class AuthRepositoryImpl(private val authDataSource: AuthDataSource) : AuthRepos
 
     override suspend fun isLoggedIn() = authDataSource.isLoggedIn()
     override suspend fun logout(): Flow<Boolean> = authDataSource.logout()
+    override suspend fun deleteAccount(): Flow<Boolean> = authDataSource.deleteAccount()
 }

@@ -21,20 +21,30 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavOptions
 import barksandmeows.composeapp.generated.resources.Res
-import barksandmeows.composeapp.generated.resources.cancel
 import barksandmeows.composeapp.generated.resources.cat_plural
 import barksandmeows.composeapp.generated.resources.cat_singular
+import barksandmeows.composeapp.generated.resources.delete_account
+import barksandmeows.composeapp.generated.resources.delete_account_confirmation_message
+import barksandmeows.composeapp.generated.resources.delete_account_confirmation_title
 import barksandmeows.composeapp.generated.resources.dog_plural
 import barksandmeows.composeapp.generated.resources.dog_singular
 import barksandmeows.composeapp.generated.resources.email_label
@@ -46,6 +56,7 @@ import com.app.auth.viewModels.ProfileUiState
 import com.app.extensions.getPetIcon
 import com.app.auth.viewModels.ProfileViewModel
 import com.app.dataModels.Pet
+import com.app.uicomponents.composables.dialogs.ConfirmationDialog
 import com.app.uicomponents.composables.loading.LoadingComposable
 import com.app.viewModels.GetPetsUiState
 import com.app.viewModels.PetViewModel
@@ -83,6 +94,36 @@ fun ProfileScreen(
                     coroutineScope.launch {
                         profileViewModel.logout()
                     }
+                },
+                onDeleteAccount = {
+                    coroutineScope.launch {
+                        profileViewModel.deleteAccount()
+                    }
+                }
+            )
+        }
+
+        is ProfileUiState.Error -> {
+            val snackbarHostState = remember { SnackbarHostState() }
+
+            LaunchedEffect(state.message) {
+                snackbarHostState.showSnackbar(state.message)
+            }
+
+            ProfileContent(
+                email = state.email ?: "Unknown",
+                petsUiState = petsUiState.value,
+                errorMessage = state.message,
+                snackbarHostState = snackbarHostState,
+                onLogout = {
+                    coroutineScope.launch {
+                        profileViewModel.logout()
+                    }
+                },
+                onDeleteAccount = {
+                    coroutineScope.launch {
+                        profileViewModel.deleteAccount()
+                    }
                 }
             )
         }
@@ -101,17 +142,48 @@ fun ProfileScreen(
 fun ProfileContent(
     email: String,
     petsUiState: GetPetsUiState,
-    onLogout: () -> Unit
+    onLogout: () -> Unit,
+    onDeleteAccount: () -> Unit,
+    errorMessage: String? = null,
+    snackbarHostState: SnackbarHostState? = null
 ) {
     val scrollState = rememberScrollState()
+    var showDeleteAccountDialog by remember { mutableStateOf(false) }
+    val localSnackbarHostState = snackbarHostState ?: remember { SnackbarHostState() }
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(scrollState)
-            .padding(16.dp),
-        horizontalAlignment = Alignment.CenterHorizontally
-    ) {
+    if (showDeleteAccountDialog) {
+        ConfirmationDialog(
+            title = stringResource(Res.string.delete_account_confirmation_title),
+            message = stringResource(Res.string.delete_account_confirmation_message),
+            onConfirm = {
+                showDeleteAccountDialog = false
+                onDeleteAccount()
+            },
+            onDismiss = {
+                showDeleteAccountDialog = false
+            }
+        )
+    }
+
+    androidx.compose.material3.Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = localSnackbarHostState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer
+                )
+            }
+        }
+    ) { paddingValues ->
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(scrollState)
+                .padding(paddingValues)
+                .padding(16.dp),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
         Spacer(modifier = Modifier.height(32.dp))
 
         // Profile Icon
@@ -166,7 +238,21 @@ fun ProfileContent(
             Text(stringResource(Res.string.logout))
         }
 
+        Spacer(modifier = Modifier.height(8.dp))
+
+        // Delete Account Button
+        OutlinedButton(
+            onClick = { showDeleteAccountDialog = true },
+            modifier = Modifier.fillMaxWidth(),
+            colors = ButtonDefaults.outlinedButtonColors(
+                contentColor = MaterialTheme.colorScheme.error
+            )
+        ) {
+            Text(stringResource(Res.string.delete_account))
+        }
+
         Spacer(modifier = Modifier.height(32.dp))
+        }
     }
 }
 

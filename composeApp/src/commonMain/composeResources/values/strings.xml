@@ -11,6 +11,9 @@
     <string name="profile_icon_description">Profile Icon</string>
     <string name="profile">Profile</string>
     <string name="logout">Logout</string>
+    <string name="delete_account">Delete Account</string>
+    <string name="delete_account_confirmation_title">Delete Account?</string>
+    <string name="delete_account_confirmation_message">Are you sure you want to delete your account? This will permanently delete all your data including pets and vaccine records. This action cannot be undone.</string>
     <string name="email_label">Email</string>
     <string name="dog_singular">Dog</string>
     <string name="dog_plural">Dogs</string>

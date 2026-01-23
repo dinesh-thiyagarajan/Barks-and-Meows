@@ -9,4 +9,5 @@ interface AuthRepository {
     suspend fun signInWithGoogle(idToken: String): AuthResponse
     suspend fun isLoggedIn(): Flow<Boolean>
     suspend fun logout(): Flow<Boolean>
+    suspend fun deleteAccount(): Flow<Boolean>
 }

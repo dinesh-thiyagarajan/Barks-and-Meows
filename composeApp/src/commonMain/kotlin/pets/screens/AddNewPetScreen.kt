@@ -182,6 +182,37 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
                             Text("Submit")
                         })
                 }
+
+                is AddPetUiState.Error -> {
+                    Column(
+                        modifier = Modifier.fillMaxSize(),
+                        verticalArrangement = Arrangement.Center
+                    ) {
+                        Text(
+                            text = "Error",
+                            style = MaterialTheme.typography.headlineSmall,
+                            color = MaterialTheme.colorScheme.error
+                        )
+                        Spacer(modifier = Modifier.height(16.dp))
+                        Text(
+                            text = (addPetUiState.value as AddPetUiState.Error).message,
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurface
+                        )
+                        Spacer(modifier = Modifier.height(24.dp))
+                        PrimaryActionButtonComposable(
+                            coroutineScope = coroutineScope,
+                            onButtonClick = {
+                                NavRouter.popBackStack()
+                            },
+                            modifier = Modifier.fillMaxWidth(),
+                            enabled = true,
+                            buttonLabel = {
+                                Text("Go Back")
+                            }
+                        )
+                    }
+                }
             }
         }
     }

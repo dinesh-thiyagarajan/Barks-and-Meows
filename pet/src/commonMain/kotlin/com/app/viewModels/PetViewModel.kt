@@ -45,16 +45,24 @@ class PetViewModel(
     suspend fun addNewPet(pet: Pet) {
         _addPetUiState.value = AddPetUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
-            addPetUseCase.invoke(pet)
-            _addPetUiState.value = AddPetUiState.Success
+            try {
+                addPetUseCase.invoke(pet)
+                _addPetUiState.value = AddPetUiState.Success
+            } catch (e: Exception) {
+                _addPetUiState.value = AddPetUiState.Error(e.message ?: "Failed to add pet. Check your permissions.")
+            }
         }
     }
 
     suspend fun updatePet(pet: Pet) {
         _updatePetUiState.value = UpdatePetUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
-            updatePetUseCase.invoke(pet)
-            _updatePetUiState.value = UpdatePetUiState.Success
+            try {
+                updatePetUseCase.invoke(pet)
+                _updatePetUiState.value = UpdatePetUiState.Success
+            } catch (e: Exception) {
+                _updatePetUiState.value = UpdatePetUiState.Error(e.message ?: "Failed to update pet. Check your permissions.")
+            }
         }
     }
 
@@ -101,10 +109,12 @@ sealed interface AddPetUiState {
     data object Success : AddPetUiState
     data object Loading : AddPetUiState
     data object NotStarted : AddPetUiState
+    data class Error(val message: String) : AddPetUiState
 }
 
 sealed interface UpdatePetUiState {
     data object Success : UpdatePetUiState
     data object Loading : UpdatePetUiState
     data object NotStarted : UpdatePetUiState
+    data class Error(val message: String) : UpdatePetUiState
 }

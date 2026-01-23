@@ -16,6 +16,9 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -59,6 +62,7 @@ fun EditPetScreen(
     val petDetailsUiState = petDetailsViewModel.petDetailsUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(petId) {
         launch {
@@ -68,16 +72,30 @@ fun EditPetScreen(
     }
 
     LaunchedEffect(updatePetUiState.value) {
-        when (updatePetUiState.value) {
+        when (val state = updatePetUiState.value) {
             is UpdatePetUiState.Success -> {
                 petViewModel.resetUpdatePetUiState()
                 NavRouter.popBackStack()
+            }
+            is UpdatePetUiState.Error -> {
+                snackbarHostState.showSnackbar(state.message)
+                petViewModel.resetUpdatePetUiState()
             }
             else -> {}
         }
     }
 
-    Scaffold {
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer
+                )
+            }
+        }
+    ) {
         Column(
             modifier = Modifier.fillMaxSize()
                 .padding(24.dp)
