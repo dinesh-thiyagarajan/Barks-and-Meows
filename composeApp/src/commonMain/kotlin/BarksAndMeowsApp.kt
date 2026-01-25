@@ -33,7 +33,10 @@ import navigation.bottomNavItems
 import navigation.path
 import navigation.showBottomNavBar
 import navigation.showTopAppBar
+import org.jetbrains.compose.resources.stringResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import barksandmeows.composeapp.generated.resources.Res
+import barksandmeows.composeapp.generated.resources.error_pet_id_not_passed
 import org.koin.compose.KoinApplication
 import pets.screens.AddNewPetScreen
 import pets.screens.EditPetScreen
@@ -82,7 +85,7 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                                 icon = {
                                     Icon(
                                         imageVector = item.icon,
-                                        contentDescription = item.description
+                                        contentDescription = stringResource(item.descriptionRes)
                                     )
                                 },
                                 colors = NavigationBarItemDefaults.colors(
@@ -172,7 +175,8 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                         }
                     }) {
                     val petId = it.arguments?.getString(NavConstants.PET_ID)
-                    EditPetScreen(petId = petId ?: "none passed")
+                    val defaultPetId = stringResource(Res.string.error_pet_id_not_passed)
+                    EditPetScreen(petId = petId ?: defaultPetId)
                 }
 
                 composable(
@@ -184,7 +188,8 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                         }
                     }) {
                     val petId = it.arguments?.getString(NavConstants.PET_ID)
-                    PetDetailScreen(petId = petId ?: "none passed")
+                    val defaultPetId = stringResource(Res.string.error_pet_id_not_passed)
+                    PetDetailScreen(petId = petId ?: defaultPetId)
                 }
 
                 composable(
@@ -196,7 +201,8 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                         }
                     }) {
                     val petId = it.arguments?.getString(NavConstants.PET_ID)
-                    AddVaccineNoteScreen(petId = petId ?: "none passed")
+                    val defaultPetId = stringResource(Res.string.error_pet_id_not_passed)
+                    AddVaccineNoteScreen(petId = petId ?: defaultPetId)
                 }
             }
         }

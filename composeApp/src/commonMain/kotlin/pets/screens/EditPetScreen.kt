@@ -33,9 +33,15 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
+import barksandmeows.composeapp.generated.resources.edit_pet_subtitle
+import barksandmeows.composeapp.generated.resources.edit_pet_title
+import barksandmeows.composeapp.generated.resources.error_loading_pet
 import barksandmeows.composeapp.generated.resources.pet_age
+import barksandmeows.composeapp.generated.resources.pet_details
 import barksandmeows.composeapp.generated.resources.pet_name
+import barksandmeows.composeapp.generated.resources.pet_type
 import barksandmeows.composeapp.generated.resources.update
+import barksandmeows.composeapp.generated.resources.updating
 import com.app.dataModels.Pet
 import com.app.uicomponents.composables.buttons.PrimaryActionButtonComposable
 import com.app.uicomponents.composables.chips.CategorySelectorChip
@@ -126,14 +132,14 @@ fun EditPetScreen(
                     } else {
                         // Header Section
                         Text(
-                            text = "Edit Your Pet",
+                            text = stringResource(Res.string.edit_pet_title),
                             style = MaterialTheme.typography.headlineMedium,
                             color = MaterialTheme.colorScheme.onSurface,
                             modifier = Modifier.padding(bottom = 8.dp)
                         )
 
                         Text(
-                            text = "Update your pet's information",
+                            text = stringResource(Res.string.edit_pet_subtitle),
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(bottom = 24.dp)
@@ -148,7 +154,7 @@ fun EditPetScreen(
                         ) {
                             Column(modifier = Modifier.padding(16.dp)) {
                                 Text(
-                                    text = "Pet Type",
+                                    text = stringResource(Res.string.pet_type),
                                     style = MaterialTheme.typography.titleSmall,
                                     color = MaterialTheme.colorScheme.onSurfaceVariant,
                                     modifier = Modifier.padding(bottom = 12.dp)
@@ -177,7 +183,7 @@ fun EditPetScreen(
 
                         // Pet Details Section
                         Text(
-                            text = "Pet Details",
+                            text = stringResource(Res.string.pet_details),
                             style = MaterialTheme.typography.titleSmall,
                             color = MaterialTheme.colorScheme.onSurfaceVariant,
                             modifier = Modifier.padding(bottom = 12.dp)
@@ -228,7 +234,7 @@ fun EditPetScreen(
                             enabled = !isLoading && petName.isNotEmpty() && petCategories.value.any { it.selected },
                             buttonLabel = {
                                 if (isLoading) {
-                                    Text("Updating...")
+                                    Text(stringResource(Res.string.updating))
                                 } else {
                                     Text(stringResource(Res.string.update))
                                 }
@@ -237,7 +243,7 @@ fun EditPetScreen(
                 }
 
                 is GetPetDetailsUiState.Error -> {
-                    Text("Error loading pet details")
+                    Text(stringResource(Res.string.error_loading_pet))
                 }
             }
         }

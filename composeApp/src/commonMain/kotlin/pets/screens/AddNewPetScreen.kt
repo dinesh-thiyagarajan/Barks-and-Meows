@@ -30,8 +30,15 @@ import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
+import barksandmeows.composeapp.generated.resources.add_pet_subtitle
+import barksandmeows.composeapp.generated.resources.add_pet_title
+import barksandmeows.composeapp.generated.resources.error_title
+import barksandmeows.composeapp.generated.resources.go_back
 import barksandmeows.composeapp.generated.resources.pet_age
+import barksandmeows.composeapp.generated.resources.pet_details
 import barksandmeows.composeapp.generated.resources.pet_name
+import barksandmeows.composeapp.generated.resources.pet_type
+import barksandmeows.composeapp.generated.resources.submit
 import com.app.dataModels.Pet
 import com.app.uicomponents.composables.buttons.PrimaryActionButtonComposable
 import com.app.uicomponents.composables.chips.CategorySelectorChip
@@ -80,14 +87,14 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
 
                     // Header Section
                     Text(
-                        text = "Add Your Pet",
+                        text = stringResource(Res.string.add_pet_title),
                         style = MaterialTheme.typography.headlineMedium,
                         color = MaterialTheme.colorScheme.onSurface,
                         modifier = Modifier.padding(bottom = 8.dp)
                     )
 
                     Text(
-                        text = "Tell us about your furry friend",
+                        text = stringResource(Res.string.add_pet_subtitle),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(bottom = 24.dp)
@@ -102,7 +109,7 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
                     ) {
                         Column(modifier = Modifier.padding(16.dp)) {
                             Text(
-                                text = "Pet Type",
+                                text = stringResource(Res.string.pet_type),
                                 style = MaterialTheme.typography.titleSmall,
                                 color = MaterialTheme.colorScheme.onSurfaceVariant,
                                 modifier = Modifier.padding(bottom = 12.dp)
@@ -131,7 +138,7 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
 
                     // Pet Details Section
                     Text(
-                        text = "Pet Details",
+                        text = stringResource(Res.string.pet_details),
                         style = MaterialTheme.typography.titleSmall,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(bottom = 12.dp)
@@ -179,7 +186,7 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
                         modifier = Modifier.fillMaxWidth(),
                         enabled = petName.isNotEmpty() && petCategories.value.any { it.selected },
                         buttonLabel = {
-                            Text("Submit")
+                            Text(stringResource(Res.string.submit))
                         })
                 }
 
@@ -189,7 +196,7 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
                         verticalArrangement = Arrangement.Center
                     ) {
                         Text(
-                            text = "Error",
+                            text = stringResource(Res.string.error_title),
                             style = MaterialTheme.typography.headlineSmall,
                             color = MaterialTheme.colorScheme.error
                         )
@@ -208,7 +215,7 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
                             modifier = Modifier.fillMaxWidth(),
                             enabled = true,
                             buttonLabel = {
-                                Text("Go Back")
+                                Text(stringResource(Res.string.go_back))
                             }
                         )
                     }

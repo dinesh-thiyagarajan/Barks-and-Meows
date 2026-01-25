@@ -46,11 +46,28 @@
 
     <!-- Add New Pet Screen -->
     <string name="submit">Submit</string>
+    <string name="add_pet_title">Add Your Pet</string>
+    <string name="add_pet_subtitle">Tell us about your furry friend</string>
+    <string name="pet_type">Pet Type</string>
+    <string name="pet_details">Pet Details</string>
+    <string name="error_title">Error</string>
+    <string name="go_back">Go Back</string>
 
     <!-- Edit Pet Screen -->
     <string name="edit_pet">Edit Pet</string>
     <string name="edit_pet_description">Edit pet</string>
     <string name="update">Update</string>
+    <string name="edit_pet_title">Edit Your Pet</string>
+    <string name="edit_pet_subtitle">Update your pet\'s information</string>
+    <string name="updating">Updating...</string>
+    <string name="error_loading_pet">Error loading pet details</string>
+
+    <!-- Navigation -->
+    <string name="home">Home</string>
+    <string name="nav_profile">Profile</string>
+
+    <!-- Error Messages -->
+    <string name="error_pet_id_not_passed">none passed</string>
 
     <!-- Menu Options -->
     <string name="more_options">More options</string>
