@@ -32,7 +32,8 @@ class ProfileViewModel(
             val currentUser = firebaseAuth.currentUser
             if (currentUser != null) {
                 _profileUiState.value = ProfileUiState.Loaded(
-                    email = currentUser.email ?: "No email"
+                    email = currentUser.email ?: "No email",
+                    displayName = currentUser.displayName
                 )
             } else {
                 _profileUiState.value = ProfileUiState.NotLoggedIn
@@ -41,7 +42,9 @@ class ProfileViewModel(
     }
 
     fun logout() {
-        val currentEmail = (profileUiState.value as? ProfileUiState.Loaded)?.email
+        val loadedState = profileUiState.value as? ProfileUiState.Loaded
+        val currentEmail = loadedState?.email
+        val currentDisplayName = loadedState?.displayName
         _profileUiState.value = ProfileUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -52,7 +55,8 @@ class ProfileViewModel(
                         } else {
                             _profileUiState.value = ProfileUiState.Error(
                                 message = "Failed to logout. Please try again.",
-                                email = currentEmail
+                                email = currentEmail,
+                                displayName = currentDisplayName
                             )
                         }
                     }
@@ -61,7 +65,8 @@ class ProfileViewModel(
                 withContext(Dispatchers.Main) {
                     _profileUiState.value = ProfileUiState.Error(
                         message = e.message ?: "An unexpected error occurred during logout",
-                        email = currentEmail
+                        email = currentEmail,
+                        displayName = currentDisplayName
                     )
                 }
             }
@@ -69,7 +74,9 @@ class ProfileViewModel(
     }
 
     fun deleteAccount() {
-        val currentEmail = (profileUiState.value as? ProfileUiState.Loaded)?.email
+        val loadedState = profileUiState.value as? ProfileUiState.Loaded
+        val currentEmail = loadedState?.email
+        val currentDisplayName = loadedState?.displayName
         _profileUiState.value = ProfileUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             try {
@@ -80,7 +87,8 @@ class ProfileViewModel(
                         } else {
                             _profileUiState.value = ProfileUiState.Error(
                                 message = "Failed to delete account. Please try again or contact support.",
-                                email = currentEmail
+                                email = currentEmail,
+                                displayName = currentDisplayName
                             )
                         }
                     }
@@ -89,22 +97,23 @@ class ProfileViewModel(
                 withContext(Dispatchers.Main) {
                     _profileUiState.value = ProfileUiState.Error(
                         message = e.message ?: "An unexpected error occurred while deleting account",
-                        email = currentEmail
+                        email = currentEmail,
+                        displayName = currentDisplayName
                     )
                 }
             }
         }
     }
 
-    fun resetErrorState(email: String) {
-        _profileUiState.value = ProfileUiState.Loaded(email)
+    fun resetErrorState(email: String, displayName: String? = null) {
+        _profileUiState.value = ProfileUiState.Loaded(email, displayName)
     }
 }
 
 sealed interface ProfileUiState {
     data object Loading : ProfileUiState
-    data class Loaded(val email: String) : ProfileUiState
+    data class Loaded(val email: String, val displayName: String?) : ProfileUiState
     data object NotLoggedIn : ProfileUiState
     data object LoggedOut : ProfileUiState
-    data class Error(val message: String, val email: String? = null) : ProfileUiState
+    data class Error(val message: String, val email: String? = null, val displayName: String? = null) : ProfileUiState
 }

@@ -4,11 +4,14 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.wrapContentSize
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
 import androidx.compose.material3.Button
@@ -111,6 +114,7 @@ internal fun AddNewVaccineNoteComposable(
     coroutineScope: CoroutineScope,
     vaccines: List<Vaccine>
 ) {
+    val scrollState = rememberScrollState()
     var dateTimeStamp by remember { mutableStateOf("") }
     var doctorName by remember { mutableStateOf("") }
     var note by remember { mutableStateOf("") }
@@ -147,7 +151,12 @@ internal fun AddNewVaccineNoteComposable(
         }
     }
 
-    Column(modifier = Modifier.padding(all = 10.dp)) {
+    Column(
+        modifier = Modifier
+            .fillMaxSize()
+            .verticalScroll(scrollState)
+            .padding(all = 16.dp)
+    ) {
         GenericInputTextFieldComposable(
             textFieldValue = doctorName,
             onValueChange = { doctorName = it },

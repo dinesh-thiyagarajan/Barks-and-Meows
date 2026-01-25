@@ -1,7 +1,9 @@
 package profile
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -49,7 +51,6 @@ import barksandmeows.composeapp.generated.resources.dog_plural
 import barksandmeows.composeapp.generated.resources.dog_singular
 import barksandmeows.composeapp.generated.resources.email_label
 import barksandmeows.composeapp.generated.resources.logout
-import barksandmeows.composeapp.generated.resources.profile
 import barksandmeows.composeapp.generated.resources.profile_icon_description
 import org.jetbrains.compose.resources.stringResource
 import com.app.auth.viewModels.ProfileUiState
@@ -89,6 +90,7 @@ fun ProfileScreen(
         is ProfileUiState.Loaded -> {
             ProfileContent(
                 email = state.email,
+                displayName = state.displayName,
                 petsUiState = petsUiState.value,
                 onLogout = {
                     coroutineScope.launch {
@@ -112,6 +114,7 @@ fun ProfileScreen(
 
             ProfileContent(
                 email = state.email ?: "Unknown",
+                displayName = state.displayName,
                 petsUiState = petsUiState.value,
                 errorMessage = state.message,
                 snackbarHostState = snackbarHostState,
@@ -141,6 +144,7 @@ fun ProfileScreen(
 @Composable
 fun ProfileContent(
     email: String,
+    displayName: String?,
     petsUiState: GetPetsUiState,
     onLogout: () -> Unit,
     onDeleteAccount: () -> Unit,
@@ -176,82 +180,96 @@ fun ProfileContent(
             }
         }
     ) { paddingValues ->
-        Column(
+        Box(
             modifier = Modifier
                 .fillMaxSize()
-                .verticalScroll(scrollState)
                 .padding(paddingValues)
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
         ) {
-        Spacer(modifier = Modifier.height(32.dp))
+            // Scrollable content
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .verticalScroll(scrollState)
+                    .padding(horizontal = 16.dp)
+                    .padding(bottom = 140.dp),
+                horizontalAlignment = Alignment.CenterHorizontally
+            ) {
+                Spacer(modifier = Modifier.height(32.dp))
 
-        // Profile Icon
-        Icon(
-            imageVector = Icons.Default.AccountCircle,
-            contentDescription = stringResource(Res.string.profile_icon_description),
-            modifier = Modifier.size(120.dp),
-            tint = MaterialTheme.colorScheme.primary
-        )
+                // Profile Icon
+                Icon(
+                    imageVector = Icons.Default.AccountCircle,
+                    contentDescription = stringResource(Res.string.profile_icon_description),
+                    modifier = Modifier.size(120.dp),
+                    tint = MaterialTheme.colorScheme.primary
+                )
 
-        Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-        Text(
-            text = stringResource(Res.string.profile),
-            style = MaterialTheme.typography.headlineMedium,
-            fontWeight = FontWeight.Bold
-        )
+                // Username heading - show displayName or extract from email
+                val userName = displayName?.takeIf { it.isNotBlank() }
+                    ?: email.substringBefore("@").replaceFirstChar { it.uppercase() }
+                Text(
+                    text = userName,
+                    style = MaterialTheme.typography.headlineMedium,
+                    fontWeight = FontWeight.Bold
+                )
 
-        Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(32.dp))
 
-        // Email Card
-        EmailCard(email = email)
+                // Email Card
+                EmailCard(email = email)
 
-        Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
-        // Pet Statistics - Just the category cards
-        when (petsUiState) {
-            is GetPetsUiState.Success -> {
-                if (petsUiState.pets.isNotEmpty()) {
-                    PetCategoryCards(pets = petsUiState.pets)
-                    Spacer(modifier = Modifier.height(16.dp))
+                // Pet Statistics
+                when (petsUiState) {
+                    is GetPetsUiState.Success -> {
+                        if (petsUiState.pets.isNotEmpty()) {
+                            PetStatisticsSection(pets = petsUiState.pets)
+                        }
+                    }
+                    is GetPetsUiState.Loading -> {
+                        // Optional: Show loading indicator for pets
+                    }
+                    is GetPetsUiState.Error -> {
+                        // Optional: Show error message
+                    }
                 }
             }
-            is GetPetsUiState.Loading -> {
-                // Optional: Show loading indicator for pets
+
+            // Bottom buttons
+            Column(
+                modifier = Modifier
+                    .align(Alignment.BottomCenter)
+                    .fillMaxWidth()
+                    .background(MaterialTheme.colorScheme.background)
+                    .padding(16.dp)
+            ) {
+                // Logout Button
+                Button(
+                    onClick = onLogout,
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Text(stringResource(Res.string.logout))
+                }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Delete Account Button
+                OutlinedButton(
+                    onClick = { showDeleteAccountDialog = true },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = ButtonDefaults.outlinedButtonColors(
+                        contentColor = MaterialTheme.colorScheme.error
+                    )
+                ) {
+                    Text(stringResource(Res.string.delete_account))
+                }
             }
-            is GetPetsUiState.Error -> {
-                // Optional: Show error message
-            }
-        }
-
-        Spacer(modifier = Modifier.height(16.dp))
-
-        // Logout Button
-        Button(
-            onClick = onLogout,
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.buttonColors(
-                containerColor = MaterialTheme.colorScheme.error
-            )
-        ) {
-            Text(stringResource(Res.string.logout))
-        }
-
-        Spacer(modifier = Modifier.height(8.dp))
-
-        // Delete Account Button
-        OutlinedButton(
-            onClick = { showDeleteAccountDialog = true },
-            modifier = Modifier.fillMaxWidth(),
-            colors = ButtonDefaults.outlinedButtonColors(
-                contentColor = MaterialTheme.colorScheme.error
-            )
-        ) {
-            Text(stringResource(Res.string.delete_account))
-        }
-
-        Spacer(modifier = Modifier.height(32.dp))
         }
     }
 }
@@ -296,18 +314,18 @@ private fun EmailCard(email: String) {
 }
 
 @Composable
-private fun PetCategoryCards(pets: List<Pet>) {
+private fun PetStatisticsSection(pets: List<Pet>) {
     val categoryCount = pets.groupBy { it.petCategory.category.lowercase() }
         .mapValues { it.value.size }
 
-    Row(
+    Column(
         modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceEvenly
+        verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
         // Dogs
         val dogCount = categoryCount["dog"] ?: 0
         if (dogCount > 0) {
-            PetCategoryItem(
+            PetStatCard(
                 icon = getPetIcon("dog"),
                 count = dogCount,
                 label = if (dogCount == 1) stringResource(Res.string.dog_singular) else stringResource(Res.string.dog_plural)
@@ -317,7 +335,7 @@ private fun PetCategoryCards(pets: List<Pet>) {
         // Cats
         val catCount = categoryCount["cat"] ?: 0
         if (catCount > 0) {
-            PetCategoryItem(
+            PetStatCard(
                 icon = getPetIcon("cat"),
                 count = catCount,
                 label = if (catCount == 1) stringResource(Res.string.cat_singular) else stringResource(Res.string.cat_plural)
@@ -327,37 +345,41 @@ private fun PetCategoryCards(pets: List<Pet>) {
 }
 
 @Composable
-private fun PetCategoryItem(
+private fun PetStatCard(
     icon: org.jetbrains.compose.resources.DrawableResource,
     count: Int,
     label: String
 ) {
     Card(
+        modifier = Modifier.fillMaxWidth(),
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
+            containerColor = MaterialTheme.colorScheme.surfaceVariant
         ),
         elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(16.dp),
+            verticalAlignment = Alignment.CenterVertically
         ) {
             Image(
                 painter = painterResource(icon),
                 contentDescription = label,
-                modifier = Modifier.size(48.dp)
+                modifier = Modifier.size(40.dp)
             )
-            Spacer(modifier = Modifier.height(8.dp))
+            Spacer(modifier = Modifier.size(16.dp))
+            Text(
+                text = label,
+                style = MaterialTheme.typography.bodyLarge,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                modifier = Modifier.weight(1f)
+            )
             Text(
                 text = "$count",
                 style = MaterialTheme.typography.titleLarge,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurface
             )
         }
     }
