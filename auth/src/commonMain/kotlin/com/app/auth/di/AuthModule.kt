@@ -4,6 +4,7 @@ import com.app.auth.dataSource.AuthDataSource
 import com.app.auth.repository.AuthRepository
 import com.app.auth.repository.AuthRepositoryImpl
 import com.app.auth.useCases.DeleteAccountUseCase
+import com.app.auth.useCases.ForgotPasswordUseCase
 import com.app.auth.useCases.GoogleSignInUseCase
 import com.app.auth.useCases.IsLoggedInUseCase
 import com.app.auth.useCases.LoginUseCase
@@ -30,7 +31,8 @@ val authModule = module {
     single<IsLoggedInUseCase> { IsLoggedInUseCase(authRepository = get()) }
     single<LogoutUseCase> { LogoutUseCase(authRepository = get()) }
     single<DeleteAccountUseCase> { DeleteAccountUseCase(authRepository = get()) }
-    viewModel { AuthViewModel(loginUseCase = get(), googleSignInUseCase = get()) }
+    single<ForgotPasswordUseCase> { ForgotPasswordUseCase(authRepository = get()) }
+    viewModel { AuthViewModel(loginUseCase = get(), googleSignInUseCase = get(), forgotPasswordUseCase = get()) }
     viewModel { SignUpViewModel(signUpUseCase = get()) }
     viewModel { ProfileViewModel(logoutUseCase = get(), deleteAccountUseCase = get(), firebaseAuth = get()) }
 }

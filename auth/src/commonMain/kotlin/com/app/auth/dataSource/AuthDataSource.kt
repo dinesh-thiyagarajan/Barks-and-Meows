@@ -61,4 +61,13 @@ class AuthDataSource(private val firebaseAuth: FirebaseAuth) {
         }
     }
 
+    fun sendPasswordResetEmail(email: String) = flow {
+        try {
+            firebaseAuth.sendPasswordResetEmail(email)
+            emit(true)
+        } catch (ex: Exception) {
+            throw Exception("Failed to send password reset email: ${ex.message ?: "Unknown error"}")
+        }
+    }
+
 }

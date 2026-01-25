@@ -10,23 +10,19 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentSize
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Email
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.Icon
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -38,11 +34,18 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.unit.dp
 import barksandmeows.auth.generated.resources.Res
+import barksandmeows.auth.generated.resources.cancel
 import barksandmeows.auth.generated.resources.email
+import barksandmeows.auth.generated.resources.forgot_password
+import barksandmeows.auth.generated.resources.forgot_password_description
+import barksandmeows.auth.generated.resources.forgot_password_success
 import barksandmeows.auth.generated.resources.ic_app_logo
 import barksandmeows.auth.generated.resources.login
+import barksandmeows.auth.generated.resources.ok
 import barksandmeows.auth.generated.resources.password
+import barksandmeows.auth.generated.resources.send_reset_email
 import com.app.auth.viewModels.AuthViewModel
+import com.app.auth.viewModels.ForgotPasswordState
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
@@ -58,6 +61,107 @@ fun LoginComposable(
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    var showForgotPasswordDialog by remember { mutableStateOf(false) }
+    var forgotPasswordEmail by remember { mutableStateOf("") }
+    val forgotPasswordState by authViewModel.forgotPasswordState.collectAsState()
+
+    // Forgot Password Dialog
+    if (showForgotPasswordDialog) {
+        AlertDialog(
+            onDismissRequest = {
+                if (forgotPasswordState !is ForgotPasswordState.Sending) {
+                    showForgotPasswordDialog = false
+                    authViewModel.resetForgotPasswordState()
+                    forgotPasswordEmail = ""
+                }
+            },
+            title = { Text(stringResource(Res.string.forgot_password)) },
+            text = {
+                Column {
+                    when (forgotPasswordState) {
+                        is ForgotPasswordState.Idle -> {
+                            Text(stringResource(Res.string.forgot_password_description))
+                            Spacer(modifier = Modifier.height(16.dp))
+                            OutlinedTextField(
+                                value = forgotPasswordEmail,
+                                onValueChange = { forgotPasswordEmail = it },
+                                label = { Text(stringResource(Res.string.email)) },
+                                singleLine = true,
+                                keyboardOptions = KeyboardOptions(
+                                    keyboardType = KeyboardType.Email,
+                                    imeAction = ImeAction.Done
+                                ),
+                                modifier = Modifier.fillMaxWidth()
+                            )
+                        }
+
+                        is ForgotPasswordState.Sending -> {
+                            Row(
+                                modifier = Modifier.fillMaxWidth(),
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                CircularProgressIndicator()
+                            }
+                        }
+
+                        is ForgotPasswordState.Sent -> {
+                            Text(stringResource(Res.string.forgot_password_success))
+                        }
+
+                        is ForgotPasswordState.Error -> {
+                            Text(
+                                text = (forgotPasswordState as ForgotPasswordState.Error).message,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                        }
+                    }
+                }
+            },
+            confirmButton = {
+                when (forgotPasswordState) {
+                    is ForgotPasswordState.Idle -> {
+                        TextButton(
+                            onClick = {
+                                if (forgotPasswordEmail.isNotEmpty()) {
+                                    authViewModel.sendPasswordResetEmail(forgotPasswordEmail)
+                                }
+                            },
+                            enabled = forgotPasswordEmail.isNotEmpty()
+                        ) {
+                            Text(stringResource(Res.string.send_reset_email))
+                        }
+                    }
+
+                    is ForgotPasswordState.Sent, is ForgotPasswordState.Error -> {
+                        TextButton(
+                            onClick = {
+                                showForgotPasswordDialog = false
+                                authViewModel.resetForgotPasswordState()
+                                forgotPasswordEmail = ""
+                            }
+                        ) {
+                            Text(stringResource(Res.string.ok))
+                        }
+                    }
+
+                    else -> {}
+                }
+            },
+            dismissButton = {
+                if (forgotPasswordState is ForgotPasswordState.Idle) {
+                    TextButton(
+                        onClick = {
+                            showForgotPasswordDialog = false
+                            forgotPasswordEmail = ""
+                        }
+                    ) {
+                        Text(stringResource(Res.string.cancel))
+                    }
+                }
+            }
+        )
+    }
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -99,6 +203,16 @@ fun LoginComposable(
             ),
             modifier = Modifier.fillMaxWidth(0.8f)
         )
+
+        TextButton(
+            onClick = { showForgotPasswordDialog = true },
+            modifier = Modifier.align(Alignment.End).padding(end = 32.dp)
+        ) {
+            Text(
+                stringResource(Res.string.forgot_password),
+                style = MaterialTheme.typography.bodySmall
+            )
+        }
 
         if (errorMessage != null) {
             Spacer(modifier = Modifier.height(8.dp))
