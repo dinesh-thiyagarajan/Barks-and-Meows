@@ -20,7 +20,7 @@ class AuthViewModel(
         AuthUiState.NotLoggedIn
     )
 
-    suspend fun loginWithUserNamePassword(email: String, password: String) {
+    fun loginWithUserNamePassword(email: String, password: String) {
         _authUiState.value = AuthUiState.LoginInProgress
         viewModelScope.launch(Dispatchers.IO) {
             val response = loginUseCase.invoke(email = email, password = password)
@@ -32,7 +32,7 @@ class AuthViewModel(
         }
     }
 
-    suspend fun loginWithGoogle(idToken: String?) {
+    fun loginWithGoogle(idToken: String?) {
         if (idToken == null) {
             _authUiState.value = AuthUiState.Error("Google Sign-In cancelled")
             return

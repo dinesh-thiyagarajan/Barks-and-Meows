@@ -32,7 +32,7 @@ class VaccineNoteViewModel(
         MutableStateFlow(GetVaccineNotesUiState.Loading)
 
 
-    suspend fun addVaccineNote(vaccineNote: VaccineNote) {
+    fun addVaccineNote(vaccineNote: VaccineNote) {
         _addVaccineNoteUiState.value = AddVaccineNoteUiState.AddingVaccineNote
         viewModelScope.launch(Dispatchers.IO) {
             addVaccineNoteUseCase.invoke(vaccineNote = vaccineNote)
@@ -47,7 +47,7 @@ class VaccineNoteViewModel(
     }
 
 
-    suspend fun getVaccineNotes(petId: String) {
+    fun getVaccineNotes(petId: String) {
         _getVaccineNoteUiState.value = GetVaccineNotesUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
             getVaccineNotesUseCase.invoke(petId = petId)
@@ -62,7 +62,7 @@ class VaccineNoteViewModel(
         }
     }
 
-    suspend fun getVaccinesList() {
+    fun getVaccinesList() {
         _addVaccineNoteUiState.value = AddVaccineNoteUiState.FetchingVaccines
         viewModelScope.launch(Dispatchers.IO) {
             getVaccinesUseCase.invoke().collect {
@@ -71,7 +71,7 @@ class VaccineNoteViewModel(
         }
     }
 
-    suspend fun deleteVaccineNote(petId: String, vaccineNoteId: String) {
+    fun deleteVaccineNote(petId: String, vaccineNoteId: String) {
         viewModelScope.launch(Dispatchers.IO) {
             deleteVaccineNoteUseCase.invoke(petId = petId, vaccineNoteId = vaccineNoteId)
                 .catch {

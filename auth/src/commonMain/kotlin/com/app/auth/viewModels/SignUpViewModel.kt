@@ -16,7 +16,7 @@ class SignUpViewModel(private val signUpUseCase: SignUpUseCase) : ViewModel() {
         SignUpUiState.Initial
     )
 
-    suspend fun signUpWithEmailPassword(email: String, password: String) {
+    fun signUpWithEmailPassword(email: String, password: String) {
         _signUpUiState.value = SignUpUiState.SignUpInProgress
         viewModelScope.launch(Dispatchers.IO) {
             val response = signUpUseCase.invoke(email = email, password = password)

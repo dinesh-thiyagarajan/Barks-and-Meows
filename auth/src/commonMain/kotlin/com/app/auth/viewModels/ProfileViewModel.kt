@@ -40,7 +40,7 @@ class ProfileViewModel(
         }
     }
 
-    suspend fun logout() {
+    fun logout() {
         val currentEmail = (profileUiState.value as? ProfileUiState.Loaded)?.email
         _profileUiState.value = ProfileUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {
@@ -68,7 +68,7 @@ class ProfileViewModel(
         }
     }
 
-    suspend fun deleteAccount() {
+    fun deleteAccount() {
         val currentEmail = (profileUiState.value as? ProfileUiState.Loaded)?.email
         _profileUiState.value = ProfileUiState.Loading
         viewModelScope.launch(Dispatchers.IO) {

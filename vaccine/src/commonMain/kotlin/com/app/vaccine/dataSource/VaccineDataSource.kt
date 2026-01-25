@@ -13,7 +13,7 @@ class VaccineDataSource(
     private val vaccineNotesCollection: String
 ) {
 
-    suspend fun getVaccineNotesForPet(petId: String) = flow {
+    fun getVaccineNotesForPet(petId: String) = flow {
         val vaccineNotes = mutableListOf<VaccineNote>()
         firestore.collection(baseEnv).document(petCollection).collection(userId).document(petId)
             .collection(vaccineNotesCollection).snapshots.collect { querySnapshot ->
@@ -28,7 +28,7 @@ class VaccineDataSource(
             }
     }
 
-    suspend fun addVaccineNoteForPet(vaccineNote: VaccineNote) = flow {
+    fun addVaccineNoteForPet(vaccineNote: VaccineNote) = flow {
         val docId =
             firestore.collection(baseEnv).document(petCollection).collection(userId)
                 .document(vaccineNote.petId)
@@ -38,7 +38,7 @@ class VaccineDataSource(
         emit(docId)
     }
 
-    suspend fun deleteVaccineNote(petId: String, vaccineNoteId: String) = flow {
+    fun deleteVaccineNote(petId: String, vaccineNoteId: String) = flow {
         firestore.collection(baseEnv).document(petCollection).collection(userId)
             .document(petId)
             .collection(vaccineNotesCollection)
@@ -47,7 +47,7 @@ class VaccineDataSource(
         emit(true)
     }
 
-    suspend fun getVaccines() = flow {
+    fun getVaccines() = flow {
         val vaccineList: MutableList<Vaccine> = mutableListOf()
         // Dog Vaccines
         vaccineList.add(Vaccine(vaccineId = "dog_dhpp", "DHPP (Distemper, Hepatitis, Parvovirus, Parainfluenza)"))

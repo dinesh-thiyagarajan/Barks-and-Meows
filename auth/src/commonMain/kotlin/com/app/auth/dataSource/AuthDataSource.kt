@@ -15,11 +15,11 @@ class AuthDataSource(private val firebaseAuth: FirebaseAuth) {
         }
     }
 
-    suspend fun isLoggedIn() = flow {
+    fun isLoggedIn() = flow {
         emit(firebaseAuth.currentUser != null)
     }
 
-    suspend fun logout() = flow {
+    fun logout() = flow {
         try {
             firebaseAuth.signOut()
             emit(true)
@@ -48,7 +48,7 @@ class AuthDataSource(private val firebaseAuth: FirebaseAuth) {
         }
     }
 
-    suspend fun deleteAccount() = flow {
+    fun deleteAccount() = flow {
         try {
             val currentUser = firebaseAuth.currentUser
             if (currentUser == null) {

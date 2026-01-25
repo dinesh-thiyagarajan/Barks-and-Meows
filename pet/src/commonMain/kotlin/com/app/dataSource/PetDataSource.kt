@@ -32,7 +32,7 @@ class PetDataSource(
                 encodeDefaults = true
             })
 
-    suspend fun getPets() = flow {
+    fun getPets() = flow {
         try {
             val petsList = mutableListOf<Pet>()
             firestore.collection(baseEnv).document(petCollection)
@@ -51,7 +51,7 @@ class PetDataSource(
         }
     }
 
-    suspend fun getPetDetails(petId: String) = flow {
+    fun getPetDetails(petId: String) = flow {
         try {
             firestore.collection(baseEnv).document(petCollection).collection(userId)
                 .document(petId)
@@ -65,7 +65,7 @@ class PetDataSource(
         }
     }
 
-    suspend fun deletePet(petId: String) = flow {
+    fun deletePet(petId: String) = flow {
         firestore.collection(baseEnv).document(petCollection)
             .collection(userId)
             .document(petId)
@@ -73,7 +73,7 @@ class PetDataSource(
         emit(true)
     }
 
-    suspend fun getPetCategories() = flow {
+    fun getPetCategories() = flow {
         val petCategories = listOf(
             PetCategory(1, "Dog", drawableResource = Res.drawable.ic_dog),
             PetCategory(2, "Cat", drawableResource = Res.drawable.ic_cat)
