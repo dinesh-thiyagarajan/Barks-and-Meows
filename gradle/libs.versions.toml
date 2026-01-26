@@ -19,9 +19,9 @@ viewmodel = "2.9.6"
 navigation = "2.9.1"
 gitlive-firebase = "2.4.0"
 koin = "4.1.1"
-firebase-bom = "33.1.1"
-playServicesAuth = "21.0.0"
-buildKonfig = "0.15.1"
+firebase-bom = "34.8.0"
+playServicesAuth = "21.5.0"
+buildKonfig = "0.17.1"
 
 [libraries]
 jetbrains-lifecycle-viewmodel = { module = "org.jetbrains.androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "viewmodel" }
