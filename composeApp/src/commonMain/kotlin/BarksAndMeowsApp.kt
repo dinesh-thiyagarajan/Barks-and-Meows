@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -22,6 +23,8 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import auth.LoginScreen
+import barksandmeows.composeapp.generated.resources.Res
+import barksandmeows.composeapp.generated.resources.error_pet_id_not_passed
 import com.app.uicomponents.composables.appBar.BarksAndMeowsAppBar
 import di.appModule
 import home.HomeScreen
@@ -34,9 +37,6 @@ import navigation.path
 import navigation.showBottomNavBar
 import navigation.showTopAppBar
 import org.jetbrains.compose.resources.stringResource
-import org.jetbrains.compose.ui.tooling.preview.Preview
-import barksandmeows.composeapp.generated.resources.Res
-import barksandmeows.composeapp.generated.resources.error_pet_id_not_passed
 import org.koin.compose.KoinApplication
 import pets.screens.AddNewPetScreen
 import pets.screens.EditPetScreen
@@ -174,7 +174,7 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                             defaultValue = ""
                         }
                     }) {
-                    val petId = it.arguments?.getString(NavConstants.PET_ID)
+                    val petId = it.savedStateHandle.get<String>(NavConstants.PET_ID)
                     val defaultPetId = stringResource(Res.string.error_pet_id_not_passed)
                     EditPetScreen(petId = petId ?: defaultPetId)
                 }
@@ -187,7 +187,7 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                             defaultValue = ""
                         }
                     }) {
-                    val petId = it.arguments?.getString(NavConstants.PET_ID)
+                    val petId = it.savedStateHandle.get<String>(NavConstants.PET_ID)
                     val defaultPetId = stringResource(Res.string.error_pet_id_not_passed)
                     PetDetailScreen(petId = petId ?: defaultPetId)
                 }
@@ -200,7 +200,7 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                             defaultValue = ""
                         }
                     }) {
-                    val petId = it.arguments?.getString(NavConstants.PET_ID)
+                    val petId = it.savedStateHandle.get<String>(NavConstants.PET_ID)
                     val defaultPetId = stringResource(Res.string.error_pet_id_not_passed)
                     AddVaccineNoteScreen(petId = petId ?: defaultPetId)
                 }
