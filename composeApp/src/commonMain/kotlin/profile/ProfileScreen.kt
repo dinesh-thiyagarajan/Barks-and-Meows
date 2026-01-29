@@ -52,7 +52,6 @@ import barksandmeows.composeapp.generated.resources.dog_singular
 import barksandmeows.composeapp.generated.resources.email_label
 import barksandmeows.composeapp.generated.resources.logout
 import barksandmeows.composeapp.generated.resources.profile_icon_description
-import com.app.auth.useCases.LogoutUseCase
 import org.jetbrains.compose.resources.stringResource
 import com.app.auth.viewModels.ProfileUiState
 import com.app.extensions.getPetIcon
