@@ -10,7 +10,7 @@ import com.app.reminder.useCases.GetRemindersUseCase
 import com.app.reminder.useCases.UpdateLastFedTimeUseCase
 import com.app.reminder.useCases.UpdateReminderUseCase
 import com.app.reminder.viewModels.ReminderViewModel
-import org.koin.compose.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 

@@ -8,7 +8,7 @@ import com.app.vaccine.useCases.DeleteVaccineNoteUseCase
 import com.app.vaccine.useCases.GetVaccineNotesUseCase
 import com.app.vaccine.useCases.GetVaccinesUseCase
 import com.app.vaccine.viewModels.VaccineNoteViewModel
-import org.koin.compose.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 

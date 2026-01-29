@@ -5,7 +5,7 @@ import com.app.di.petModule
 import com.app.reminder.di.reminderModule
 import env.Config
 import com.app.vaccine.di.vaccineModule
-import org.koin.compose.viewmodel.dsl.viewModel
+import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import splash.SplashViewModel

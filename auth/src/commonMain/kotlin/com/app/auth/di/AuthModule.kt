@@ -16,8 +16,8 @@ import com.app.auth.viewModels.SignUpViewModel
 import dev.gitlive.firebase.Firebase
 import dev.gitlive.firebase.auth.FirebaseAuth
 import dev.gitlive.firebase.auth.auth
-import org.koin.compose.viewmodel.dsl.viewModel
 import org.koin.core.qualifier.named
+import org.koin.core.module.dsl.viewModel
 import org.koin.dsl.module
 
 val authModule = module {
