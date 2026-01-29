@@ -1,6 +1,7 @@
 package com.app.reminder.worker
 
 import android.content.Context
+import androidx.work.Constraints
 import androidx.work.Data
 import androidx.work.ExistingWorkPolicy
 import androidx.work.OneTimeWorkRequestBuilder
@@ -43,8 +44,16 @@ object ReminderScheduler {
             .putInt(FeedingReminderWorker.KEY_INTERVAL_MINUTES, intervalMinutes)
             .build()
 
+        // Configure constraints to ensure work runs even when app is closed
+        val constraints = Constraints.Builder()
+            .setRequiresBatteryNotLow(false)  // Run even on low battery
+            .setRequiresCharging(false)        // Run even when not charging
+            .setRequiresDeviceIdle(false)      // Run even when device is active
+            .build()
+
         val workRequest = OneTimeWorkRequestBuilder<FeedingReminderWorker>()
             .setInputData(inputData)
+            .setConstraints(constraints)
             .addTag(reminderId)
             .setInitialDelay(delayMinutes, TimeUnit.MINUTES)
             .build()

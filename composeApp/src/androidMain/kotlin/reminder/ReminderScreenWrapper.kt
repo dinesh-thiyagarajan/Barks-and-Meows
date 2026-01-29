@@ -9,22 +9,17 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
 import com.app.reminder.composables.ReminderScreen
-import com.app.reminder.dataSource.ReminderLocalDataSource
 import com.app.reminder.worker.ReminderScheduler
-import kotlinx.coroutines.launch
 
 @Composable
 actual fun ReminderScreenWithScheduling(
     onReminderClick: (String) -> Unit
 ) {
     val context = LocalContext.current
-    val scope = rememberCoroutineScope()
-    val localDataSource = ReminderLocalDataSource(context)
 
     // Callbacks to be invoked after permission result
     var onPermissionGranted by remember { mutableStateOf<(() -> Unit)?>(null) }
@@ -72,16 +67,12 @@ actual fun ReminderScreenWithScheduling(
     ReminderScreen(
         onReminderClick = onReminderClick,
         onScheduleReminder = { reminder ->
+            // Only handle WorkManager scheduling - ViewModel handles data persistence
             ReminderScheduler.scheduleReminder(context, reminder)
-            scope.launch {
-                localDataSource.addReminder(reminder)
-            }
         },
         onCancelReminder = { reminderId ->
+            // Only handle WorkManager cancellation - ViewModel handles data deletion
             ReminderScheduler.cancelReminder(context, reminderId)
-            scope.launch {
-                localDataSource.deleteReminder(reminderId)
-            }
         },
         onRequestNotificationPermission = requestNotificationPermission,
         isNotificationPermissionGranted = isNotificationPermissionGranted

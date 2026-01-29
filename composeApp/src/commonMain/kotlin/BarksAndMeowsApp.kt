@@ -41,7 +41,6 @@ import navigation.showBottomNavBar
 import navigation.showTopAppBar
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
-import org.koin.core.context.GlobalContext
 import pets.screens.AddNewPetScreen
 import pets.screens.EditPetScreen
 import pets.screens.PetDetailScreen
@@ -54,23 +53,13 @@ import vaccine.AddVaccineNoteScreen
 @Composable
 @Preview
 fun BarksAndMeowsApp() {
-    // Check if Koin is already started (Android initializes in Application class)
-    val isKoinStarted = try {
-        GlobalContext.getOrNull() != null
-    } catch (e: Exception) {
-        false
-    }
-
-    if (isKoinStarted) {
-        // Koin already started, no wrapper needed - composables use koinInject() directly
+    // KoinApplication wrapper handles both Android and iOS
+    // Android's Application class may pre-initialize Koin, KoinApplication detects and skips re-init
+    // iOS initializes Koin through this wrapper
+    KoinApplication(application = {
+        modules(appModule())
+    }) {
         BarksAndMeowsApp(navController = rememberNavController())
-    } else {
-        // For platforms where Koin isn't pre-initialized (e.g., iOS)
-        KoinApplication(application = {
-            modules(appModule())
-        }) {
-            BarksAndMeowsApp(navController = rememberNavController())
-        }
     }
 }
 
