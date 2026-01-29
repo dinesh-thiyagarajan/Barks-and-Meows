@@ -29,7 +29,12 @@ val authModule = module {
     single<SignUpUseCase> { SignUpUseCase(authRepository = get()) }
     single<GoogleSignInUseCase> { GoogleSignInUseCase(authRepository = get()) }
     single<IsLoggedInUseCase> { IsLoggedInUseCase(authRepository = get()) }
-    single<LogoutUseCase> { LogoutUseCase(authRepository = get()) }
+    single<LogoutUseCase> {
+        LogoutUseCase(
+            authRepository = get(),
+            onLogout = getOrNull()
+        )
+    }
     single<DeleteAccountUseCase> { DeleteAccountUseCase(authRepository = get()) }
     single<ForgotPasswordUseCase> { ForgotPasswordUseCase(authRepository = get()) }
     viewModel { AuthViewModel(loginUseCase = get(), googleSignInUseCase = get(), forgotPasswordUseCase = get()) }

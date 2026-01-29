@@ -12,4 +12,9 @@ actual class ReminderSchedulerProvider {
         // iOS implementation would cancel scheduled notifications
         // This is a placeholder for future iOS implementation
     }
+
+    actual fun cancelAllReminders() {
+        // iOS implementation would cancel all scheduled notifications
+        // This is a placeholder for future iOS implementation
+    }
 }

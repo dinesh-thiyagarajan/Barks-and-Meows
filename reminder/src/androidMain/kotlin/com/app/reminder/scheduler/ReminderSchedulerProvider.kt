@@ -14,4 +14,8 @@ actual class ReminderSchedulerProvider(
     actual fun cancelReminder(reminderId: String) {
         ReminderScheduler.cancelReminder(context, reminderId)
     }
+
+    actual fun cancelAllReminders() {
+        ReminderScheduler.cancelAllReminders(context)
+    }
 }

@@ -21,4 +21,6 @@ val envModule = module {
     single<String>(named("vaccine_notes_collection")) { Config.VACCINE_NOTES_COLLECTION }
 }
 
-fun appModule() = listOf(authModule, envModule, petModule, splashModule, vaccineModule, reminderModule)
+expect fun platformModules(): List<org.koin.core.module.Module>
+
+fun appModule() = listOf(authModule, envModule, petModule, splashModule, vaccineModule, reminderModule) + platformModules()
