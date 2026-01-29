@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resources>
+    <!-- Reminder Screen -->
+    <string name="feeding_reminders_title">Feeding Reminders</string>
+    <string name="no_reminders_title">No feeding reminders yet</string>
+    <string name="no_reminders_subtitle">Tap + to add a reminder for your pet</string>
+    <string name="add_reminder">Add Reminder</string>
+    <string name="failed_to_load_reminders">Failed to load reminders</string>
+
+    <!-- Add Reminder Dialog -->
+    <string name="add_feeding_reminder">Add Feeding Reminder</string>
+    <string name="select_pet">Select Pet</string>
+    <string name="no_pets_found">No pets found. Please add a pet first.</string>
+    <string name="reminder_interval">Reminder Interval</string>
+    <string name="minutes">Minutes</string>
+    <string name="hours">Hours</string>
+    <string name="every">Every</string>
+    <string name="cancel">Cancel</string>
+
+    <!-- Reminder Card -->
+    <string name="active">Active</string>
+    <string name="paused">Paused</string>
+    <string name="reminder_interval_label">Reminder Interval</string>
+    <string name="last_fed">Last Fed</string>
+    <string name="next_reminder">Next Reminder</string>
+    <string name="never">Never</string>
+    <string name="unknown">Unknown</string>
+    <string name="mark_as_fed">Mark as Fed</string>
+    <string name="delete">Delete</string>
+    <string name="overdue">Overdue</string>
+    <string name="in_time">in %1$s</string>
+
+    <!-- Add Reminder Dialog -->
+    <string name="reminder_preview">You\'ll be reminded to feed %1$s every %2$s</string>
+
+    <!-- Delete Confirmation Dialog -->
+    <string name="delete_reminder">Delete Reminder</string>
+    <string name="delete_reminder_confirmation">Are you sure you want to delete the feeding reminder for %1$s? This action cannot be undone.</string>
+
+    <!-- Success Dialog -->
+    <string name="reminder_scheduled">Reminder Scheduled!</string>
+    <string name="reminder_scheduled_message">Feeding reminder for %1$s has been scheduled successfully. You\'ll receive notifications at the configured intervals.</string>
+    <string name="ok">OK</string>
+
+    <!-- Detail Screen -->
+    <string name="time_to_feed">Time to Feed!</string>
+    <string name="feeding_schedule">Feeding Schedule: Every %1$s</string>
+    <string name="never_fed">Never fed</string>
+    <string name="go_back">Go Back</string>
+
+    <!-- Permission Dialog -->
+    <string name="notification_permission_required">Notification Permission Required</string>
+    <string name="notification_permission_message">To receive feeding reminders for your pets, please enable notification permissions in your device settings. Without this permission, you won\'t be notified when it\'s time to feed your pet.</string>
+</resources>

@@ -51,6 +51,7 @@ kotlin {
             implementation(project(":pet"))
             implementation(project(":uiComponents"))
             implementation(project(":vaccine"))
+            implementation(project(":reminder"))
         }
     }
 }

@@ -2,6 +2,7 @@ package di
 
 import com.app.auth.di.authModule
 import com.app.di.petModule
+import com.app.reminder.di.reminderModule
 import env.Config
 import com.app.vaccine.di.vaccineModule
 import org.koin.compose.viewmodel.dsl.viewModel
@@ -20,4 +21,4 @@ val envModule = module {
     single<String>(named("vaccine_notes_collection")) { Config.VACCINE_NOTES_COLLECTION }
 }
 
-fun appModule() = listOf(authModule, envModule, petModule, splashModule, vaccineModule)
+fun appModule() = listOf(authModule, envModule, petModule, splashModule, vaccineModule, reminderModule)

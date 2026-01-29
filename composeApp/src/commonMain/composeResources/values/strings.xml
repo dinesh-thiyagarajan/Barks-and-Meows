@@ -28,7 +28,7 @@
     <string name="delete">Delete</string>
     <string name="cancel">Cancel</string>
     <string name="no_vaccine_notes">No vaccine notes yet</string>
-    <string name="no_vaccine_notes_description">Start tracking your pet\'s vaccination history by adding the first vaccine note</string>
+    <string name="no_vaccine_notes_description">Start tracking your pet's vaccination history by adding the first vaccine note</string>
     <string name="doctor_prefix">Doctor: </string>
     <string name="date_prefix">Date: </string>
     <string name="notes_label">Notes:</string>
@@ -64,10 +64,12 @@
 
     <!-- Navigation -->
     <string name="home">Home</string>
+    <string name="nav_reminders">Reminders</string>
     <string name="nav_profile">Profile</string>
 
     <!-- Error Messages -->
     <string name="error_pet_id_not_passed">none passed</string>
+    <string name="error_reminder_id_not_passed">none passed</string>
 
     <!-- Menu Options -->
     <string name="more_options">More options</string>

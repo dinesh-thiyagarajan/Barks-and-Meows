@@ -13,6 +13,8 @@ enum class AppRouteActions(
     EditPetScreen(route = "edit-pet/", listOf(NavConstants.PET_ID)),
     PetDetailScreen(route = "pet-details/", listOf(NavConstants.PET_ID)),
     AddVaccineNoteScreen(route = "add-vaccine-note/", listOf(NavConstants.PET_ID)),
+    ReminderScreen(route = "reminders/"),
+    FeedingReminderDetailScreen(route = "feeding-reminder-detail/", listOf(NavConstants.REMINDER_ID)),
 }
 
 fun AppRouteActions.path(): String {
@@ -26,4 +28,5 @@ fun AppRouteActions.path(): String {
 
 object NavConstants {
     const val PET_ID = "pet_id"
+    const val REMINDER_ID = "reminder_id"
 }

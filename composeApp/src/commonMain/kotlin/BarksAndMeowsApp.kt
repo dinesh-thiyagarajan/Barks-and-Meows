@@ -25,7 +25,10 @@ import androidx.navigation.navArgument
 import auth.LoginScreen
 import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.error_pet_id_not_passed
+import barksandmeows.composeapp.generated.resources.error_reminder_id_not_passed
+import com.app.reminder.composables.FeedingReminderDetailScreen
 import com.app.uicomponents.composables.appBar.BarksAndMeowsAppBar
+import reminder.ReminderScreenWithScheduling
 import di.appModule
 import home.HomeScreen
 import navigation.AppRouteActions
@@ -38,6 +41,7 @@ import navigation.showBottomNavBar
 import navigation.showTopAppBar
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
+import org.koin.core.context.GlobalContext
 import pets.screens.AddNewPetScreen
 import pets.screens.EditPetScreen
 import pets.screens.PetDetailScreen
@@ -50,10 +54,23 @@ import vaccine.AddVaccineNoteScreen
 @Composable
 @Preview
 fun BarksAndMeowsApp() {
-    KoinApplication(application = {
-        modules(appModule())
-    }) {
+    // Check if Koin is already started (Android initializes in Application class)
+    val isKoinStarted = try {
+        GlobalContext.getOrNull() != null
+    } catch (e: Exception) {
+        false
+    }
+
+    if (isKoinStarted) {
+        // Koin already started, no wrapper needed - composables use koinInject() directly
         BarksAndMeowsApp(navController = rememberNavController())
+    } else {
+        // For platforms where Koin isn't pre-initialized (e.g., iOS)
+        KoinApplication(application = {
+            modules(appModule())
+        }) {
+            BarksAndMeowsApp(navController = rememberNavController())
+        }
     }
 }
 
@@ -203,6 +220,30 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                     val petId = it.savedStateHandle.get<String>(NavConstants.PET_ID)
                     val defaultPetId = stringResource(Res.string.error_pet_id_not_passed)
                     AddVaccineNoteScreen(petId = petId ?: defaultPetId)
+                }
+
+                composable(route = AppRouteActions.ReminderScreen.path()) {
+                    ReminderScreenWithScheduling(
+                        onReminderClick = { reminderId ->
+                            NavRouter.navigate("${AppRouteActions.FeedingReminderDetailScreen.route}$reminderId")
+                        }
+                    )
+                }
+
+                composable(
+                    route = AppRouteActions.FeedingReminderDetailScreen.path(),
+                    arguments = AppRouteActions.FeedingReminderDetailScreen.navArguments.map {
+                        navArgument(it) {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        }
+                    }) {
+                    val reminderId = it.savedStateHandle.get<String>(NavConstants.REMINDER_ID)
+                    val defaultReminderId = stringResource(Res.string.error_reminder_id_not_passed)
+                    FeedingReminderDetailScreen(
+                        reminderId = reminderId ?: defaultReminderId,
+                        onNavigateBack = { NavRouter.popBackStack() }
+                    )
                 }
             }
         }
