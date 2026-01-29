@@ -53,9 +53,6 @@ import vaccine.AddVaccineNoteScreen
 @Composable
 @Preview
 fun BarksAndMeowsApp() {
-    // KoinApplication wrapper handles both Android and iOS
-    // Android's Application class may pre-initialize Koin, KoinApplication detects and skips re-init
-    // iOS initializes Koin through this wrapper
     KoinApplication(application = {
         modules(appModule())
     }) {
