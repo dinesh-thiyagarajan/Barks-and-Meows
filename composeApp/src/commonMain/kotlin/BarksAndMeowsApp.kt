@@ -22,6 +22,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import auth.ForgotPasswordScreen
 import auth.LoginScreen
 import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.error_pet_id_not_passed
@@ -155,6 +156,10 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
 
                 composable(route = AppRouteActions.SignUpScreen.path()) {
                     SignUpScreen()
+                }
+
+                composable(route = AppRouteActions.ForgotPasswordScreen.path()) {
+                    ForgotPasswordScreen()
                 }
 
                 composable(route = AppRouteActions.HomeScreen.path()) {

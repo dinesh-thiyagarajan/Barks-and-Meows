@@ -35,7 +35,8 @@ fun LoginScreen(authViewModel: AuthViewModel = koinViewModel(),
                 coroutineScope = coroutineScope,
                 authViewModel = authViewModel,
                 onGoogleSignInClick = googleSignInHandler,
-                onSignUpClicked = onSignUpClicked
+                onSignUpClicked = onSignUpClicked,
+                onForgotPasswordClicked = { NavRouter.navigate(AppRouteActions.ForgotPasswordScreen.route) }
             )
         }
 
@@ -49,7 +50,8 @@ fun LoginScreen(authViewModel: AuthViewModel = koinViewModel(),
                 authViewModel = authViewModel,
                 errorMessage = state.message,
                 onGoogleSignInClick = googleSignInHandler,
-                onSignUpClicked = onSignUpClicked
+                onSignUpClicked = onSignUpClicked,
+                onForgotPasswordClicked = { NavRouter.navigate(AppRouteActions.ForgotPasswordScreen.route) }
             )
         }
     }

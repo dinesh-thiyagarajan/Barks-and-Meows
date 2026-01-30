@@ -49,34 +49,10 @@ fun LoginComposable(
     errorMessage: String? = null,
     onGoogleSignInClick: () -> Unit = {},
     onSignUpClicked: () -> Unit = {},
+    onForgotPasswordClicked: () -> Unit = {},
 ) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
-    var showForgotPasswordDialog by remember { mutableStateOf(false) }
-    var forgotPasswordEmail by remember { mutableStateOf("") }
-    val forgotPasswordState by authViewModel.forgotPasswordState.collectAsState()
-
-    if (showForgotPasswordDialog) {
-        ForgotPasswordDialog(
-            email = forgotPasswordEmail,
-            onEmailChange = { forgotPasswordEmail = it },
-            forgotPasswordState = forgotPasswordState,
-            onSendResetEmail = {
-                if (forgotPasswordEmail.isNotEmpty()) {
-                    authViewModel.sendPasswordResetEmail(forgotPasswordEmail)
-                }
-            },
-            onDismiss = {
-                showForgotPasswordDialog = false
-                forgotPasswordEmail = ""
-            },
-            onReset = {
-                showForgotPasswordDialog = false
-                authViewModel.resetForgotPasswordState()
-                forgotPasswordEmail = ""
-            }
-        )
-    }
 
     Column(
         modifier = Modifier
@@ -120,7 +96,7 @@ fun LoginComposable(
         )
 
         TextButton(
-            onClick = { showForgotPasswordDialog = true },
+            onClick = onForgotPasswordClicked,
             modifier = Modifier.align(Alignment.End).padding(end = 32.dp)
         ) {
             Text(

@@ -7,6 +7,7 @@ enum class AppRouteActions(
     SplashScreen(route = "splash/"),
     LoginScreen(route = "login/"),
     SignUpScreen(route = "signup/"),
+    ForgotPasswordScreen(route = "forgot-password/"),
     HomeScreen(route = "home/"),
     ProfileScreen(route = "profile/"),
     AddNewPetScreen(route = "add-new-pet/"),
