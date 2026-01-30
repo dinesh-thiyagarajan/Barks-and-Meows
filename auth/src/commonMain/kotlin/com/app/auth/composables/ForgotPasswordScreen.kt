@@ -13,12 +13,16 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
@@ -37,12 +41,14 @@ import barksandmeows.auth.generated.resources.forgot_password
 import barksandmeows.auth.generated.resources.forgot_password_description
 import barksandmeows.auth.generated.resources.forgot_password_success
 import barksandmeows.auth.generated.resources.ic_app_logo
+import barksandmeows.auth.generated.resources.ic_back_arrow
 import barksandmeows.auth.generated.resources.send_reset_email
 import com.app.auth.viewModels.AuthViewModel
 import com.app.auth.viewModels.ForgotPasswordState
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ForgotPasswordScreen(
     authViewModel: AuthViewModel,
@@ -51,116 +57,133 @@ fun ForgotPasswordScreen(
     var email by remember { mutableStateOf("") }
     val forgotPasswordState by authViewModel.forgotPasswordState.collectAsState()
 
-    Scaffold { paddingValues ->
+    Scaffold(
+        topBar = {
+            CenterAlignedTopAppBar(
+                title = { Text(stringResource(Res.string.forgot_password)) },
+                navigationIcon = {
+                    IconButton(onClick = onBackPressed) {
+                        Icon(
+                            painter = painterResource(Res.drawable.ic_back_arrow),
+                            contentDescription = "Back"
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.primaryContainer
+                )
+            )
+        }
+    ) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .padding(paddingValues)
-                .padding(horizontal = 16.dp)
-                .verticalScroll(rememberScrollState()),
+                .padding(paddingValues),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
-            TextButton(
-                onClick = onBackPressed,
-                modifier = Modifier.align(Alignment.Start)
-            ) {
-                Text("← Back")
+            ForgotPasswordContent(
+                email = email,
+                onEmailChange = { email = it },
+                forgotPasswordState = forgotPasswordState,
+                onSendResetEmail = { authViewModel.sendPasswordResetEmail(email) },
+                onBackToLogin = {
+                    authViewModel.resetForgotPasswordState()
+                    onBackPressed()
+                }
+            )
+        }
+    }
+}
+
+@Composable
+private fun ForgotPasswordContent(
+    email: String,
+    onEmailChange: (String) -> Unit,
+    forgotPasswordState: ForgotPasswordState,
+    onSendResetEmail: () -> Unit,
+    onBackToLogin: () -> Unit
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 24.dp),
+        verticalArrangement = Arrangement.spacedBy(20.dp),
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        Image(
+            painterResource(Res.drawable.ic_app_logo),
+            contentDescription = null,
+            modifier = Modifier.size(100.dp)
+        )
+
+        when (forgotPasswordState) {
+            is ForgotPasswordState.Idle, is ForgotPasswordState.Error -> {
+                Text(
+                    text = stringResource(Res.string.forgot_password_description),
+                    style = MaterialTheme.typography.bodyMedium,
+                    textAlign = TextAlign.Center,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
+
+                OutlinedTextField(
+                    value = email,
+                    onValueChange = onEmailChange,
+                    label = { Text(stringResource(Res.string.email)) },
+                    singleLine = true,
+                    keyboardOptions = KeyboardOptions(
+                        keyboardType = KeyboardType.Email,
+                        imeAction = ImeAction.Done
+                    ),
+                    modifier = Modifier.fillMaxWidth()
+                )
+
+                if (forgotPasswordState is ForgotPasswordState.Error) {
+                    Text(
+                        text = forgotPasswordState.message,
+                        color = MaterialTheme.colorScheme.error,
+                        style = MaterialTheme.typography.bodySmall,
+                        textAlign = TextAlign.Center
+                    )
+                }
+
+                Button(
+                    onClick = {
+                        if (email.isNotEmpty()) {
+                            onSendResetEmail()
+                        }
+                    },
+                    enabled = email.isNotEmpty(),
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text(stringResource(Res.string.send_reset_email))
+                }
             }
 
-            Spacer(modifier = Modifier.height(16.dp))
+            is ForgotPasswordState.Sending -> {
+                CircularProgressIndicator(
+                    modifier = Modifier.size(64.dp)
+                )
+                Text(
+                    text = "Sending reset email...",
+                    style = MaterialTheme.typography.bodyLarge
+                )
+            }
 
-            Image(
-                painterResource(Res.drawable.ic_app_logo),
-                contentDescription = null,
-                modifier = Modifier.size(100.dp)
-            )
+            is ForgotPasswordState.Sent -> {
+                Text(
+                    text = stringResource(Res.string.forgot_password_success),
+                    style = MaterialTheme.typography.bodyLarge,
+                    textAlign = TextAlign.Center,
+                    color = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.padding(horizontal = 8.dp)
+                )
 
-            Spacer(modifier = Modifier.height(16.dp))
-
-            Text(
-                text = stringResource(Res.string.forgot_password),
-                style = MaterialTheme.typography.headlineMedium
-            )
-
-            Spacer(modifier = Modifier.height(24.dp))
-
-            when (forgotPasswordState) {
-                is ForgotPasswordState.Idle, is ForgotPasswordState.Error -> {
-                    Text(
-                        text = stringResource(Res.string.forgot_password_description),
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier.padding(bottom = 24.dp)
-                    )
-
-                    OutlinedTextField(
-                        value = email,
-                        onValueChange = { email = it },
-                        label = { Text(stringResource(Res.string.email)) },
-                        singleLine = true,
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Email,
-                            imeAction = ImeAction.Done
-                        ),
-                        modifier = Modifier.fillMaxWidth()
-                    )
-
-                    if (forgotPasswordState is ForgotPasswordState.Error) {
-                        Spacer(modifier = Modifier.height(8.dp))
-                        Text(
-                            text = (forgotPasswordState as ForgotPasswordState.Error).message,
-                            color = MaterialTheme.colorScheme.error,
-                            style = MaterialTheme.typography.bodySmall,
-                            textAlign = TextAlign.Center
-                        )
-                    }
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    Button(
-                        onClick = {
-                            if (email.isNotEmpty()) {
-                                authViewModel.sendPasswordResetEmail(email)
-                            }
-                        },
-                        enabled = email.isNotEmpty(),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text(stringResource(Res.string.send_reset_email))
-                    }
-                }
-
-                is ForgotPasswordState.Sending -> {
-                    CircularProgressIndicator(
-                        modifier = Modifier.size(64.dp)
-                    )
-                    Spacer(modifier = Modifier.height(16.dp))
-                    Text(
-                        text = "Sending reset email...",
-                        style = MaterialTheme.typography.bodyLarge
-                    )
-                }
-
-                is ForgotPasswordState.Sent -> {
-                    Text(
-                        text = stringResource(Res.string.forgot_password_success),
-                        style = MaterialTheme.typography.bodyLarge,
-                        textAlign = TextAlign.Center,
-                        color = MaterialTheme.colorScheme.primary
-                    )
-
-                    Spacer(modifier = Modifier.height(32.dp))
-
-                    Button(
-                        onClick = {
-                            authViewModel.resetForgotPasswordState()
-                            onBackPressed()
-                        },
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Text("Back to Login")
-                    }
+                Button(
+                    onClick = onBackToLogin,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Text("Back to Login")
                 }
             }
         }
