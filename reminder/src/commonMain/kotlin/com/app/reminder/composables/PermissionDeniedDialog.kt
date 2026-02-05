@@ -13,7 +13,11 @@ fun PermissionDeniedDialog(
         onDismissRequest = onDismiss,
         title = { Text("Notification Permission Required") },
         text = {
-            Text("To receive feeding reminders for your pets, please enable notification permissions in your device settings. Without this permission, you won't be notified when it's time to feed your pet.")
+            Text(
+                "To receive feeding reminders for your pets, please enable notification permissions " +
+                    "in your device settings. Without this permission, you won't be notified when " +
+                    "it's time to feed your pet."
+            )
         },
         confirmButton = {
             TextButton(onClick = onDismiss) {

@@ -40,7 +40,7 @@ actual class GoogleSignInHelper(private val context: Context, private val webCli
         return try {
             val account = task.getResult(ApiException::class.java)
             account?.idToken
-        } catch (e: ApiException) {
+        } catch (ignored: ApiException) {
             null
         }
     }

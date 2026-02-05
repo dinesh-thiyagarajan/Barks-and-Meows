@@ -64,7 +64,6 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
-
 @OptIn(KoinExperimentalAPI::class)
 @Composable
 fun PetDetailScreen(
@@ -156,7 +155,7 @@ fun PetDetailScreen(
                             text = { Text(stringResource(Res.string.edit)) },
                             onClick = {
                                 showMenu = false
-                                NavRouter.navigate("${AppRouteActions.EditPetScreen.route}${petId}")
+                                NavRouter.navigate("${AppRouteActions.EditPetScreen.route}$petId")
                             },
                             leadingIcon = {
                                 Icon(
@@ -207,8 +206,9 @@ fun PetDetailScreen(
                             pet = petResponse.pet,
                             petIcon = petIcon,
                             onAddVaccineNoteClicked = { petId ->
-                                NavRouter.navigate("${AppRouteActions.AddVaccineNoteScreen.route}${petId}")
-                            })
+                                NavRouter.navigate("${AppRouteActions.AddVaccineNoteScreen.route}$petId")
+                            }
+                        )
                     }
                 }
             }
@@ -262,6 +262,3 @@ fun PetDetailScreen(
         }
     }
 }
-
-
-

@@ -52,7 +52,7 @@ class MainActivity : ComponentActivity() {
             window.decorView.postDelayed({
                 try {
                     NavRouter.navigate(AppRouteActions.ReminderScreen.route)
-                } catch (e: Exception) {
+                } catch (ignored: Exception) {
                     // Navigation may fail if NavRouter is not ready yet, ignore
                 }
             }, 500)

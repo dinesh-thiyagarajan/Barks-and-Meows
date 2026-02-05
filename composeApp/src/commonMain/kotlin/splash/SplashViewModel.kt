@@ -13,7 +13,6 @@ class SplashViewModel(private val isLoggedInUseCase: IsLoggedInUseCase) : ViewMo
         SplashUiState.FetchingLoginStatus
     )
 
-
     suspend fun isLoggedIn() {
         isLoggedInUseCase.invoke().collect { isLoggedIn ->
             // adding a delay of 2 seconds to display the splash screen
@@ -32,5 +31,3 @@ sealed interface SplashUiState {
     data object FetchingLoginStatus : SplashUiState
     data object LoggedIn : SplashUiState
 }
-
-

@@ -18,7 +18,9 @@ fun DeleteReminderConfirmDialog(
             onDismissRequest = onDismiss,
             title = { Text("Delete Reminder") },
             text = {
-                Text("Are you sure you want to delete the feeding reminder for ${reminder.petName}? This action cannot be undone.")
+                Text(
+                    "Are you sure you want to delete the feeding reminder for ${reminder.petName}? This action cannot be undone."
+                )
             },
             confirmButton = {
                 TextButton(

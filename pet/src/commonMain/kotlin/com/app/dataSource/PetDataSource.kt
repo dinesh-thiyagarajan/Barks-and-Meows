@@ -8,7 +8,6 @@ import com.app.dataModels.PetCategory
 import dev.gitlive.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.flow.flow
 
-
 class PetDataSource(
     private val firestore: FirebaseFirestore,
     private val userId: String,
@@ -45,7 +44,7 @@ class PetDataSource(
                     }
                     emit(petsList)
                 }
-        } catch (e: Exception) {
+        } catch (ignored: Exception) {
             // Handle Firestore permission errors gracefully (e.g., after logout)
             emit(emptyList())
         }
@@ -59,7 +58,7 @@ class PetDataSource(
                     val pet = documentSnapshot.data<Pet>()
                     emit(pet)
                 }
-        } catch (e: Exception) {
+        } catch (ignored: Exception) {
             // Handle Firestore permission errors gracefully (e.g., after logout)
             // Flow will complete without emitting
         }

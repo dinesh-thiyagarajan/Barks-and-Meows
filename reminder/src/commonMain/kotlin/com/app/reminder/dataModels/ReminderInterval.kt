@@ -22,8 +22,14 @@ enum class ReminderInterval(val displayName: String, val minutes: Int, val hours
     companion object {
         val minuteOptions = listOf(EVERY_15_MINUTES, EVERY_30_MINUTES, EVERY_45_MINUTES)
         val hourOptions = listOf(
-            EVERY_1_HOUR, EVERY_2_HOURS, EVERY_3_HOURS, EVERY_4_HOURS,
-            EVERY_6_HOURS, EVERY_8_HOURS, EVERY_12_HOURS, EVERY_24_HOURS
+            EVERY_1_HOUR,
+            EVERY_2_HOURS,
+            EVERY_3_HOURS,
+            EVERY_4_HOURS,
+            EVERY_6_HOURS,
+            EVERY_8_HOURS,
+            EVERY_12_HOURS,
+            EVERY_24_HOURS
         )
     }
 }

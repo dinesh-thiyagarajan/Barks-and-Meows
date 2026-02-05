@@ -1,6 +1,5 @@
 package com.app.vaccine.dataModels
 
-import dev.gitlive.firebase.firestore.Timestamp
 import kotlinx.serialization.Serializable
 
 @Serializable

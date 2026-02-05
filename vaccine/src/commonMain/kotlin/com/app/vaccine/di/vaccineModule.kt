@@ -16,7 +16,8 @@ val vaccineModule = module {
     single<VaccineRepository> { VaccineRepositoryImpl(vaccineDataSource = get()) }
     single<VaccineDataSource> {
         VaccineDataSource(
-            firestore = get(), userId = get(named("user_id")),
+            firestore = get(),
+            userId = get(named("user_id")),
             baseEnv = get(named("base_env")),
             petCollection = get(
                 named("pets_collection"),

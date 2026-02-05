@@ -15,8 +15,10 @@ import org.koin.core.annotation.KoinExperimentalAPI
 
 @OptIn(KoinExperimentalAPI::class)
 @Composable
-fun LoginScreen(authViewModel: AuthViewModel = koinViewModel(),
-                onSignUpClicked: () -> Unit = {}) {
+fun LoginScreen(
+    authViewModel: AuthViewModel = koinViewModel(),
+    onSignUpClicked: () -> Unit = {}
+) {
     val coroutineScope = rememberCoroutineScope()
     val authUiState = authViewModel.authUiState.collectAsState()
     val googleSignInHandler = GoogleSignInHandler(authViewModel)
@@ -56,4 +58,3 @@ fun LoginScreen(authViewModel: AuthViewModel = koinViewModel(),
         }
     }
 }
-

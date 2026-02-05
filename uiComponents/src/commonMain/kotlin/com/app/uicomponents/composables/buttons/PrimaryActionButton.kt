@@ -13,7 +13,6 @@ import androidx.compose.ui.unit.dp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
-
 @Composable
 fun PrimaryActionButtonComposable(
     coroutineScope: CoroutineScope = rememberCoroutineScope(),
@@ -30,6 +29,10 @@ fun PrimaryActionButtonComposable(
             coroutineScope.launch {
                 onButtonClick.invoke()
             }
-        }, enabled = enabled, modifier = modifier, colors = colors, content = buttonLabel
+        },
+        enabled = enabled,
+        modifier = modifier,
+        colors = colors,
+        content = buttonLabel
     )
 }

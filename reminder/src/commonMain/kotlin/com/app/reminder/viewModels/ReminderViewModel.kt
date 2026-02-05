@@ -104,7 +104,7 @@ class ReminderViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 updateReminderUseCase.invoke(reminder)
-            } catch (e: Exception) {
+            } catch (ignored: Exception) {
                 // Revert on error by refreshing from backend
                 getReminders()
             }
@@ -124,7 +124,7 @@ class ReminderViewModel(
                 deleteReminderUseCase.invoke(reminderId)
                     .flowOn(Dispatchers.IO)
                     .collect { /* deleted */ }
-            } catch (e: Exception) {
+            } catch (ignored: Exception) {
                 // Revert on error by refreshing from backend
                 getReminders()
             }
@@ -165,7 +165,7 @@ class ReminderViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 updateLastFedTimeUseCase.invoke(reminderId, currentTime)
-            } catch (e: Exception) {
+            } catch (ignored: Exception) {
                 // Revert on error by refreshing from backend
                 getReminders()
             }

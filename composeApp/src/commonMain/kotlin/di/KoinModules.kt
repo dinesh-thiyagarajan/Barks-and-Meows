@@ -3,13 +3,12 @@ package di
 import com.app.auth.di.authModule
 import com.app.di.petModule
 import com.app.reminder.di.reminderModule
-import env.Config
 import com.app.vaccine.di.vaccineModule
+import env.Config
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
 import org.koin.dsl.module
 import splash.SplashViewModel
-
 
 val splashModule = module {
     viewModel { SplashViewModel(isLoggedInUseCase = get()) }

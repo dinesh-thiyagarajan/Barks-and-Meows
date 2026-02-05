@@ -15,7 +15,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_18)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),

@@ -23,8 +23,8 @@ class AuthDataSource(private val firebaseAuth: FirebaseAuth) {
         try {
             firebaseAuth.signOut()
             emit(true)
-        } catch (ex: Exception) {
-            throw Exception("Failed to logout: ${ex.message ?: "Unknown error"}")
+        } catch (expected: Exception) {
+            throw Exception("Failed to logout: ${expected.message ?: "Unknown error"}", expected)
         }
     }
 
@@ -56,8 +56,8 @@ class AuthDataSource(private val firebaseAuth: FirebaseAuth) {
             }
             currentUser.delete()
             emit(true)
-        } catch (ex: Exception) {
-            throw Exception("Failed to delete account: ${ex.message ?: "Unknown error"}")
+        } catch (expected: Exception) {
+            throw Exception("Failed to delete account: ${expected.message ?: "Unknown error"}", expected)
         }
     }
 
@@ -65,9 +65,8 @@ class AuthDataSource(private val firebaseAuth: FirebaseAuth) {
         try {
             firebaseAuth.sendPasswordResetEmail(email)
             emit(true)
-        } catch (ex: Exception) {
-            throw Exception("Failed to send password reset email: ${ex.message ?: "Unknown error"}")
+        } catch (expected: Exception) {
+            throw Exception("Failed to send password reset email: ${expected.message ?: "Unknown error"}", expected)
         }
     }
-
 }

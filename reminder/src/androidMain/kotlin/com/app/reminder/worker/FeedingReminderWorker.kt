@@ -73,8 +73,10 @@ class FeedingReminderWorker(
             .setSmallIcon(android.R.drawable.ic_popup_reminder)
             .setContentTitle("Time to feed $petName! 🐾")
             .setContentText("Your furry friend $petName is waiting for food")
-            .setStyle(NotificationCompat.BigTextStyle()
-                .bigText("Your furry friend $petName is waiting for food.\nReminder sent for $currentTime"))
+            .setStyle(
+                NotificationCompat.BigTextStyle()
+                    .bigText("Your furry friend $petName is waiting for food.\nReminder sent for $currentTime")
+            )
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setAutoCancel(true)
             .setContentIntent(pendingIntent)

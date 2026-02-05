@@ -24,7 +24,9 @@ fun showTopAppBar(route: String) = listOf(
 ).contains(route)
 
 sealed class BottomNavItem(
-    val route: String, val icon: ImageVector, val descriptionRes: StringResource
+    val route: String,
+    val icon: ImageVector,
+    val descriptionRes: StringResource
 ) {
     data object Home :
         BottomNavItem(AppRouteActions.HomeScreen.route, Icons.Default.Home, Res.string.home)
@@ -35,7 +37,6 @@ sealed class BottomNavItem(
     data object Profile :
         BottomNavItem(AppRouteActions.ProfileScreen.route, Icons.Default.Face, Res.string.nav_profile)
 }
-
 
 val bottomNavItems = listOf(
     BottomNavItem.Home,

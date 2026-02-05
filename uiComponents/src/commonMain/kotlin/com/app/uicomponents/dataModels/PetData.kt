@@ -2,7 +2,6 @@ package com.app.uicomponents.dataModels
 
 import org.jetbrains.compose.resources.DrawableResource
 
-
 data class PetData(
     val id: String,
     val name: String,
@@ -12,5 +11,7 @@ data class PetData(
 )
 
 data class PetCategory(
-    val id: Int, val category: String, var selected: Boolean = false
+    val id: Int,
+    val category: String,
+    var selected: Boolean = false
 )

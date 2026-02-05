@@ -31,7 +31,6 @@ class VaccineNoteViewModel(
     private val _getVaccineNoteUiState: MutableStateFlow<GetVaccineNotesUiState> =
         MutableStateFlow(GetVaccineNotesUiState.Loading)
 
-
     fun addVaccineNote(vaccineNote: VaccineNote) {
         _addVaccineNoteUiState.value = AddVaccineNoteUiState.AddingVaccineNote
         viewModelScope.launch(Dispatchers.IO) {
@@ -45,7 +44,6 @@ class VaccineNoteViewModel(
                 }
         }
     }
-
 
     fun getVaccineNotes(petId: String) {
         _getVaccineNoteUiState.value = GetVaccineNotesUiState.Loading
@@ -82,7 +80,6 @@ class VaccineNoteViewModel(
                 }
         }
     }
-
 }
 
 sealed interface AddVaccineNoteUiState {
@@ -100,4 +97,3 @@ sealed interface GetVaccineNotesUiState {
 
     data class Error(val errorMessage: String?) : GetVaccineNotesUiState
 }
-

@@ -29,7 +29,6 @@ import barksandmeows.composeapp.generated.resources.error_pet_id_not_passed
 import barksandmeows.composeapp.generated.resources.error_reminder_id_not_passed
 import com.app.reminder.composables.FeedingReminderDetailScreen
 import com.app.uicomponents.composables.appBar.BarksAndMeowsAppBar
-import reminder.ReminderScreenWithScheduling
 import di.appModule
 import home.HomeScreen
 import navigation.AppRouteActions
@@ -46,6 +45,7 @@ import pets.screens.AddNewPetScreen
 import pets.screens.EditPetScreen
 import pets.screens.PetDetailScreen
 import profile.ProfileScreen
+import reminder.ReminderScreenWithScheduling
 import signup.SignUpScreen
 import splash.SplashScreen
 import theme.BarksAndMeowsTheme
@@ -111,7 +111,6 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                             )
                         }
                     }
-
                 }
             }
         ) { innerPadding ->
@@ -181,7 +180,8 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                             type = NavType.StringType
                             defaultValue = ""
                         }
-                    }) {
+                    }
+                ) {
                     val petId = it.savedStateHandle.get<String>(NavConstants.PET_ID)
                     val defaultPetId = stringResource(Res.string.error_pet_id_not_passed)
                     EditPetScreen(petId = petId ?: defaultPetId)
@@ -194,7 +194,8 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                             type = NavType.StringType
                             defaultValue = ""
                         }
-                    }) {
+                    }
+                ) {
                     val petId = it.savedStateHandle.get<String>(NavConstants.PET_ID)
                     val defaultPetId = stringResource(Res.string.error_pet_id_not_passed)
                     PetDetailScreen(petId = petId ?: defaultPetId)
@@ -207,7 +208,8 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                             type = NavType.StringType
                             defaultValue = ""
                         }
-                    }) {
+                    }
+                ) {
                     val petId = it.savedStateHandle.get<String>(NavConstants.PET_ID)
                     val defaultPetId = stringResource(Res.string.error_pet_id_not_passed)
                     AddVaccineNoteScreen(petId = petId ?: defaultPetId)
@@ -228,7 +230,8 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                             type = NavType.StringType
                             defaultValue = ""
                         }
-                    }) {
+                    }
+                ) {
                     val reminderId = it.savedStateHandle.get<String>(NavConstants.REMINDER_ID)
                     val defaultReminderId = stringResource(Res.string.error_reminder_id_not_passed)
                     FeedingReminderDetailScreen(

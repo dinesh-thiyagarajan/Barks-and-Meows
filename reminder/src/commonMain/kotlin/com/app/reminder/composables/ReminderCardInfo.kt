@@ -47,10 +47,11 @@ fun ReminderCardInfo(
             label = "Last Fed",
             value = formatLastFedTime(lastFedTime),
             iconTint = MaterialTheme.colorScheme.secondary,
-            valueColor = if (lastFedTime == null)
+            valueColor = if (lastFedTime == null) {
                 MaterialTheme.colorScheme.error
-            else
-                MaterialTheme.colorScheme.onSurface,
+            } else {
+                MaterialTheme.colorScheme.onSurface
+            },
             modifier = Modifier.weight(1f)
         )
     }
@@ -103,7 +104,7 @@ private fun formatLastFedTime(timestamp: Long?): String {
         val day = localDateTime.day
         val month = localDateTime.month.name.lowercase().replaceFirstChar { it.uppercase() }.take(3)
         "$month $day, $hour:$minute"
-    } catch (e: Exception) {
+    } catch (ignored: Exception) {
         "Unknown"
     }
 }

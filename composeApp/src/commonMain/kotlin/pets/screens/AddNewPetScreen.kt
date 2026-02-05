@@ -2,7 +2,6 @@ package pets.screens
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -56,7 +55,6 @@ import org.koin.core.annotation.KoinExperimentalAPI
 @OptIn(KoinExperimentalAPI::class)
 @Composable
 fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
-
     val addPetUiState = petViewModel.addPetUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
@@ -128,7 +126,8 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
                                             coroutineScope.launch {
                                                 petViewModel.updateSelectedCategory(it)
                                             }
-                                        })
+                                        }
+                                    )
                                 }
                             }
                         }
@@ -187,7 +186,8 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
                         enabled = petName.isNotEmpty() && petCategories.value.any { it.selected },
                         buttonLabel = {
                             Text(stringResource(Res.string.submit))
-                        })
+                        }
+                    )
                 }
 
                 is AddPetUiState.Error -> {

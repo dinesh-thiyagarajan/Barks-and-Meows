@@ -52,11 +52,10 @@ import barksandmeows.composeapp.generated.resources.dog_singular
 import barksandmeows.composeapp.generated.resources.email_label
 import barksandmeows.composeapp.generated.resources.logout
 import barksandmeows.composeapp.generated.resources.profile_icon_description
-import org.jetbrains.compose.resources.stringResource
 import com.app.auth.viewModels.ProfileUiState
-import com.app.extensions.getPetIcon
 import com.app.auth.viewModels.ProfileViewModel
 import com.app.dataModels.Pet
+import com.app.extensions.getPetIcon
 import com.app.uicomponents.composables.dialogs.ConfirmationDialog
 import com.app.uicomponents.composables.loading.LoadingComposable
 import com.app.viewModels.GetPetsUiState
@@ -65,6 +64,7 @@ import kotlinx.coroutines.launch
 import navigation.AppRouteActions
 import navigation.NavRouter
 import org.jetbrains.compose.resources.painterResource
+import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
@@ -141,6 +141,7 @@ fun ProfileScreen(
     }
 }
 
+@Suppress("UnusedParameter")
 @Composable
 fun ProfileContent(
     email: String,
@@ -328,7 +329,13 @@ private fun PetStatisticsSection(pets: List<Pet>) {
             PetStatCard(
                 icon = getPetIcon("dog"),
                 count = dogCount,
-                label = if (dogCount == 1) stringResource(Res.string.dog_singular) else stringResource(Res.string.dog_plural)
+                label = if (dogCount == 1) {
+                    stringResource(
+                        Res.string.dog_singular
+                    )
+                } else {
+                    stringResource(Res.string.dog_plural)
+                }
             )
         }
 
@@ -338,7 +345,13 @@ private fun PetStatisticsSection(pets: List<Pet>) {
             PetStatCard(
                 icon = getPetIcon("cat"),
                 count = catCount,
-                label = if (catCount == 1) stringResource(Res.string.cat_singular) else stringResource(Res.string.cat_plural)
+                label = if (catCount == 1) {
+                    stringResource(
+                        Res.string.cat_singular
+                    )
+                } else {
+                    stringResource(Res.string.cat_plural)
+                }
             )
         }
     }

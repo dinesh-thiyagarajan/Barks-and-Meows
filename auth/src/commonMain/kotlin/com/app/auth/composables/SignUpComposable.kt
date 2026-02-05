@@ -57,7 +57,6 @@ fun SignUpComposable(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
-
         Image(
             painterResource(Res.drawable.ic_app_logo),
             null,

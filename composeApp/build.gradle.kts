@@ -97,4 +97,3 @@ android {
         debugImplementation(libs.ui.tooling)
     }
 }
-

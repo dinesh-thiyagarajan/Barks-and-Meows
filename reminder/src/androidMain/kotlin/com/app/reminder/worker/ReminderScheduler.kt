@@ -46,9 +46,9 @@ object ReminderScheduler {
 
         // Configure constraints to ensure work runs even when app is closed
         val constraints = Constraints.Builder()
-            .setRequiresBatteryNotLow(false)  // Run even on low battery
-            .setRequiresCharging(false)        // Run even when not charging
-            .setRequiresDeviceIdle(false)      // Run even when device is active
+            .setRequiresBatteryNotLow(false) // Run even on low battery
+            .setRequiresCharging(false) // Run even when not charging
+            .setRequiresDeviceIdle(false) // Run even when device is active
             .build()
 
         val workRequest = OneTimeWorkRequestBuilder<FeedingReminderWorker>()
@@ -59,7 +59,7 @@ object ReminderScheduler {
             .build()
 
         WorkManager.getInstance(context).enqueueUniqueWork(
-            "${FeedingReminderWorker.WORK_NAME_PREFIX}${reminderId}",
+            "${FeedingReminderWorker.WORK_NAME_PREFIX}$reminderId",
             ExistingWorkPolicy.REPLACE,
             workRequest
         )

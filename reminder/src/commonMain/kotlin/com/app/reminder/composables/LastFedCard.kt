@@ -69,7 +69,7 @@ private fun formatLastFedTimeDetailed(timestamp: Long?): String {
         val month = localDateTime.month.name.lowercase().replaceFirstChar { it.uppercase() }
         val year = localDateTime.year
         "$month $day, $year\nat $hour:$minute"
-    } catch (e: Exception) {
+    } catch (ignored: Exception) {
         unknown
     }
 }

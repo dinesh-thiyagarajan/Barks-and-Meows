@@ -16,7 +16,7 @@ import org.koin.dsl.module
 
 val reminderModule = module {
     single<String>(named("reminder_collection")) { "Reminders" }
-    
+
     single<ReminderDataSource> {
         ReminderDataSource(
             firestore = get(),
@@ -25,18 +25,18 @@ val reminderModule = module {
             reminderCollection = get(named("reminder_collection"))
         )
     }
-    
+
     single<ReminderRepository> {
         ReminderRepositoryImpl(reminderDataSource = get())
     }
-    
+
     single { GetRemindersUseCase(reminderRepository = get()) }
     single { AddReminderUseCase(reminderRepository = get()) }
     single { UpdateReminderUseCase(reminderRepository = get()) }
     single { DeleteReminderUseCase(reminderRepository = get()) }
     single { GetReminderByIdUseCase(reminderRepository = get()) }
     single { UpdateLastFedTimeUseCase(reminderRepository = get()) }
-    
+
     viewModel {
         ReminderViewModel(
             getRemindersUseCase = get(),

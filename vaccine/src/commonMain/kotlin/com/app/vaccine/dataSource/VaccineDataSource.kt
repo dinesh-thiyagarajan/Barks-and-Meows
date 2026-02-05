@@ -59,7 +59,9 @@ class VaccineDataSource(
         vaccineList.add(Vaccine(vaccineId = "dog_coronavirus", "Canine Coronavirus"))
 
         // Cat Vaccines
-        vaccineList.add(Vaccine(vaccineId = "cat_fvrcp", "FVRCP (Feline Viral Rhinotracheitis, Calicivirus, Panleukopenia)"))
+        vaccineList.add(
+            Vaccine(vaccineId = "cat_fvrcp", "FVRCP (Feline Viral Rhinotracheitis, Calicivirus, Panleukopenia)")
+        )
         vaccineList.add(Vaccine(vaccineId = "cat_rabies", "Rabies"))
         vaccineList.add(Vaccine(vaccineId = "cat_felv", "FeLV (Feline Leukemia Virus)"))
         vaccineList.add(Vaccine(vaccineId = "cat_fiv", "FIV (Feline Immunodeficiency Virus)"))
@@ -68,6 +70,4 @@ class VaccineDataSource(
 
         emit(vaccineList)
     }
-
-
 }

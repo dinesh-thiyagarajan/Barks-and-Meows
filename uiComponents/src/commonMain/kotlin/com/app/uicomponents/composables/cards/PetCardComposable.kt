@@ -108,7 +108,15 @@ fun PetCardComposable(
 
                         // Age
                         Text(
-                            text = "${petData.age} ${if (petData.age == 1) stringResource(Res.string.year_singular) else stringResource(Res.string.years_plural)} ${stringResource(Res.string.years_old)}",
+                            text = "${petData.age} ${if (petData.age == 1) {
+                                stringResource(
+                                    Res.string.year_singular
+                                )
+                            } else {
+                                stringResource(
+                                    Res.string.years_plural
+                                )
+                            }} ${stringResource(Res.string.years_old)}",
                             style = MaterialTheme.typography.bodyMedium,
                             color = MaterialTheme.colorScheme.onSurfaceVariant
                         )

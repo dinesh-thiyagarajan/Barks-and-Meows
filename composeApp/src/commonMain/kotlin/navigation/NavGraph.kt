@@ -22,7 +22,7 @@ fun AppRouteActions.path(): String {
     if (navArguments.isEmpty()) return route
     var completePath = route
     for (argument in navArguments) {
-        completePath += "{${argument}}/"
+        completePath += "{$argument}/"
     }
     return completePath.removeSuffix("/")
 }

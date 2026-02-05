@@ -40,7 +40,7 @@ class ReminderDataSource(
                     }
                     emit(remindersList)
                 }
-        } catch (e: Exception) {
+        } catch (ignored: Exception) {
             emit(emptyList())
         }
     }
@@ -54,7 +54,7 @@ class ReminderDataSource(
                     val reminder = documentSnapshot.data<FeedingReminder>()
                     emit(reminder)
                 }
-        } catch (e: Exception) {
+        } catch (ignored: Exception) {
             // Handle Firestore permission errors gracefully
         }
     }
@@ -69,7 +69,7 @@ class ReminderDataSource(
                         .find { it.petId == petId }
                     emit(reminder)
                 }
-        } catch (e: Exception) {
+        } catch (ignored: Exception) {
             emit(null)
         }
     }
@@ -88,7 +88,7 @@ class ReminderDataSource(
                 .collection(userId)
                 .document(reminderId)
                 .update("lastFedTime" to lastFedTime)
-        } catch (e: Exception) {
+        } catch (ignored: Exception) {
             // Handle error gracefully
         }
     }

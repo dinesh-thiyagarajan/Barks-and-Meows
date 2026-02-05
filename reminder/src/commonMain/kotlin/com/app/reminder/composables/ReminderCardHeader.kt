@@ -65,10 +65,11 @@ fun ReminderCardHeader(
                 Text(
                     text = if (isEnabled) "Active" else "Paused",
                     style = MaterialTheme.typography.bodySmall,
-                    color = if (isEnabled)
+                    color = if (isEnabled) {
                         MaterialTheme.colorScheme.primary
-                    else
+                    } else {
                         MaterialTheme.colorScheme.onSurfaceVariant
+                    }
                 )
             }
         }
