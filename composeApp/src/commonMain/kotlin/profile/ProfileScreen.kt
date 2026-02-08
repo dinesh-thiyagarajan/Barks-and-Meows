@@ -52,6 +52,7 @@ import barksandmeows.composeapp.generated.resources.dog_singular
 import barksandmeows.composeapp.generated.resources.email_label
 import barksandmeows.composeapp.generated.resources.logout
 import barksandmeows.composeapp.generated.resources.profile_icon_description
+import com.app.ads.composables.AdBanner
 import com.app.auth.viewModels.ProfileUiState
 import com.app.auth.viewModels.ProfileViewModel
 import com.app.dataModels.Pet
@@ -195,17 +196,17 @@ fun ProfileContent(
                     .padding(bottom = 140.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // Profile Icon
                 Icon(
                     imageVector = Icons.Default.AccountCircle,
                     contentDescription = stringResource(Res.string.profile_icon_description),
-                    modifier = Modifier.size(120.dp),
+                    modifier = Modifier.size(80.dp),
                     tint = MaterialTheme.colorScheme.primary
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(8.dp))
 
                 // Username heading - show displayName or extract from email
                 val userName = displayName?.takeIf { it.isNotBlank() }
@@ -216,7 +217,7 @@ fun ProfileContent(
                     fontWeight = FontWeight.Bold
                 )
 
-                Spacer(modifier = Modifier.height(32.dp))
+                Spacer(modifier = Modifier.height(16.dp))
 
                 // Email Card
                 EmailCard(email = email)
@@ -237,6 +238,11 @@ fun ProfileContent(
                         // Optional: Show error message
                     }
                 }
+
+                Spacer(modifier = Modifier.height(24.dp))
+
+                // Ad Banner
+                AdBanner(modifier = Modifier.fillMaxWidth())
             }
 
             // Bottom buttons

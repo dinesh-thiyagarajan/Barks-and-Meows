@@ -1,5 +1,6 @@
 package di
 
+import com.app.ads.di.adsModule
 import com.app.auth.di.authModule
 import com.app.di.petModule
 import com.app.reminder.di.reminderModule
@@ -22,4 +23,4 @@ val envModule = module {
 
 expect fun platformModules(): List<org.koin.core.module.Module>
 
-fun appModule() = listOf(authModule, envModule, petModule, splashModule, vaccineModule, reminderModule) + platformModules()
+fun appModule() = listOf(authModule, envModule, petModule, splashModule, vaccineModule, reminderModule, adsModule) + platformModules()

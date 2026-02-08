@@ -1,6 +1,7 @@
 package com.app.barksandmeows
 
 import android.app.Application
+import com.app.ads.initializeAds
 import di.appModule
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
@@ -14,5 +15,6 @@ class BarksAndMeowsApplication : Application() {
             androidContext(this@BarksAndMeowsApplication)
             modules(appModule())
         }
+        initializeAds(this)
     }
 }

@@ -1,5 +1,6 @@
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import java.util.Properties
 
 plugins {
     alias(libs.plugins.kotlinMultiplatform)
@@ -52,9 +53,18 @@ kotlin {
             implementation(project(":uiComponents"))
             implementation(project(":vaccine"))
             implementation(project(":reminder"))
+            implementation(project(":ads"))
         }
     }
 }
+
+val localProperties = Properties().apply {
+    val localPropertiesFile = rootProject.file("local.properties")
+    if (localPropertiesFile.exists()) {
+        load(localPropertiesFile.inputStream())
+    }
+}
+val admobAppId: String = localProperties.getProperty("ADMOB_APP_ID", "")
 
 android {
     namespace = "com.app.barksandmeows"
@@ -70,6 +80,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 6
         versionName = "1.5"
+        manifestPlaceholders["ADMOB_APP_ID"] = admobAppId
     }
     packaging {
         resources {
