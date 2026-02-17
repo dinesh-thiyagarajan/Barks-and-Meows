@@ -48,6 +48,9 @@
     <string name="never_fed">Never fed</string>
     <string name="go_back">Go Back</string>
 
+    <!-- Disclaimer -->
+    <string name="reminder_disclaimer">Reminder times are approximate. Android battery optimization (Doze mode) may delay notifications when the device is idle or in low-power state.</string>
+
     <!-- Permission Dialog -->
     <string name="notification_permission_required">Notification Permission Required</string>
     <string name="notification_permission_message">To receive feeding reminders for your pets, please enable notification permissions in your device settings. Without this permission, you won\'t be notified when it\'s time to feed your pet.</string>

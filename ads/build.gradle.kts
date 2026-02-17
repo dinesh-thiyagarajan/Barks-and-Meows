@@ -17,6 +17,7 @@ val localProperties = Properties().apply {
 }
 
 val admobAdUnitId: String = localProperties.getProperty("ADMOB_AD_UNIT_ID", "")
+val isAdsEnabled: String = localProperties.getProperty("IS_ADS_ENABLED", "false")
 
 kotlin {
     androidTarget {
@@ -57,6 +58,7 @@ android {
     defaultConfig {
         minSdk = libs.versions.android.minSdk.get().toInt()
         buildConfigField("String", "ADMOB_AD_UNIT_ID", "\"$admobAdUnitId\"")
+        buildConfigField("boolean", "IS_ADS_ENABLED", isAdsEnabled)
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_18

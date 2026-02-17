@@ -57,6 +57,9 @@ class VaccineDataSource(
         vaccineList.add(Vaccine(vaccineId = "dog_lyme", "Lyme Disease"))
         vaccineList.add(Vaccine(vaccineId = "dog_canine_influenza", "Canine Influenza"))
         vaccineList.add(Vaccine(vaccineId = "dog_coronavirus", "Canine Coronavirus"))
+        vaccineList.add(Vaccine(vaccineId = "dog_rattlesnake", "Rattlesnake Vaccine"))
+        vaccineList.add(Vaccine(vaccineId = "dog_parainfluenza", "Canine Parainfluenza"))
+        vaccineList.add(Vaccine(vaccineId = "dog_giardia", "Giardia"))
 
         // Cat Vaccines
         vaccineList.add(
@@ -67,6 +70,9 @@ class VaccineDataSource(
         vaccineList.add(Vaccine(vaccineId = "cat_fiv", "FIV (Feline Immunodeficiency Virus)"))
         vaccineList.add(Vaccine(vaccineId = "cat_chlamydia", "Chlamydia"))
         vaccineList.add(Vaccine(vaccineId = "cat_bordetella", "Bordetella"))
+        vaccineList.add(Vaccine(vaccineId = "cat_fip", "FIP (Feline Infectious Peritonitis)"))
+        vaccineList.add(Vaccine(vaccineId = "cat_ringworm", "Feline Ringworm"))
+        vaccineList.add(Vaccine(vaccineId = "cat_giardia", "Feline Giardia"))
 
         emit(vaccineList)
     }

@@ -7,6 +7,7 @@
     <string name="or_separator">  OR  </string>
     <string name="google_icon_description">Google</string>
     <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="sign_up_with_google">Sign up with Google</string>
     <string name="no_account_signup">Don\'t have an account? Sign Up</string>
 
     <!-- Sign Up Composable -->

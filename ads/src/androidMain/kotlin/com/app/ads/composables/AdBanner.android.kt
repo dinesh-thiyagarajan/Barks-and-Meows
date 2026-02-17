@@ -12,6 +12,7 @@ import com.google.android.gms.ads.AdView
 
 @Composable
 actual fun AdBanner(modifier: Modifier) {
+    if (!BuildConfig.IS_ADS_ENABLED) return
     AndroidView(
         modifier = modifier.fillMaxWidth(),
         factory = { context ->

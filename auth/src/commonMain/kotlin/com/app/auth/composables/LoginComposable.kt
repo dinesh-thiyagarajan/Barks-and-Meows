@@ -3,6 +3,7 @@ package com.app.auth.composables
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,7 +15,9 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -32,9 +35,13 @@ import androidx.compose.ui.unit.dp
 import barksandmeows.auth.generated.resources.Res
 import barksandmeows.auth.generated.resources.email
 import barksandmeows.auth.generated.resources.forgot_password
+import barksandmeows.auth.generated.resources.google_icon_description
 import barksandmeows.auth.generated.resources.ic_app_logo
+import barksandmeows.auth.generated.resources.ic_google_logo
 import barksandmeows.auth.generated.resources.login
+import barksandmeows.auth.generated.resources.or_separator
 import barksandmeows.auth.generated.resources.password
+import barksandmeows.auth.generated.resources.sign_in_with_google
 import com.app.auth.viewModels.AuthViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
@@ -126,6 +133,36 @@ fun LoginComposable(
             modifier = Modifier.fillMaxWidth(0.8f)
         ) {
             Text(stringResource(Res.string.login))
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Row(
+            modifier = Modifier.fillMaxWidth(0.8f),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            HorizontalDivider(modifier = Modifier.weight(1f))
+            Text(
+                text = stringResource(Res.string.or_separator),
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
+            HorizontalDivider(modifier = Modifier.weight(1f))
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        OutlinedButton(
+            onClick = onGoogleSignInClick,
+            modifier = Modifier.fillMaxWidth(0.8f)
+        ) {
+            Image(
+                painter = painterResource(Res.drawable.ic_google_logo),
+                contentDescription = stringResource(Res.string.google_icon_description),
+                modifier = Modifier.size(20.dp)
+            )
+            Spacer(modifier = Modifier.size(8.dp))
+            Text(stringResource(Res.string.sign_in_with_google))
         }
 
         Spacer(modifier = Modifier.height(24.dp))
