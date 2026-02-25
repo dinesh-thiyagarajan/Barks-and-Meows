@@ -54,6 +54,7 @@ fun LoginComposable(
     coroutineScope: CoroutineScope,
     authViewModel: AuthViewModel,
     errorMessage: String? = null,
+    versionName: String = "",
     onGoogleSignInClick: () -> Unit = {},
     onSignUpClicked: () -> Unit = {},
     onForgotPasswordClicked: () -> Unit = {},
@@ -172,6 +173,15 @@ fun LoginComposable(
             modifier = Modifier.wrapContentSize()
         ) {
             Text("Don't have an account? Sign Up", style = MaterialTheme.typography.bodyMedium)
+        }
+
+        if (versionName.isNotEmpty()) {
+            Spacer(modifier = Modifier.height(16.dp))
+            Text(
+                text = "v$versionName",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant
+            )
         }
     }
 }

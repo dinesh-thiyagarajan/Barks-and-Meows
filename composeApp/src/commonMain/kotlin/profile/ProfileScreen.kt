@@ -55,6 +55,7 @@ import barksandmeows.composeapp.generated.resources.profile_icon_description
 import com.app.ads.composables.AdBanner
 import com.app.auth.viewModels.ProfileUiState
 import com.app.auth.viewModels.ProfileViewModel
+import common.utils.getAppVersion
 import com.app.dataModels.Pet
 import com.app.extensions.getPetIcon
 import com.app.uicomponents.composables.dialogs.ConfirmationDialog
@@ -276,6 +277,15 @@ fun ProfileContent(
                 ) {
                     Text(stringResource(Res.string.delete_account))
                 }
+
+                Spacer(modifier = Modifier.height(8.dp))
+
+                Text(
+                    text = "v${getAppVersion()}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.align(Alignment.CenterHorizontally)
+                )
             }
         }
     }

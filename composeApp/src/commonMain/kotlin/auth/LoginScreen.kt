@@ -8,6 +8,7 @@ import com.app.auth.composables.LoginComposable
 import com.app.auth.viewModels.AuthUiState
 import com.app.auth.viewModels.AuthViewModel
 import com.app.uicomponents.composables.loading.LoadingComposable
+import common.utils.getAppVersion
 import navigation.AppRouteActions
 import navigation.NavRouter
 import org.koin.compose.viewmodel.koinViewModel
@@ -22,6 +23,7 @@ fun LoginScreen(
     val coroutineScope = rememberCoroutineScope()
     val authUiState = authViewModel.authUiState.collectAsState()
     val googleSignInHandler = GoogleSignInHandler(authViewModel)
+    val appVersion = getAppVersion()
 
     when (val state = authUiState.value) {
         is AuthUiState.LoggedIn -> {
@@ -36,6 +38,7 @@ fun LoginScreen(
             LoginComposable(
                 coroutineScope = coroutineScope,
                 authViewModel = authViewModel,
+                versionName = appVersion,
                 onGoogleSignInClick = googleSignInHandler,
                 onSignUpClicked = onSignUpClicked,
                 onForgotPasswordClicked = { NavRouter.navigate(AppRouteActions.ForgotPasswordScreen.route) }
@@ -51,6 +54,7 @@ fun LoginScreen(
                 coroutineScope = coroutineScope,
                 authViewModel = authViewModel,
                 errorMessage = state.message,
+                versionName = appVersion,
                 onGoogleSignInClick = googleSignInHandler,
                 onSignUpClicked = onSignUpClicked,
                 onForgotPasswordClicked = { NavRouter.navigate(AppRouteActions.ForgotPasswordScreen.route) }
