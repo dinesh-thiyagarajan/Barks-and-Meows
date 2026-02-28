@@ -78,8 +78,8 @@ android {
         applicationId = "com.app.barksandmeows"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
-        versionCode = 13
-        versionName = "1.13"
+        versionCode = 14
+        versionName = "1.14"
         manifestPlaceholders["ADMOB_APP_ID"] = admobAppId
     }
     packaging {
