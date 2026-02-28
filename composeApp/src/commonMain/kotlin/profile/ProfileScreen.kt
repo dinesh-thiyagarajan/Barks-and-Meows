@@ -1,6 +1,5 @@
 package profile
 
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -21,11 +20,8 @@ import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.DeleteForever
 import androidx.compose.material.icons.outlined.Email
-import androidx.compose.material.icons.outlined.Pets
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -51,13 +47,9 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavOptions
 import barksandmeows.composeapp.generated.resources.Res
-import barksandmeows.composeapp.generated.resources.cat_plural
-import barksandmeows.composeapp.generated.resources.cat_singular
 import barksandmeows.composeapp.generated.resources.delete_account
 import barksandmeows.composeapp.generated.resources.delete_account_confirmation_message
 import barksandmeows.composeapp.generated.resources.delete_account_confirmation_title
-import barksandmeows.composeapp.generated.resources.dog_plural
-import barksandmeows.composeapp.generated.resources.dog_singular
 import barksandmeows.composeapp.generated.resources.email_label
 import barksandmeows.composeapp.generated.resources.logout
 import barksandmeows.composeapp.generated.resources.profile_icon_description
@@ -65,16 +57,11 @@ import com.app.ads.composables.AdBanner
 import com.app.auth.viewModels.ProfileUiState
 import com.app.auth.viewModels.ProfileViewModel
 import common.utils.getAppVersion
-import com.app.dataModels.Pet
-import com.app.extensions.getPetIcon
 import com.app.uicomponents.composables.dialogs.ConfirmationDialog
 import com.app.uicomponents.composables.loading.LoadingComposable
-import com.app.viewModels.GetPetsUiState
-import com.app.viewModels.PetViewModel
 import kotlinx.coroutines.launch
 import navigation.AppRouteActions
 import navigation.NavRouter
-import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
@@ -82,16 +69,10 @@ import org.koin.core.annotation.KoinExperimentalAPI
 @OptIn(KoinExperimentalAPI::class)
 @Composable
 fun ProfileScreen(
-    profileViewModel: ProfileViewModel = koinViewModel(),
-    petViewModel: PetViewModel = koinViewModel()
+    profileViewModel: ProfileViewModel = koinViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
     val profileUiState = profileViewModel.profileUiState.collectAsState()
-    val petsUiState = petViewModel.getPetsUiState.collectAsState()
-
-    LaunchedEffect(Unit) {
-        petViewModel.getPets()
-    }
 
     when (val state = profileUiState.value) {
         is ProfileUiState.Loading -> {
@@ -102,7 +83,6 @@ fun ProfileScreen(
             ProfileContent(
                 email = state.email,
                 displayName = state.displayName,
-                petsUiState = petsUiState.value,
                 onLogout = {
                     coroutineScope.launch {
                         profileViewModel.logout()
@@ -126,7 +106,6 @@ fun ProfileScreen(
             ProfileContent(
                 email = state.email ?: "Unknown",
                 displayName = state.displayName,
-                petsUiState = petsUiState.value,
                 errorMessage = state.message,
                 snackbarHostState = snackbarHostState,
                 onLogout = {
@@ -151,12 +130,10 @@ fun ProfileScreen(
     }
 }
 
-@Suppress("UnusedParameter")
 @Composable
 fun ProfileContent(
     email: String,
     displayName: String?,
-    petsUiState: GetPetsUiState,
     onLogout: () -> Unit,
     onDeleteAccount: () -> Unit,
     errorMessage: String? = null,
@@ -264,17 +241,6 @@ fun ProfileContent(
                     label = stringResource(Res.string.email_label),
                     value = email
                 )
-
-                // Pet Statistics
-                when (petsUiState) {
-                    is GetPetsUiState.Success -> {
-                        if (petsUiState.pets.isNotEmpty()) {
-                            PetStatisticsSection(pets = petsUiState.pets)
-                        }
-                    }
-                    is GetPetsUiState.Loading -> {}
-                    is GetPetsUiState.Error -> {}
-                }
             }
 
             Spacer(modifier = Modifier.height(24.dp))
@@ -406,103 +372,6 @@ private fun InfoCard(
                     color = MaterialTheme.colorScheme.onSurface
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun PetStatisticsSection(pets: List<Pet>) {
-    val categoryCount = pets.groupBy { it.petCategory.category.lowercase() }
-        .mapValues { it.value.size }
-
-    // Section header
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(top = 8.dp, bottom = 4.dp),
-        verticalAlignment = Alignment.CenterVertically
-    ) {
-        Icon(
-            imageVector = Icons.Outlined.Pets,
-            contentDescription = null,
-            modifier = Modifier.size(18.dp),
-            tint = MaterialTheme.colorScheme.primary
-        )
-        Spacer(modifier = Modifier.width(8.dp))
-        Text(
-            text = "My Pets",
-            style = MaterialTheme.typography.titleSmall,
-            fontWeight = FontWeight.SemiBold,
-            color = MaterialTheme.colorScheme.primary
-        )
-    }
-
-    // Pet stat cards in a row
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        val dogCount = categoryCount["dog"] ?: 0
-        if (dogCount > 0) {
-            PetStatCard(
-                icon = getPetIcon("dog"),
-                count = dogCount,
-                label = if (dogCount == 1) stringResource(Res.string.dog_singular)
-                else stringResource(Res.string.dog_plural),
-                modifier = Modifier.weight(1f)
-            )
-        }
-
-        val catCount = categoryCount["cat"] ?: 0
-        if (catCount > 0) {
-            PetStatCard(
-                icon = getPetIcon("cat"),
-                count = catCount,
-                label = if (catCount == 1) stringResource(Res.string.cat_singular)
-                else stringResource(Res.string.cat_plural),
-                modifier = Modifier.weight(1f)
-            )
-        }
-    }
-}
-
-@Composable
-private fun PetStatCard(
-    icon: org.jetbrains.compose.resources.DrawableResource,
-    count: Int,
-    label: String,
-    modifier: Modifier = Modifier
-) {
-    Surface(
-        modifier = modifier,
-        shape = RoundedCornerShape(16.dp),
-        color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
-        tonalElevation = 1.dp
-    ) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-            horizontalAlignment = Alignment.CenterHorizontally
-        ) {
-            Image(
-                painter = painterResource(icon),
-                contentDescription = label,
-                modifier = Modifier.size(44.dp)
-            )
-            Spacer(modifier = Modifier.height(10.dp))
-            Text(
-                text = "$count",
-                style = MaterialTheme.typography.headlineSmall,
-                fontWeight = FontWeight.Bold,
-                color = MaterialTheme.colorScheme.primary
-            )
-            Text(
-                text = label,
-                style = MaterialTheme.typography.labelMedium,
-                color = MaterialTheme.colorScheme.onSecondaryContainer,
-                fontWeight = FontWeight.Medium
-            )
         }
     }
 }
