@@ -1,7 +1,6 @@
 package profile
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -12,21 +11,30 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.Logout
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.DeleteForever
+import androidx.compose.material.icons.outlined.Email
+import androidx.compose.material.icons.outlined.Pets
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -39,6 +47,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavOptions
 import barksandmeows.composeapp.generated.resources.Res
@@ -134,7 +143,6 @@ fun ProfileScreen(
         }
 
         is ProfileUiState.NotLoggedIn, is ProfileUiState.LoggedOut -> {
-            // Clear entire backstack when logging out to remove all screens with active Firestore listeners
             val navOptions = NavOptions.Builder()
                 .setPopUpTo(AppRouteActions.HomeScreen.route, inclusive = true)
                 .build()
@@ -172,7 +180,7 @@ fun ProfileContent(
         )
     }
 
-    androidx.compose.material3.Scaffold(
+    Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = localSnackbarHostState) { data ->
                 Snackbar(
@@ -183,47 +191,79 @@ fun ProfileContent(
             }
         }
     ) { paddingValues ->
-        Box(
+        Column(
             modifier = Modifier
                 .fillMaxSize()
                 .padding(paddingValues)
+                .verticalScroll(scrollState)
         ) {
-            // Scrollable content
+            // --- Profile Hero Section ---
             Column(
                 modifier = Modifier
-                    .fillMaxSize()
-                    .verticalScroll(scrollState)
-                    .padding(horizontal = 16.dp)
-                    .padding(bottom = 140.dp),
+                    .fillMaxWidth()
+                    .padding(top = 32.dp, bottom = 24.dp),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
+                // Avatar
+                Surface(
+                    modifier = Modifier.size(100.dp),
+                    shape = CircleShape,
+                    color = MaterialTheme.colorScheme.primaryContainer,
+                    tonalElevation = 4.dp,
+                    shadowElevation = 8.dp
+                ) {
+                    Box(contentAlignment = Alignment.Center) {
+                        Icon(
+                            imageVector = Icons.Default.AccountCircle,
+                            contentDescription = stringResource(Res.string.profile_icon_description),
+                            modifier = Modifier.size(64.dp),
+                            tint = MaterialTheme.colorScheme.onPrimaryContainer
+                        )
+                    }
+                }
+
                 Spacer(modifier = Modifier.height(16.dp))
 
-                // Profile Icon
-                Icon(
-                    imageVector = Icons.Default.AccountCircle,
-                    contentDescription = stringResource(Res.string.profile_icon_description),
-                    modifier = Modifier.size(80.dp),
-                    tint = MaterialTheme.colorScheme.primary
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Username heading - show displayName or extract from email
+                // Display name
                 val userName = displayName?.takeIf { it.isNotBlank() }
                     ?: email.substringBefore("@").replaceFirstChar { it.uppercase() }
                 Text(
                     text = userName,
                     style = MaterialTheme.typography.headlineMedium,
-                    fontWeight = FontWeight.Bold
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
 
-                Spacer(modifier = Modifier.height(16.dp))
+                Spacer(modifier = Modifier.height(4.dp))
 
-                // Email Card
-                EmailCard(email = email)
+                // Email subtitle
+                Text(
+                    text = email,
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
 
-                Spacer(modifier = Modifier.height(16.dp))
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 24.dp),
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // --- Info Section ---
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(horizontal = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
+            ) {
+                // Email card
+                InfoCard(
+                    icon = Icons.Outlined.Email,
+                    label = stringResource(Res.string.email_label),
+                    value = email
+                )
 
                 // Pet Statistics
                 when (petsUiState) {
@@ -232,73 +272,104 @@ fun ProfileContent(
                             PetStatisticsSection(pets = petsUiState.pets)
                         }
                     }
-                    is GetPetsUiState.Loading -> {
-                        // Optional: Show loading indicator for pets
-                    }
-                    is GetPetsUiState.Error -> {
-                        // Optional: Show error message
-                    }
+                    is GetPetsUiState.Loading -> {}
+                    is GetPetsUiState.Error -> {}
                 }
-
-                Spacer(modifier = Modifier.height(24.dp))
-
-                // Ad Banner
-                AdBanner(modifier = Modifier.fillMaxWidth())
             }
 
-            // Bottom buttons
+            Spacer(modifier = Modifier.height(24.dp))
+
+            // Ad Banner
+            AdBanner(modifier = Modifier.fillMaxWidth().padding(horizontal = 20.dp))
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            HorizontalDivider(
+                modifier = Modifier.padding(horizontal = 24.dp),
+                color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.5f)
+            )
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // --- Actions Section ---
             Column(
                 modifier = Modifier
-                    .align(Alignment.BottomCenter)
                     .fillMaxWidth()
-                    .background(MaterialTheme.colorScheme.background)
-                    .padding(16.dp)
+                    .padding(horizontal = 20.dp),
+                verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
                 // Logout Button
                 Button(
                     onClick = onLogout,
                     modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.buttonColors(
                         containerColor = MaterialTheme.colorScheme.error
                     )
                 ) {
-                    Text(stringResource(Res.string.logout))
+                    Icon(
+                        imageVector = Icons.AutoMirrored.Filled.Logout,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = stringResource(Res.string.logout),
+                        style = MaterialTheme.typography.labelLarge,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
                 }
-
-                Spacer(modifier = Modifier.height(8.dp))
 
                 // Delete Account Button
                 OutlinedButton(
                     onClick = { showDeleteAccountDialog = true },
                     modifier = Modifier.fillMaxWidth(),
+                    shape = RoundedCornerShape(14.dp),
                     colors = ButtonDefaults.outlinedButtonColors(
                         contentColor = MaterialTheme.colorScheme.error
                     )
                 ) {
-                    Text(stringResource(Res.string.delete_account))
+                    Icon(
+                        imageVector = Icons.Default.DeleteForever,
+                        contentDescription = null,
+                        modifier = Modifier.size(18.dp)
+                    )
+                    Spacer(modifier = Modifier.width(8.dp))
+                    Text(
+                        text = stringResource(Res.string.delete_account),
+                        style = MaterialTheme.typography.labelLarge,
+                        modifier = Modifier.padding(vertical = 4.dp)
+                    )
                 }
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                Text(
-                    text = "v${getAppVersion()}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurfaceVariant,
-                    modifier = Modifier.align(Alignment.CenterHorizontally)
-                )
             }
+
+            Spacer(modifier = Modifier.height(20.dp))
+
+            // App version
+            Text(
+                text = "v${getAppVersion()}",
+                style = MaterialTheme.typography.bodySmall,
+                color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.6f),
+                modifier = Modifier.fillMaxWidth(),
+                textAlign = TextAlign.Center
+            )
+
+            Spacer(modifier = Modifier.height(24.dp))
         }
     }
 }
 
 @Composable
-private fun EmailCard(email: String) {
-    Card(
+private fun InfoCard(
+    icon: androidx.compose.ui.graphics.vector.ImageVector,
+    label: String,
+    value: String
+) {
+    Surface(
         modifier = Modifier.fillMaxWidth(),
-        elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        )
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f),
+        tonalElevation = 1.dp
     ) {
         Row(
             modifier = Modifier
@@ -306,24 +377,33 @@ private fun EmailCard(email: String) {
                 .padding(16.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            Icon(
-                imageVector = Icons.Default.Email,
-                contentDescription = stringResource(Res.string.email_label),
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(24.dp)
-            )
-            Spacer(modifier = Modifier.size(12.dp))
+            Surface(
+                shape = RoundedCornerShape(10.dp),
+                color = MaterialTheme.colorScheme.primaryContainer,
+                modifier = Modifier.size(40.dp)
+            ) {
+                Box(contentAlignment = Alignment.Center) {
+                    Icon(
+                        imageVector = icon,
+                        contentDescription = null,
+                        modifier = Modifier.size(22.dp),
+                        tint = MaterialTheme.colorScheme.onPrimaryContainer
+                    )
+                }
+            }
+            Spacer(modifier = Modifier.width(14.dp))
             Column {
                 Text(
-                    text = stringResource(Res.string.email_label),
+                    text = label,
                     style = MaterialTheme.typography.labelMedium,
                     color = MaterialTheme.colorScheme.onSurfaceVariant
                 )
-                Spacer(modifier = Modifier.height(4.dp))
+                Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = email,
+                    text = value,
                     style = MaterialTheme.typography.bodyLarge,
-                    fontWeight = FontWeight.Medium
+                    fontWeight = FontWeight.Medium,
+                    color = MaterialTheme.colorScheme.onSurface
                 )
             }
         }
@@ -335,39 +415,52 @@ private fun PetStatisticsSection(pets: List<Pet>) {
     val categoryCount = pets.groupBy { it.petCategory.category.lowercase() }
         .mapValues { it.value.size }
 
-    Column(
-        modifier = Modifier.fillMaxWidth(),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
+    // Section header
+    Row(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 8.dp, bottom = 4.dp),
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        // Dogs
+        Icon(
+            imageVector = Icons.Outlined.Pets,
+            contentDescription = null,
+            modifier = Modifier.size(18.dp),
+            tint = MaterialTheme.colorScheme.primary
+        )
+        Spacer(modifier = Modifier.width(8.dp))
+        Text(
+            text = "My Pets",
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+
+    // Pet stat cards in a row
+    Row(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalArrangement = Arrangement.spacedBy(12.dp)
+    ) {
         val dogCount = categoryCount["dog"] ?: 0
         if (dogCount > 0) {
             PetStatCard(
                 icon = getPetIcon("dog"),
                 count = dogCount,
-                label = if (dogCount == 1) {
-                    stringResource(
-                        Res.string.dog_singular
-                    )
-                } else {
-                    stringResource(Res.string.dog_plural)
-                }
+                label = if (dogCount == 1) stringResource(Res.string.dog_singular)
+                else stringResource(Res.string.dog_plural),
+                modifier = Modifier.weight(1f)
             )
         }
 
-        // Cats
         val catCount = categoryCount["cat"] ?: 0
         if (catCount > 0) {
             PetStatCard(
                 icon = getPetIcon("cat"),
                 count = catCount,
-                label = if (catCount == 1) {
-                    stringResource(
-                        Res.string.cat_singular
-                    )
-                } else {
-                    stringResource(Res.string.cat_plural)
-                }
+                label = if (catCount == 1) stringResource(Res.string.cat_singular)
+                else stringResource(Res.string.cat_plural),
+                modifier = Modifier.weight(1f)
             )
         }
     }
@@ -377,38 +470,38 @@ private fun PetStatisticsSection(pets: List<Pet>) {
 private fun PetStatCard(
     icon: org.jetbrains.compose.resources.DrawableResource,
     count: Int,
-    label: String
+    label: String,
+    modifier: Modifier = Modifier
 ) {
-    Card(
-        modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surfaceVariant
-        ),
-        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
+    Surface(
+        modifier = modifier,
+        shape = RoundedCornerShape(16.dp),
+        color = MaterialTheme.colorScheme.secondaryContainer.copy(alpha = 0.5f),
+        tonalElevation = 1.dp
     ) {
-        Row(
+        Column(
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(16.dp),
-            verticalAlignment = Alignment.CenterVertically
+            horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Image(
                 painter = painterResource(icon),
                 contentDescription = label,
-                modifier = Modifier.size(40.dp)
+                modifier = Modifier.size(44.dp)
             )
-            Spacer(modifier = Modifier.size(16.dp))
-            Text(
-                text = label,
-                style = MaterialTheme.typography.bodyLarge,
-                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                modifier = Modifier.weight(1f)
-            )
+            Spacer(modifier = Modifier.height(10.dp))
             Text(
                 text = "$count",
-                style = MaterialTheme.typography.titleLarge,
+                style = MaterialTheme.typography.headlineSmall,
                 fontWeight = FontWeight.Bold,
                 color = MaterialTheme.colorScheme.primary
+            )
+            Text(
+                text = label,
+                style = MaterialTheme.typography.labelMedium,
+                color = MaterialTheme.colorScheme.onSecondaryContainer,
+                fontWeight = FontWeight.Medium
             )
         }
     }
