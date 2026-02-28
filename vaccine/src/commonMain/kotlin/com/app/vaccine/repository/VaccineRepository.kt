@@ -9,4 +9,6 @@ interface VaccineRepository {
     suspend fun addVaccineNoteForPet(vaccineNote: VaccineNote): Flow<String>
     suspend fun deleteVaccineNote(petId: String, vaccineNoteId: String): Flow<Boolean>
     suspend fun getVaccines(): Flow<List<Vaccine>>
+    suspend fun getVaccineReminders(petIds: List<String>): Flow<List<VaccineNote>>
+    suspend fun updateVaccineNote(vaccineNote: VaccineNote): Flow<Boolean>
 }

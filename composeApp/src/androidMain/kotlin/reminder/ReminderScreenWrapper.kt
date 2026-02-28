@@ -12,7 +12,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.content.ContextCompat
-import com.app.reminder.composables.ReminderScreen
 import com.app.reminder.worker.ReminderScheduler
 
 @Composable
@@ -64,7 +63,7 @@ actual fun ReminderScreenWithScheduling(
         }
     }
 
-    ReminderScreen(
+    CombinedReminderScreen(
         onReminderClick = onReminderClick,
         onScheduleReminder = { reminder ->
             // Only handle WorkManager scheduling - ViewModel handles data persistence

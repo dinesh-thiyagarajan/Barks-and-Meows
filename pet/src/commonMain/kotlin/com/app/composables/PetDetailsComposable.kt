@@ -37,7 +37,7 @@ import org.jetbrains.compose.resources.stringResource
 fun PetDetailsComposable(
     pet: Pet,
     petIcon: DrawableResource,
-    onAddVaccineNoteClicked: (String) -> Unit
+    onAddVaccineNoteClicked: (petId: String, petName: String) -> Unit
 ) {
     Column(modifier = Modifier.padding(20.dp)) {
         Image(
@@ -97,7 +97,7 @@ fun PetDetailsComposable(
                 }
 
                 FilledTonalIconButton(
-                    onClick = { onAddVaccineNoteClicked.invoke(pet.id) },
+                    onClick = { onAddVaccineNoteClicked.invoke(pet.id, pet.name) },
                     colors = IconButtonDefaults.filledTonalIconButtonColors(
                         containerColor = MaterialTheme.colorScheme.primary,
                         contentColor = MaterialTheme.colorScheme.onPrimary

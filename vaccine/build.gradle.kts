@@ -43,6 +43,10 @@ kotlin {
             implementation(libs.bundles.koin)
             implementation(libs.koin.compose.viewmodel)
         }
+        androidMain.dependencies {
+            implementation(libs.androidx.work.runtime)
+            implementation(libs.androidx.core)
+        }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
         }

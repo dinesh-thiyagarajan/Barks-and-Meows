@@ -58,6 +58,9 @@ import com.app.viewModels.GetPetDetailsUiState
 import com.app.viewModels.PetDetailsViewModel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import navigation.AppRouteActions
 import navigation.NavRouter
 import org.jetbrains.compose.resources.stringResource
@@ -205,8 +208,8 @@ fun PetDetailScreen(
                         PetDetailsComposable(
                             pet = petResponse.pet,
                             petIcon = petIcon,
-                            onAddVaccineNoteClicked = { petId ->
-                                NavRouter.navigate("${AppRouteActions.AddVaccineNoteScreen.route}$petId")
+                            onAddVaccineNoteClicked = { petId, petName ->
+                                NavRouter.navigate("${AppRouteActions.AddVaccineNoteScreen.route}$petId/$petName")
                             }
                         )
                     }
@@ -249,6 +252,13 @@ fun PetDetailScreen(
                                         notesLabel = stringResource(Res.string.notes_label),
                                         notAvailableText = stringResource(Res.string.not_available),
                                         deleteDescription = stringResource(Res.string.delete_vaccine_note_description),
+                                        reminderDate = vaccineNote.reminderTimestamp?.let { millis ->
+                                            val instant = Instant.fromEpochMilliseconds(millis)
+                                            val localDate = instant.toLocalDateTime(TimeZone.currentSystemDefault()).date
+                                            val month = localDate.monthNumber.toString().padStart(2, '0')
+                                            val day = localDate.dayOfMonth.toString().padStart(2, '0')
+                                            "${localDate.year}-$month-$day"
+                                        },
                                         onDeleteClick = {
                                             vaccineNoteToDelete = vaccineNote.id
                                         }

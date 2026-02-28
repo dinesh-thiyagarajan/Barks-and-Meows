@@ -3,10 +3,13 @@ package com.app.vaccine.di
 import com.app.vaccine.dataSource.VaccineDataSource
 import com.app.vaccine.repository.VaccineRepository
 import com.app.vaccine.repository.VaccineRepositoryImpl
+import com.app.vaccine.scheduler.VaccineReminderSchedulerProvider
 import com.app.vaccine.useCases.AddVaccineNoteUseCase
 import com.app.vaccine.useCases.DeleteVaccineNoteUseCase
 import com.app.vaccine.useCases.GetVaccineNotesUseCase
+import com.app.vaccine.useCases.GetVaccineRemindersUseCase
 import com.app.vaccine.useCases.GetVaccinesUseCase
+import com.app.vaccine.useCases.UpdateVaccineNoteUseCase
 import com.app.vaccine.viewModels.VaccineNoteViewModel
 import org.koin.core.module.dsl.viewModel
 import org.koin.core.qualifier.named
@@ -31,12 +34,17 @@ val vaccineModule = module {
     single { AddVaccineNoteUseCase(vaccineRepository = get()) }
     single { DeleteVaccineNoteUseCase(vaccineRepository = get()) }
     single { GetVaccinesUseCase(vaccineRepository = get()) }
+    single { GetVaccineRemindersUseCase(vaccineRepository = get()) }
+    single { UpdateVaccineNoteUseCase(vaccineRepository = get()) }
     viewModel {
         VaccineNoteViewModel(
             addVaccineNoteUseCase = get(),
             getVaccineNotesUseCase = get(),
             getVaccinesUseCase = get(),
-            deleteVaccineNoteUseCase = get()
+            deleteVaccineNoteUseCase = get(),
+            vaccineReminderSchedulerProvider = get(),
+            getVaccineRemindersUseCase = get(),
+            updateVaccineNoteUseCase = get()
         )
     }
 }

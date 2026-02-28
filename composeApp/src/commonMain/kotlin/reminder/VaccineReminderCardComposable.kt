@@ -1,4 +1,4 @@
-package com.app.uicomponents.composables.cards
+package reminder
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -23,25 +23,25 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 @Composable
-fun VaccineNoteCardComposable(
+fun VaccineReminderCardComposable(
+    petName: String,
     vaccineName: String,
+    reminderTimestamp: Long,
     doctorName: String,
-    date: String,
-    notes: String,
-    doctorLabel: String,
-    dateLabel: String,
-    notesLabel: String,
-    notAvailableText: String,
-    deleteDescription: String,
-    reminderDate: String? = null,
+    vaccineDate: String,
     onDeleteClick: () -> Unit
 ) {
+    val reminderDateFormatted = formatTimestamp(reminderTimestamp)
+
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = 8.dp),
+            .padding(vertical = 4.dp),
         elevation = CardDefaults.cardElevation(defaultElevation = 4.dp),
         colors = CardDefaults.cardColors(
             containerColor = MaterialTheme.colorScheme.surfaceVariant
@@ -54,65 +54,54 @@ fun VaccineNoteCardComposable(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.Top
         ) {
-            Column(
-                modifier = Modifier.weight(1f)
-            ) {
-                // Vaccine Name
+            Column(modifier = Modifier.weight(1f)) {
+                // Pet Name
                 Text(
-                    text = vaccineName,
+                    text = petName,
                     style = MaterialTheme.typography.titleMedium,
-                    fontWeight = FontWeight.Bold
-                )
-
-                Spacer(modifier = Modifier.height(8.dp))
-
-                // Doctor Info
-                VaccineInfoRow(
-                    label = doctorLabel,
-                    value = doctorName.ifEmpty { notAvailableText }
+                    fontWeight = FontWeight.Bold,
+                    color = MaterialTheme.colorScheme.primary
                 )
 
                 Spacer(modifier = Modifier.height(4.dp))
 
-                // Date Info
-                VaccineInfoRow(
-                    label = dateLabel,
-                    value = date.ifEmpty { notAvailableText }
+                // Vaccine Name
+                Text(
+                    text = vaccineName,
+                    style = MaterialTheme.typography.bodyLarge,
+                    fontWeight = FontWeight.SemiBold
                 )
 
-                // Notes (if available)
-                if (notes.isNotEmpty()) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Text(
-                        text = notesLabel,
-                        style = MaterialTheme.typography.bodyMedium,
-                        fontWeight = FontWeight.SemiBold,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                Spacer(modifier = Modifier.height(8.dp))
+
+                // Reminder Date
+                Row(verticalAlignment = Alignment.CenterVertically) {
+                    Icon(
+                        imageVector = Icons.Default.Notifications,
+                        contentDescription = null,
+                        modifier = Modifier.size(16.dp),
+                        tint = MaterialTheme.colorScheme.primary
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
+                    Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = notes,
-                        style = MaterialTheme.typography.bodySmall
+                        text = "Reminder: $reminderDateFormatted",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.primary,
+                        fontWeight = FontWeight.Medium
                     )
                 }
 
-                // Reminder indicator
-                if (!reminderDate.isNullOrEmpty()) {
-                    Spacer(modifier = Modifier.height(8.dp))
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        Icon(
-                            imageVector = Icons.Default.Notifications,
-                            contentDescription = "Reminder set",
-                            modifier = Modifier.size(14.dp),
-                            tint = MaterialTheme.colorScheme.primary
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
-                        Text(
-                            text = "Reminder: $reminderDate",
-                            style = MaterialTheme.typography.bodySmall,
-                            color = MaterialTheme.colorScheme.primary
-                        )
-                    }
+                Spacer(modifier = Modifier.height(4.dp))
+
+                // Doctor Name
+                if (doctorName.isNotEmpty()) {
+                    InfoRow(label = "Doctor: ", value = doctorName)
+                    Spacer(modifier = Modifier.height(4.dp))
+                }
+
+                // Original vaccine date
+                if (vaccineDate.isNotEmpty()) {
+                    InfoRow(label = "Vaccinated: ", value = vaccineDate)
                 }
             }
 
@@ -123,7 +112,7 @@ fun VaccineNoteCardComposable(
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = deleteDescription,
+                    contentDescription = "Remove reminder",
                     tint = MaterialTheme.colorScheme.error
                 )
             }
@@ -132,20 +121,30 @@ fun VaccineNoteCardComposable(
 }
 
 @Composable
-private fun VaccineInfoRow(
-    label: String,
-    value: String
-) {
-    Row(modifier = Modifier.fillMaxWidth()) {
+private fun InfoRow(label: String, value: String) {
+    Row {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.bodySmall,
             fontWeight = FontWeight.SemiBold,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Text(
             text = value,
-            style = MaterialTheme.typography.bodyMedium
+            style = MaterialTheme.typography.bodySmall
         )
+    }
+}
+
+private fun formatTimestamp(timestamp: Long): String {
+    return try {
+        val instant = Instant.fromEpochMilliseconds(timestamp)
+        val localDateTime = instant.toLocalDateTime(TimeZone.currentSystemDefault())
+        val month = localDateTime.month.name.lowercase()
+            .replaceFirstChar { it.uppercase() }
+            .take(3)
+        "$month ${localDateTime.dayOfMonth}, ${localDateTime.year}"
+    } catch (_: Exception) {
+        "Unknown"
     }
 }

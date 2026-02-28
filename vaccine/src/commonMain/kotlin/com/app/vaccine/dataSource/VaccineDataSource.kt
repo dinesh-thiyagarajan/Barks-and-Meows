@@ -3,7 +3,11 @@ package com.app.vaccine.dataSource
 import com.app.vaccine.dataModels.Vaccine
 import com.app.vaccine.dataModels.VaccineNote
 import dev.gitlive.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.map
 
 class VaccineDataSource(
     private val firestore: FirebaseFirestore,
@@ -75,5 +79,28 @@ class VaccineDataSource(
         vaccineList.add(Vaccine(vaccineId = "cat_giardia", "Feline Giardia"))
 
         emit(vaccineList)
+    }
+
+    fun getVaccineReminders(petIds: List<String>): Flow<List<VaccineNote>> {
+        if (petIds.isEmpty()) return flowOf(emptyList())
+
+        val flows = petIds.map { petId ->
+            getVaccineNotesForPet(petId).map { notes ->
+                notes.filter { it.reminderTimestamp != null }
+            }
+        }
+
+        return combine(flows) { arrays ->
+            arrays.flatMap { it.toList() }
+        }
+    }
+
+    fun updateVaccineNote(vaccineNote: VaccineNote) = flow {
+        firestore.collection(baseEnv).document(petCollection).collection(userId)
+            .document(vaccineNote.petId)
+            .collection(vaccineNotesCollection)
+            .document(vaccineNote.id)
+            .set(vaccineNote, buildSettings = { encodeDefaults = true })
+        emit(true)
     }
 }

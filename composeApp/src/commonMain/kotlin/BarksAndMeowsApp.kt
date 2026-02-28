@@ -211,8 +211,12 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                     }
                 ) {
                     val petId = it.savedStateHandle.get<String>(NavConstants.PET_ID)
+                    val petName = it.savedStateHandle.get<String>(NavConstants.PET_NAME)
                     val defaultPetId = stringResource(Res.string.error_pet_id_not_passed)
-                    AddVaccineNoteScreen(petId = petId ?: defaultPetId)
+                    AddVaccineNoteScreen(
+                        petId = petId ?: defaultPetId,
+                        petName = petName ?: ""
+                    )
                 }
 
                 composable(route = AppRouteActions.ReminderScreen.path()) {

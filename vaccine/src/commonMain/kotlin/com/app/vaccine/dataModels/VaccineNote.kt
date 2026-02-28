@@ -9,5 +9,7 @@ data class VaccineNote(
     val vaccine: Vaccine,
     val note: String,
     val timestamp: String,
-    val doctorName: String
+    val doctorName: String,
+    val reminderTimestamp: Long? = null,
+    val petName: String? = null
 )

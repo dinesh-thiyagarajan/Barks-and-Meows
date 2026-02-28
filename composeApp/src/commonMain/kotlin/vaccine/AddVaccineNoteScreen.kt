@@ -3,6 +3,7 @@ package vaccine
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -14,6 +15,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
+import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material3.Button
 import androidx.compose.material3.DatePicker
 import androidx.compose.material3.DatePickerDialog
@@ -26,6 +28,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.OutlinedTextFieldDefaults
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Switch
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.rememberDatePickerState
@@ -66,6 +69,7 @@ import org.koin.core.annotation.KoinExperimentalAPI
 @Composable
 fun AddVaccineNoteScreen(
     petId: String,
+    petName: String = "",
     vaccineNoteViewModel: VaccineNoteViewModel = koinViewModel()
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -97,6 +101,7 @@ fun AddVaccineNoteScreen(
             is AddVaccineNoteUiState.VaccinesFetchedSuccessfully -> {
                 AddNewVaccineNoteComposable(
                     petId = petId,
+                    petName = petName,
                     vaccineNoteViewModel = vaccineNoteViewModel,
                     coroutineScope = coroutineScope,
                     vaccines = uiState.vaccineList
@@ -110,6 +115,7 @@ fun AddVaccineNoteScreen(
 @Composable
 internal fun AddNewVaccineNoteComposable(
     petId: String,
+    petName: String,
     vaccineNoteViewModel: VaccineNoteViewModel,
     coroutineScope: CoroutineScope,
     vaccines: List<Vaccine>
@@ -122,6 +128,45 @@ internal fun AddNewVaccineNoteComposable(
     var selectedVaccine: Vaccine? by remember { mutableStateOf(null) }
     var showDatePicker by remember { mutableStateOf(false) }
     val datePickerState = rememberDatePickerState()
+
+    // Reminder state
+    var reminderEnabled by remember { mutableStateOf(false) }
+    var reminderDateMillis by remember { mutableStateOf<Long?>(null) }
+    var reminderDateDisplay by remember { mutableStateOf("") }
+    var showReminderDatePicker by remember { mutableStateOf(false) }
+    val reminderDatePickerState = rememberDatePickerState()
+
+    // Reminder Date Picker Dialog
+    if (showReminderDatePicker) {
+        DatePickerDialog(
+            onDismissRequest = { showReminderDatePicker = false },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        reminderDatePickerState.selectedDateMillis?.let { millis ->
+                            reminderDateMillis = millis
+                            val instant = Instant.fromEpochMilliseconds(millis)
+                            val localDate =
+                                instant.toLocalDateTime(TimeZone.currentSystemDefault()).date
+                            val month = localDate.monthNumber.toString().padStart(2, '0')
+                            val day = localDate.dayOfMonth.toString().padStart(2, '0')
+                            reminderDateDisplay = "${localDate.year}-$month-$day"
+                        }
+                        showReminderDatePicker = false
+                    }
+                ) {
+                    Text("OK")
+                }
+            },
+            dismissButton = {
+                TextButton(onClick = { showReminderDatePicker = false }) {
+                    Text("Cancel")
+                }
+            }
+        ) {
+            DatePicker(state = reminderDatePickerState)
+        }
+    }
 
     // Date Picker Dialog
     if (showDatePicker) {
@@ -246,6 +291,60 @@ internal fun AddNewVaccineNoteComposable(
 
         Spacer(modifier = Modifier.height(16.dp))
 
+        // Vaccine Reminder Toggle
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = "Set Vaccine Reminder",
+                style = MaterialTheme.typography.bodyLarge,
+                modifier = Modifier.weight(1f)
+            )
+            Switch(
+                checked = reminderEnabled,
+                onCheckedChange = {
+                    reminderEnabled = it
+                    if (!it) {
+                        reminderDateMillis = null
+                        reminderDateDisplay = ""
+                    }
+                }
+            )
+        }
+
+        if (reminderEnabled) {
+            Spacer(modifier = Modifier.height(8.dp))
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { showReminderDatePicker = true }
+            ) {
+                OutlinedTextField(
+                    value = reminderDateDisplay,
+                    onValueChange = {},
+                    label = { Text("Reminder Date") },
+                    readOnly = true,
+                    enabled = false,
+                    trailingIcon = {
+                        Icon(
+                            imageVector = Icons.Default.Notifications,
+                            contentDescription = "Select reminder date"
+                        )
+                    },
+                    modifier = Modifier.fillMaxWidth(),
+                    colors = OutlinedTextFieldDefaults.colors(
+                        disabledTextColor = MaterialTheme.colorScheme.onSurface,
+                        disabledBorderColor = MaterialTheme.colorScheme.outline,
+                        disabledLabelColor = MaterialTheme.colorScheme.onSurfaceVariant,
+                        disabledTrailingIconColor = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                )
+            }
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
         Button(
             shape = RoundedCornerShape(4.dp),
             onClick = {
@@ -258,7 +357,9 @@ internal fun AddNewVaccineNoteComposable(
                                 ?: return@launch, // Ensure vaccine is selected
                             note = note,
                             timestamp = dateTimeStamp,
-                            doctorName = doctorName
+                            doctorName = doctorName,
+                            reminderTimestamp = if (reminderEnabled) reminderDateMillis else null,
+                            petName = petName
                         )
                     )
                 }
