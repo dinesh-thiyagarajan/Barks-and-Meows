@@ -2,7 +2,6 @@ package splash
 
 import androidx.lifecycle.ViewModel
 import com.app.auth.useCases.IsLoggedInUseCase
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 
@@ -15,8 +14,6 @@ class SplashViewModel(private val isLoggedInUseCase: IsLoggedInUseCase) : ViewMo
 
     suspend fun isLoggedIn() {
         isLoggedInUseCase.invoke().collect { isLoggedIn ->
-            // adding a delay of 2 seconds to display the splash screen
-            delay(2000)
             if (isLoggedIn) {
                 _splashUiState.value = SplashUiState.LoggedIn
             } else {
