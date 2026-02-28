@@ -3,20 +3,27 @@ package pets.screens
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.outlined.DeleteOutline
+import androidx.compose.material.icons.outlined.EditNote
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.DropdownMenuItem
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.MenuDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -160,31 +167,50 @@ fun PetDetailScreen(
                     }
                     DropdownMenu(
                         expanded = showMenu,
-                        onDismissRequest = { showMenu = false }
+                        onDismissRequest = { showMenu = false },
+                        shape = RoundedCornerShape(16.dp)
                     ) {
                         DropdownMenuItem(
-                            text = { Text(stringResource(Res.string.edit)) },
+                            text = {
+                                Text(
+                                    text = stringResource(Res.string.edit),
+                                    style = MaterialTheme.typography.bodyLarge
+                                )
+                            },
                             onClick = {
                                 showMenu = false
                                 NavRouter.navigate("${AppRouteActions.EditPetScreen.route}$petId")
                             },
                             leadingIcon = {
                                 Icon(
-                                    imageVector = Icons.Default.Edit,
-                                    contentDescription = null
+                                    imageVector = Icons.Outlined.EditNote,
+                                    contentDescription = null,
+                                    modifier = Modifier.size(22.dp),
+                                    tint = MaterialTheme.colorScheme.onSurface
                                 )
                             }
                         )
+                        HorizontalDivider(
+                            modifier = Modifier.padding(horizontal = 12.dp),
+                            color = MaterialTheme.colorScheme.outlineVariant.copy(alpha = 0.4f)
+                        )
                         DropdownMenuItem(
-                            text = { Text(stringResource(Res.string.delete)) },
+                            text = {
+                                Text(
+                                    text = stringResource(Res.string.delete),
+                                    style = MaterialTheme.typography.bodyLarge,
+                                    color = MaterialTheme.colorScheme.error
+                                )
+                            },
                             onClick = {
                                 showMenu = false
                                 showDeletePetDialog = true
                             },
                             leadingIcon = {
                                 Icon(
-                                    imageVector = Icons.Default.Delete,
+                                    imageVector = Icons.Outlined.DeleteOutline,
                                     contentDescription = null,
+                                    modifier = Modifier.size(22.dp),
                                     tint = MaterialTheme.colorScheme.error
                                 )
                             }
