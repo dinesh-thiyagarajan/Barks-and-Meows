@@ -1,7 +1,8 @@
 package pets.screens
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -93,6 +94,13 @@ fun PetDetailScreen(
 
     val petDetailsUiState = petDetailsViewModel.petDetailsUiState.collectAsState()
     val getVaccineNotesUiState = vaccineNoteViewModel.getVaccineNoteUiState.collectAsState()
+
+    // String resources (resolved once for reuse in items)
+    val doctorLabel = stringResource(Res.string.doctor_prefix)
+    val dateLabel = stringResource(Res.string.date_prefix)
+    val notesLabel = stringResource(Res.string.notes_label)
+    val notAvailableText = stringResource(Res.string.not_available)
+    val deleteDescription = stringResource(Res.string.delete_vaccine_note_description)
 
     // Delete Pet Confirmation Dialog
     if (showDeletePetDialog) {
@@ -186,83 +194,117 @@ fun PetDetailScreen(
             )
         }
     ) { paddingValues ->
-        Column(
-            modifier = Modifier.padding(paddingValues).fillMaxSize()
-        ) {
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp)
-            ) {
-                when (val petResponse = petDetailsUiState.value) {
-                    is GetPetDetailsUiState.Error -> {
-                        ErrorComposable(errorMessage = petResponse.errorMessage)
-                    }
-
-                    GetPetDetailsUiState.Loading -> {
-                        LoadingComposable()
-                    }
-
-                    is GetPetDetailsUiState.Success -> {
-                        val petIcon = getPetIcon(petResponse.pet.petCategory.category)
-                        PetDetailsComposable(
-                            pet = petResponse.pet,
-                            petIcon = petIcon,
-                            onAddVaccineNoteClicked = { petId, petName ->
-                                NavRouter.navigate("${AppRouteActions.AddVaccineNoteScreen.route}$petId/$petName")
-                            }
-                        )
-                    }
+        when (val petResponse = petDetailsUiState.value) {
+            is GetPetDetailsUiState.Error -> {
+                Box(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .fillMaxSize()
+                        .padding(16.dp)
+                ) {
+                    ErrorComposable(errorMessage = petResponse.errorMessage)
                 }
             }
 
-            Box(
-                modifier = Modifier
-                    .weight(1f)
-                    .fillMaxWidth()
-                    .padding(horizontal = 16.dp, vertical = 8.dp)
-            ) {
-                when (val vaccineNotesUiState = getVaccineNotesUiState.value) {
-                    is GetVaccineNotesUiState.Error -> {
-                        ErrorComposable(errorMessage = vaccineNotesUiState.errorMessage)
+            GetPetDetailsUiState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .fillMaxSize()
+                ) {
+                    LoadingComposable()
+                }
+            }
+
+            is GetPetDetailsUiState.Success -> {
+                val petIcon = getPetIcon(petResponse.pet.petCategory.category)
+
+                LazyColumn(
+                    modifier = Modifier
+                        .padding(paddingValues)
+                        .fillMaxSize(),
+                    contentPadding = PaddingValues(bottom = 24.dp)
+                ) {
+                    // Pet profile hero section
+                    item {
+                        PetDetailsComposable(
+                            pet = petResponse.pet,
+                            petIcon = petIcon,
+                            onAddVaccineNoteClicked = { id, petName ->
+                                NavRouter.navigate("${AppRouteActions.AddVaccineNoteScreen.route}$id/$petName")
+                            }
+                        )
                     }
 
-                    GetVaccineNotesUiState.Loading -> {
-                        LoadingComposable()
-                    }
+                    // Vaccine notes section
+                    when (val vaccineNotesUiState = getVaccineNotesUiState.value) {
+                        is GetVaccineNotesUiState.Error -> {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(horizontal = 16.dp)
+                                ) {
+                                    ErrorComposable(errorMessage = vaccineNotesUiState.errorMessage)
+                                }
+                            }
+                        }
 
-                    is GetVaccineNotesUiState.Success -> {
-                        if (vaccineNotesUiState.vaccineNotesList.isEmpty()) {
-                            EmptyVaccineNotesComposable(
-                                title = stringResource(Res.string.no_vaccine_notes),
-                                description = stringResource(Res.string.no_vaccine_notes_description)
-                            )
-                        } else {
-                            LazyColumn(
-                                modifier = Modifier.fillMaxWidth().padding(horizontal = 10.dp)
-                            ) {
+                        GetVaccineNotesUiState.Loading -> {
+                            item {
+                                Box(
+                                    modifier = Modifier
+                                        .fillMaxWidth()
+                                        .padding(16.dp)
+                                ) {
+                                    LoadingComposable()
+                                }
+                            }
+                        }
+
+                        is GetVaccineNotesUiState.Success -> {
+                            if (vaccineNotesUiState.vaccineNotesList.isEmpty()) {
+                                item {
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 20.dp)
+                                    ) {
+                                        EmptyVaccineNotesComposable(
+                                            title = stringResource(Res.string.no_vaccine_notes),
+                                            description = stringResource(Res.string.no_vaccine_notes_description)
+                                        )
+                                    }
+                                }
+                            } else {
                                 items(vaccineNotesUiState.vaccineNotesList) { vaccineNote ->
-                                    VaccineNoteCardComposable(
-                                        vaccineName = vaccineNote.vaccine.vaccineName,
-                                        doctorName = vaccineNote.doctorName,
-                                        date = vaccineNote.timestamp,
-                                        notes = vaccineNote.note,
-                                        doctorLabel = stringResource(Res.string.doctor_prefix),
-                                        dateLabel = stringResource(Res.string.date_prefix),
-                                        notesLabel = stringResource(Res.string.notes_label),
-                                        notAvailableText = stringResource(Res.string.not_available),
-                                        deleteDescription = stringResource(Res.string.delete_vaccine_note_description),
-                                        reminderDate = vaccineNote.reminderTimestamp?.let { millis ->
-                                            val instant = Instant.fromEpochMilliseconds(millis)
-                                            val localDate = instant.toLocalDateTime(TimeZone.currentSystemDefault()).date
-                                            val month = localDate.monthNumber.toString().padStart(2, '0')
-                                            val day = localDate.dayOfMonth.toString().padStart(2, '0')
-                                            "${localDate.year}-$month-$day"
-                                        },
-                                        onDeleteClick = {
-                                            vaccineNoteToDelete = vaccineNote.id
-                                        }
-                                    )
+                                    Box(
+                                        modifier = Modifier
+                                            .fillMaxWidth()
+                                            .padding(horizontal = 20.dp)
+                                    ) {
+                                        VaccineNoteCardComposable(
+                                            vaccineName = vaccineNote.vaccine.vaccineName,
+                                            doctorName = vaccineNote.doctorName,
+                                            date = vaccineNote.timestamp,
+                                            notes = vaccineNote.note,
+                                            doctorLabel = doctorLabel,
+                                            dateLabel = dateLabel,
+                                            notesLabel = notesLabel,
+                                            notAvailableText = notAvailableText,
+                                            deleteDescription = deleteDescription,
+                                            reminderDate = vaccineNote.reminderTimestamp?.let { millis ->
+                                                val instant = Instant.fromEpochMilliseconds(millis)
+                                                val localDate = instant.toLocalDateTime(TimeZone.currentSystemDefault()).date
+                                                val month = localDate.monthNumber.toString().padStart(2, '0')
+                                                val day = localDate.dayOfMonth.toString().padStart(2, '0')
+                                                "${localDate.year}-$month-$day"
+                                            },
+                                            onDeleteClick = {
+                                                vaccineNoteToDelete = vaccineNote.id
+                                            }
+                                        )
+                                    }
                                 }
                             }
                         }
