@@ -74,7 +74,7 @@ class PetDataSource(
 
     fun getPetCategories() = flow {
         val petCategories = listOf(
-            PetCategory(1, "Dog", drawableResource = Res.drawable.ic_dog),
+            PetCategory(1, "Dog", drawableResource = Res.drawable.ic_dog, selected = true),
             PetCategory(2, "Cat", drawableResource = Res.drawable.ic_cat)
         )
         emit(petCategories)
