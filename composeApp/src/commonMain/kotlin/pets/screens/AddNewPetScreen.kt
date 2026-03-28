@@ -158,7 +158,12 @@ fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
 
                     PetInputTextFieldComposable(
                         textFieldValue = petAge,
-                        onValueChange = { petAge = it },
+                        onValueChange = { newValue ->
+                            val parsed = newValue.toIntOrNull()
+                            if (newValue.isEmpty() || (parsed != null && parsed in 0..100)) {
+                                petAge = newValue
+                            }
+                        },
                         label = { Text(stringResource(Res.string.pet_age)) },
                         keyboardOptions = KeyboardOptions(
                             keyboardType = KeyboardType.Number,

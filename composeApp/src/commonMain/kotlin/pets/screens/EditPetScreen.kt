@@ -104,10 +104,12 @@ fun EditPetScreen(
                 petViewModel.resetUpdatePetUiState()
                 NavRouter.popBackStack()
             }
+
             is UpdatePetUiState.Error -> {
                 snackbarHostState.showSnackbar(state.message)
                 petViewModel.resetUpdatePetUiState()
             }
+
             else -> {}
         }
     }
@@ -280,7 +282,12 @@ fun EditPetScreen(
 
                                 OutlinedTextField(
                                     value = petAge,
-                                    onValueChange = { petAge = it },
+                                    onValueChange = { newValue ->
+                                        val parsed = newValue.toIntOrNull()
+                                        if (newValue.isEmpty() || (parsed != null && parsed in 0..100)) {
+                                            petAge = newValue
+                                        }
+                                    },
                                     label = { Text(stringResource(Res.string.pet_age)) },
                                     singleLine = true,
                                     leadingIcon = {
