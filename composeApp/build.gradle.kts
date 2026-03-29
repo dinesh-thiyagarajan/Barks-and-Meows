@@ -7,7 +7,8 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.jetbrainsCompose)
     alias(libs.plugins.compose.compiler)
-    id("com.google.gms.google-services")
+    alias(libs.plugins.google.services)
+    alias(libs.plugins.firebase.crashlytics)
 }
 
 kotlin {
@@ -34,6 +35,9 @@ kotlin {
         androidMain.dependencies {
             implementation(libs.ui.tooling.preview)
             implementation(libs.androidx.activity.compose)
+            implementation(project.dependencies.platform("com.google.firebase:firebase-bom:33.x.x"))
+            implementation(libs.firebase.crashlytics)
+            implementation(libs.firebase.analytics)
         }
         commonMain.dependencies {
             implementation(libs.runtime)
