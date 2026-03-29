@@ -1,20 +1,28 @@
 package pets.screens
 
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Check
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -25,205 +33,148 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.ImeAction
-import androidx.compose.ui.text.input.KeyboardType
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.add_pet_subtitle
-import barksandmeows.composeapp.generated.resources.add_pet_title
-import barksandmeows.composeapp.generated.resources.error_title
-import barksandmeows.composeapp.generated.resources.go_back
-import barksandmeows.composeapp.generated.resources.pet_age
-import barksandmeows.composeapp.generated.resources.pet_details
-import barksandmeows.composeapp.generated.resources.pet_name
-import barksandmeows.composeapp.generated.resources.pet_type
 import barksandmeows.composeapp.generated.resources.submit
 import com.app.dataModels.Pet
-import com.app.uicomponents.composables.buttons.PrimaryActionButtonComposable
-import com.app.uicomponents.composables.chips.CategorySelectorChip
+import com.app.uicomponents.composables.error.ErrorComposable
 import com.app.uicomponents.composables.loading.LoadingComposable
-import com.app.uicomponents.composables.textFields.PetInputTextFieldComposable
 import com.app.viewModels.AddPetUiState
 import com.app.viewModels.PetViewModel
 import common.utils.generateUUID
 import kotlinx.coroutines.launch
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 import navigation.NavRouter
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
 
-@OptIn(KoinExperimentalAPI::class)
+@OptIn(KoinExperimentalAPI::class, ExperimentalMaterial3Api::class)
 @Composable
 fun AddNewPetScreen(petViewModel: PetViewModel = koinViewModel()) {
     val addPetUiState = petViewModel.addPetUiState.collectAsState()
     val coroutineScope = rememberCoroutineScope()
     val scrollState = rememberScrollState()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     LaunchedEffect(petViewModel) {
         petViewModel.getPetCategories()
     }
 
-    Scaffold {
-        Column(
-            modifier = Modifier.fillMaxSize()
-                .padding(24.dp)
-                .verticalScroll(scrollState)
-        ) {
-            when (addPetUiState.value) {
-                is AddPetUiState.Loading -> {
+    LaunchedEffect(addPetUiState.value) {
+        if (addPetUiState.value is AddPetUiState.Error) {
+            snackbarHostState.showSnackbar((addPetUiState.value as AddPetUiState.Error).message)
+        }
+    }
+
+    Scaffold(
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState) { data ->
+                Snackbar(
+                    snackbarData = data,
+                    containerColor = MaterialTheme.colorScheme.errorContainer,
+                    contentColor = MaterialTheme.colorScheme.onErrorContainer
+                )
+            }
+        }
+    ) { paddingValues ->
+        when (addPetUiState.value) {
+            is AddPetUiState.Loading -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                ) {
                     LoadingComposable()
                 }
+            }
 
-                is AddPetUiState.Success -> {
-                    NavRouter.popBackStack()
+            is AddPetUiState.Success -> {
+                NavRouter.popBackStack()
+            }
+
+            is AddPetUiState.NotStarted, is AddPetUiState.Error -> {
+                val petCategories = petViewModel.petCategories.collectAsState()
+                var petName by remember { mutableStateOf("") }
+                var selectedBirthYear by remember { mutableStateOf<Int?>(null) }
+
+                val currentYear = remember {
+                    Instant.fromEpochMilliseconds(kotlin.time.Clock.System.now().toEpochMilliseconds())
+                        .toLocalDateTime(TimeZone.currentSystemDefault()).year
                 }
 
-                is AddPetUiState.NotStarted -> {
-                    val petCategories = petViewModel.petCategories.collectAsState()
-                    var petName by remember { mutableStateOf("") }
-                    var petAge by remember { mutableStateOf("0") }
-
-                    // Header Section
-                    Text(
-                        text = stringResource(Res.string.add_pet_title),
-                        style = MaterialTheme.typography.headlineMedium,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        modifier = Modifier.padding(bottom = 8.dp)
-                    )
-
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                        .verticalScroll(scrollState)
+                ) {
                     Text(
                         text = stringResource(Res.string.add_pet_subtitle),
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(bottom = 24.dp)
+                        modifier = Modifier.padding(
+                            start = 20.dp,
+                            end = 20.dp,
+                            bottom = 20.dp
+                        )
                     )
 
-                    // Category Section
-                    Card(
-                        colors = CardDefaults.cardColors(
-                            containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.3f)
-                        ),
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(modifier = Modifier.padding(16.dp)) {
-                            Text(
-                                text = stringResource(Res.string.pet_type),
-                                style = MaterialTheme.typography.titleSmall,
-                                color = MaterialTheme.colorScheme.onSurfaceVariant,
-                                modifier = Modifier.padding(bottom = 12.dp)
-                            )
-
-                            LazyRow(
-                                horizontalArrangement = Arrangement.spacedBy(12.dp)
-                            ) {
-                                items(petCategories.value.size) { index ->
-                                    CategorySelectorChip(
-                                        label = petCategories.value[index].category,
-                                        categoryId = petCategories.value[index].id,
-                                        selected = petCategories.value[index].selected,
-                                        drawableResource = petCategories.value[index].drawableResource,
-                                        onChipSelected = {
-                                            coroutineScope.launch {
-                                                petViewModel.updateSelectedCategory(it)
-                                            }
-                                        }
-                                    )
-                                }
-                            }
+                    PetFormContent(
+                        petCategories = petCategories.value,
+                        petName = petName,
+                        onPetNameChange = { petName = it },
+                        selectedBirthYear = selectedBirthYear,
+                        onBirthYearSelected = { selectedBirthYear = it },
+                        onCategorySelected = { id ->
+                            coroutineScope.launch { petViewModel.updateSelectedCategory(id) }
                         }
-                    }
-
-                    Spacer(modifier = Modifier.height(24.dp))
-
-                    // Pet Details Section
-                    Text(
-                        text = stringResource(Res.string.pet_details),
-                        style = MaterialTheme.typography.titleSmall,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant,
-                        modifier = Modifier.padding(bottom = 12.dp)
-                    )
-
-                    PetInputTextFieldComposable(
-                        textFieldValue = petName,
-                        onValueChange = { petName = it },
-                        label = { Text(stringResource(Res.string.pet_name)) },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Text,
-                            imeAction = ImeAction.Next
-                        ),
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-
-                    Spacer(modifier = Modifier.height(16.dp))
-
-                    PetInputTextFieldComposable(
-                        textFieldValue = petAge,
-                        onValueChange = { newValue ->
-                            val parsed = newValue.toIntOrNull()
-                            if (newValue.isEmpty() || (parsed != null && parsed in 0..100)) {
-                                petAge = newValue
-                            }
-                        },
-                        label = { Text(stringResource(Res.string.pet_age)) },
-                        keyboardOptions = KeyboardOptions(
-                            keyboardType = KeyboardType.Number,
-                            imeAction = ImeAction.Done
-                        ),
-                        modifier = Modifier.fillMaxWidth(),
                     )
 
                     Spacer(modifier = Modifier.height(32.dp))
 
-                    PrimaryActionButtonComposable(
-                        coroutineScope = coroutineScope,
-                        onButtonClick = {
+                    Button(
+                        shape = RoundedCornerShape(14.dp),
+                        onClick = {
                             coroutineScope.launch {
                                 val pet = Pet(
                                     id = generateUUID(),
                                     name = petName,
-                                    age = petAge.toInt(),
+                                    age = selectedBirthYear?.let { currentYear - it } ?: 0,
                                     petCategory = petCategories.value.first { it.selected }
                                 )
                                 petViewModel.addNewPet(pet)
                             }
                         },
-                        modifier = Modifier.fillMaxWidth(),
-                        enabled = petName.isNotEmpty() && petCategories.value.any { it.selected },
-                        buttonLabel = {
-                            Text(stringResource(Res.string.submit))
-                        }
-                    )
-                }
-
-                is AddPetUiState.Error -> {
-                    Column(
-                        modifier = Modifier.fillMaxSize(),
-                        verticalArrangement = Arrangement.Center
+                        enabled = petName.isNotEmpty()
+                                && petCategories.value.any { it.selected }
+                                && selectedBirthYear != null,
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(horizontal = 20.dp)
+                            .height(52.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = MaterialTheme.colorScheme.primary
+                        )
                     ) {
-                        Text(
-                            text = stringResource(Res.string.error_title),
-                            style = MaterialTheme.typography.headlineSmall,
-                            color = MaterialTheme.colorScheme.error
+                        Icon(
+                            imageVector = Icons.Default.Check,
+                            contentDescription = null,
+                            modifier = Modifier.size(20.dp)
                         )
-                        Spacer(modifier = Modifier.height(16.dp))
+                        Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = (addPetUiState.value as AddPetUiState.Error).message,
-                            style = MaterialTheme.typography.bodyMedium,
-                            color = MaterialTheme.colorScheme.onSurface
-                        )
-                        Spacer(modifier = Modifier.height(24.dp))
-                        PrimaryActionButtonComposable(
-                            coroutineScope = coroutineScope,
-                            onButtonClick = {
-                                NavRouter.popBackStack()
-                            },
-                            modifier = Modifier.fillMaxWidth(),
-                            enabled = true,
-                            buttonLabel = {
-                                Text(stringResource(Res.string.go_back))
-                            }
+                            text = stringResource(Res.string.submit),
+                            style = MaterialTheme.typography.titleMedium,
+                            fontWeight = FontWeight.SemiBold
                         )
                     }
+
+                    Spacer(modifier = Modifier.height(32.dp))
                 }
             }
         }

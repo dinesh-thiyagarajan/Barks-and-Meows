@@ -45,6 +45,7 @@
     <string name="add_pet_description">Add pet</string>
 
     <!-- Add New Pet Screen -->
+    <string name="pet_birth_year">Birth Year</string>
     <string name="submit">Submit</string>
     <string name="add_pet_title">Add Your Pet</string>
     <string name="add_pet_subtitle">Tell us about your furry friend</string>

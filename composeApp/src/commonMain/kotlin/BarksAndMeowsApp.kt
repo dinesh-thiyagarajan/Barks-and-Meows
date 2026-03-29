@@ -25,6 +25,8 @@ import androidx.navigation.navArgument
 import auth.ForgotPasswordScreen
 import auth.LoginScreen
 import barksandmeows.composeapp.generated.resources.Res
+import barksandmeows.composeapp.generated.resources.add_pet_title
+import barksandmeows.composeapp.generated.resources.edit_pet_title
 import barksandmeows.composeapp.generated.resources.error_pet_id_not_passed
 import barksandmeows.composeapp.generated.resources.error_reminder_id_not_passed
 import com.app.reminder.composables.FeedingReminderDetailScreen
@@ -70,9 +72,16 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
     BarksAndMeowsTheme {
         Scaffold(
             topBar = {
-                currentDestination?.route?.let {
-                    AnimatedVisibility(showTopAppBar(it.substringBefore("{"))) {
+                currentDestination?.route?.let { route ->
+                    val routeBase = route.substringBefore("{")
+                    AnimatedVisibility(showTopAppBar(routeBase)) {
+                        val titleKey = when {
+                            routeBase.startsWith(AppRouteActions.AddNewPetScreen.route) -> Res.string.add_pet_title
+                            routeBase.startsWith(AppRouteActions.EditPetScreen.route) -> Res.string.edit_pet_title
+                            else -> null
+                        }
                         BarksAndMeowsAppBar(
+                            titleKey = titleKey,
                             canNavigateBack = getNavController()?.previousBackStackEntry != null,
                             navigateUp = { getNavController()?.navigateUp() }
                         )
