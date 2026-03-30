@@ -31,6 +31,8 @@ kotlin {
     sourceSets {
         androidMain.dependencies {
             implementation(project.dependencies.platform(libs.android.firebase.bom))
+            implementation(libs.androidx.work.runtime)
+            implementation(libs.androidx.core)
         }
         commonMain.dependencies {
             implementation(libs.firebase.gitlive.firestore)

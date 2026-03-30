@@ -16,8 +16,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.core.content.ContextCompat
+import com.app.pet.worker.BirthdayReminderWorker
 import com.app.reminder.worker.FeedingReminderWorker
 import navigation.AppRouteActions
+import navigation.NavConstants
 import navigation.NavRouter
 
 class MainActivity : ComponentActivity() {
@@ -31,7 +33,7 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
-        createNotificationChannel()
+        createNotificationChannels()
         requestNotificationPermission()
         setContent {
             BarksAndMeowsApp()
@@ -45,34 +47,49 @@ class MainActivity : ComponentActivity() {
     }
 
     private fun handleNotificationIntent(intent: Intent?) {
-        val fromNotification = intent?.getBooleanExtra(FeedingReminderWorker.EXTRA_FROM_NOTIFICATION, false) ?: false
+        val fromBirthday = intent?.getBooleanExtra(BirthdayReminderWorker.EXTRA_FROM_BIRTHDAY, false) ?: false
+        val fromFeeding = intent?.getBooleanExtra(FeedingReminderWorker.EXTRA_FROM_NOTIFICATION, false) ?: false
 
-        if (fromNotification) {
-            // Navigate to reminder screen after a short delay to ensure NavRouter is set
-            window.decorView.postDelayed({
-                try {
-                    NavRouter.navigate(AppRouteActions.ReminderScreen.route)
-                } catch (ignored: Exception) {
-                    // Navigation may fail if NavRouter is not ready yet, ignore
-                }
-            }, 500)
+        when {
+            fromBirthday -> {
+                val petName = intent?.getStringExtra(BirthdayReminderWorker.EXTRA_PET_NAME) ?: ""
+                window.decorView.postDelayed({
+                    try {
+                        NavRouter.navigate("${AppRouteActions.HappyBirthdayScreen.route}$petName")
+                    } catch (ignored: Exception) {}
+                }, 500)
+            }
+            fromFeeding -> {
+                window.decorView.postDelayed({
+                    try {
+                        NavRouter.navigate(AppRouteActions.ReminderScreen.route)
+                    } catch (ignored: Exception) {}
+                }, 500)
+            }
         }
     }
 
-    private fun createNotificationChannel() {
+    private fun createNotificationChannels() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = "Feeding Reminders"
-            val descriptionText = "Notifications to remind you to feed your pets"
-            val importance = NotificationManager.IMPORTANCE_HIGH
-            val channel = NotificationChannel(
-                FeedingReminderWorker.CHANNEL_ID,
-                name,
-                importance
-            ).apply {
-                description = descriptionText
-            }
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            notificationManager.createNotificationChannel(channel)
+
+            NotificationChannel(
+                FeedingReminderWorker.CHANNEL_ID,
+                "Feeding Reminders",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Notifications to remind you to feed your pets"
+                notificationManager.createNotificationChannel(this)
+            }
+
+            NotificationChannel(
+                BirthdayReminderWorker.CHANNEL_ID,
+                "Birthday Reminders",
+                NotificationManager.IMPORTANCE_HIGH
+            ).apply {
+                description = "Birthday notifications for your pets"
+                notificationManager.createNotificationChannel(this)
+            }
         }
     }
 

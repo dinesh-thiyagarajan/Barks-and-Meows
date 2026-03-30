@@ -51,8 +51,21 @@ import com.app.reminder.composables.ReminderScreen
 import com.app.reminder.dataModels.FeedingReminder
 import com.app.reminder.viewModels.PetsUiState
 import com.app.reminder.viewModels.ReminderViewModel
+import barksandmeows.composeapp.generated.resources.Res
+import barksandmeows.composeapp.generated.resources.cancel
+import barksandmeows.composeapp.generated.resources.error_loading_vaccine_reminders
+import barksandmeows.composeapp.generated.resources.no_vaccine_reminders
+import barksandmeows.composeapp.generated.resources.no_vaccine_reminders_description
+import barksandmeows.composeapp.generated.resources.remove
+import barksandmeows.composeapp.generated.resources.remove_reminder
+import barksandmeows.composeapp.generated.resources.remove_vaccine_reminder_message
+import barksandmeows.composeapp.generated.resources.reminders_title
+import barksandmeows.composeapp.generated.resources.tab_feeding
+import barksandmeows.composeapp.generated.resources.tab_vaccine
+import barksandmeows.composeapp.generated.resources.unknown_pet
 import com.app.uicomponents.composables.loading.LoadingComposable
 import com.app.vaccine.dataModels.VaccineNote
+import org.jetbrains.compose.resources.stringResource
 import com.app.vaccine.viewModels.VaccineNoteViewModel
 import com.app.vaccine.viewModels.VaccineRemindersUiState
 import kotlinx.coroutines.launch
@@ -75,8 +88,8 @@ fun CombinedReminderScreen(
     isNotificationPermissionGranted: () -> Boolean = { true }
 ) {
     val tabs = listOf(
-        TabItem("Feeding", Icons.Filled.Restaurant, Icons.Outlined.Restaurant),
-        TabItem("Vaccine", Icons.Filled.MedicalServices, Icons.Outlined.MedicalServices)
+        TabItem(stringResource(Res.string.tab_feeding), Icons.Filled.Restaurant, Icons.Outlined.Restaurant),
+        TabItem(stringResource(Res.string.tab_vaccine), Icons.Filled.MedicalServices, Icons.Outlined.MedicalServices)
     )
     val pagerState = rememberPagerState(pageCount = { tabs.size })
     val coroutineScope = rememberCoroutineScope()
@@ -100,7 +113,7 @@ fun CombinedReminderScreen(
     Column(modifier = Modifier.fillMaxSize()) {
         // Header
         Text(
-            text = "Reminders",
+            text = stringResource(Res.string.reminders_title),
             style = MaterialTheme.typography.headlineLarge.copy(
                 fontWeight = FontWeight.Bold
             ),
@@ -257,7 +270,7 @@ private fun VaccineRemindersTab(
                     ) {
                         items(state.vaccineNotesList) { vaccineNote ->
                             VaccineReminderCardComposable(
-                                petName = vaccineNote.petName ?: "Unknown Pet",
+                                petName = vaccineNote.petName ?: stringResource(Res.string.unknown_pet),
                                 vaccineName = vaccineNote.vaccine.vaccineName,
                                 reminderTimestamp = vaccineNote.reminderTimestamp ?: 0L,
                                 doctorName = vaccineNote.doctorName,
@@ -274,7 +287,7 @@ private fun VaccineRemindersTab(
 
             is VaccineRemindersUiState.Error -> {
                 Text(
-                    text = "Failed to load vaccine reminders",
+                    text = stringResource(Res.string.error_loading_vaccine_reminders),
                     color = MaterialTheme.colorScheme.error
                 )
             }
@@ -287,11 +300,13 @@ private fun VaccineRemindersTab(
                 showDeleteDialog = false
                 noteToRemoveReminder = null
             },
-            title = { Text("Remove Reminder") },
+            title = { Text(stringResource(Res.string.remove_reminder)) },
             text = {
                 Text(
-                    "Remove the vaccine reminder for ${noteToRemoveReminder?.vaccine?.vaccineName}? " +
-                            "The vaccine record will be kept."
+                    stringResource(
+                        Res.string.remove_vaccine_reminder_message,
+                        noteToRemoveReminder?.vaccine?.vaccineName ?: ""
+                    )
                 )
             },
             confirmButton = {
@@ -304,7 +319,7 @@ private fun VaccineRemindersTab(
                         noteToRemoveReminder = null
                     }
                 ) {
-                    Text("Remove", color = MaterialTheme.colorScheme.error)
+                    Text(stringResource(Res.string.remove), color = MaterialTheme.colorScheme.error)
                 }
             },
             dismissButton = {
@@ -314,7 +329,7 @@ private fun VaccineRemindersTab(
                         noteToRemoveReminder = null
                     }
                 ) {
-                    Text("Cancel")
+                    Text(stringResource(Res.string.cancel))
                 }
             }
         )
@@ -336,13 +351,13 @@ private fun NoVaccineRemindersComposable() {
         )
         Spacer(modifier = Modifier.height(12.dp))
         Text(
-            text = "No vaccine reminders yet",
+            text = stringResource(Res.string.no_vaccine_reminders),
             style = MaterialTheme.typography.titleMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant
         )
         Spacer(modifier = Modifier.height(4.dp))
         Text(
-            text = "Set a reminder when adding a vaccine note",
+            text = stringResource(Res.string.no_vaccine_reminders_description),
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.onSurfaceVariant.copy(alpha = 0.7f)
         )

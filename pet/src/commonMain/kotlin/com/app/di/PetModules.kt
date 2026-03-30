@@ -9,6 +9,7 @@ import com.app.useCases.GetPetCategoriesUseCase
 import com.app.useCases.GetPetDetailsUseCase
 import com.app.useCases.GetPetsUseCase
 import com.app.useCases.UpdatePetUseCase
+import com.app.pet.scheduler.BirthdayReminderSchedulerProvider
 import com.app.viewModels.PetDetailsViewModel
 import com.app.viewModels.PetViewModel
 import dev.gitlive.firebase.Firebase
@@ -40,7 +41,8 @@ val petModule = module {
             addPetUseCase = get(),
             updatePetUseCase = get(),
             getPetsUseCase = get(),
-            getPetCategoriesUseCase = get()
+            getPetCategoriesUseCase = get(),
+            birthdaySchedulerProvider = get()
         )
     }
     viewModel { PetDetailsViewModel(getPetDetailsUseCase = get(), deletePetUseCase = get()) }

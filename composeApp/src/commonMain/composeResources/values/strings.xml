@@ -40,6 +40,36 @@
     <string name="date_label">Date</string>
     <string name="select_date_description">Select date</string>
     <string name="notes">Notes</string>
+    <string name="add_vaccine_record">Add Vaccine Record</string>
+    <string name="vaccine_details">Vaccine Details</string>
+    <string name="vaccination_date">Vaccination Date</string>
+    <string name="doctor_and_notes">Doctor &amp; Notes</string>
+    <string name="notes_optional">Notes (optional)</string>
+    <string name="reminder">Reminder</string>
+    <string name="set_vaccine_reminder">Set Vaccine Reminder</string>
+    <string name="vaccine_reminder_description">Get notified on a specific date</string>
+    <string name="reminder_date">Reminder Date</string>
+    <string name="select_reminder_date_description">Select reminder date</string>
+    <string name="select_birth_year_description">Select birth year</string>
+
+    <!-- Reminders Screen -->
+    <string name="reminders_title">Reminders</string>
+    <string name="tab_feeding">Feeding</string>
+    <string name="tab_vaccine">Vaccine</string>
+    <string name="no_vaccine_reminders">No vaccine reminders yet</string>
+    <string name="no_vaccine_reminders_description">Set a reminder when adding a vaccine note</string>
+    <string name="error_loading_vaccine_reminders">Failed to load vaccine reminders</string>
+    <string name="remove_reminder">Remove Reminder</string>
+    <string name="remove">Remove</string>
+    <string name="remove_reminder_description">Remove reminder</string>
+    <string name="remove_vaccine_reminder_message">Remove the vaccine reminder for %s? The vaccine record will be kept.</string>
+    <string name="reminder_prefix">Reminder: </string>
+    <string name="vaccinated_prefix">Vaccinated: </string>
+    <string name="unknown">Unknown</string>
+    <string name="unknown_pet">Unknown Pet</string>
+
+    <!-- Common -->
+    <string name="back">Back</string>
 
     <!-- Home Screen -->
     <string name="add_pet_description">Add pet</string>
@@ -62,6 +92,20 @@
     <string name="edit_pet_subtitle">Update your pet\'s information</string>
     <string name="updating">Updating...</string>
     <string name="error_loading_pet">Error loading pet details</string>
+
+    <!-- Quick Reminder Presets -->
+    <string name="quick_reminder_label">Quick set:</string>
+    <string name="one_month">1 Month</string>
+    <string name="three_months">3 Months</string>
+    <string name="six_months">6 Months</string>
+    <string name="one_year">1 Year</string>
+
+    <!-- Happy Birthday Screen -->
+    <string name="happy_birthday_title">Happy Birthday!</string>
+    <string name="happy_birthday_message">Happy Birthday, %s!</string>
+    <string name="birthday_notification_title">Happy Birthday!</string>
+    <string name="pet_birth_date">Birth Date</string>
+    <string name="select_birth_date_description">Select birth date</string>
 
     <!-- Navigation -->
     <string name="home">Home</string>

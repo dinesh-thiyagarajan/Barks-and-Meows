@@ -45,6 +45,7 @@ import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.KoinApplication
 import pets.screens.AddNewPetScreen
 import pets.screens.EditPetScreen
+import pets.screens.HappyBirthdayScreen
 import pets.screens.PetDetailScreen
 import profile.ProfileScreen
 import reminder.ReminderScreenWithScheduling
@@ -251,6 +252,19 @@ private fun BarksAndMeowsApp(navController: NavHostController = rememberNavContr
                         reminderId = reminderId ?: defaultReminderId,
                         onNavigateBack = { NavRouter.popBackStack() }
                     )
+                }
+
+                composable(
+                    route = AppRouteActions.HappyBirthdayScreen.path(),
+                    arguments = AppRouteActions.HappyBirthdayScreen.navArguments.map {
+                        navArgument(it) {
+                            type = NavType.StringType
+                            defaultValue = ""
+                        }
+                    }
+                ) {
+                    val petNameArg = it.savedStateHandle.get<String>(NavConstants.PET_NAME) ?: ""
+                    HappyBirthdayScreen(petName = petNameArg)
                 }
             }
         }

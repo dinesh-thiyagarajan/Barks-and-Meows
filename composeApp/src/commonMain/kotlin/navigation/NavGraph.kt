@@ -16,6 +16,7 @@ enum class AppRouteActions(
     AddVaccineNoteScreen(route = "add-vaccine-note/", listOf(NavConstants.PET_ID, NavConstants.PET_NAME)),
     ReminderScreen(route = "reminders/"),
     FeedingReminderDetailScreen(route = "feeding-reminder-detail/", listOf(NavConstants.REMINDER_ID)),
+    HappyBirthdayScreen(route = "happy-birthday/", listOf(NavConstants.PET_NAME)),
 }
 
 fun AppRouteActions.path(): String {

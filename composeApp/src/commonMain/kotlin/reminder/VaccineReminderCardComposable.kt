@@ -23,9 +23,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import barksandmeows.composeapp.generated.resources.Res
+import barksandmeows.composeapp.generated.resources.doctor_prefix
+import barksandmeows.composeapp.generated.resources.remove_reminder_description
+import barksandmeows.composeapp.generated.resources.reminder_prefix
+import barksandmeows.composeapp.generated.resources.unknown
+import barksandmeows.composeapp.generated.resources.vaccinated_prefix
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
+import org.jetbrains.compose.resources.stringResource
 
 @Composable
 fun VaccineReminderCardComposable(
@@ -84,7 +91,7 @@ fun VaccineReminderCardComposable(
                     )
                     Spacer(modifier = Modifier.width(4.dp))
                     Text(
-                        text = "Reminder: $reminderDateFormatted",
+                        text = stringResource(Res.string.reminder_prefix) + reminderDateFormatted,
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.Medium
@@ -95,13 +102,12 @@ fun VaccineReminderCardComposable(
 
                 // Doctor Name
                 if (doctorName.isNotEmpty()) {
-                    InfoRow(label = "Doctor: ", value = doctorName)
+                    InfoRow(label = stringResource(Res.string.doctor_prefix), value = doctorName)
                     Spacer(modifier = Modifier.height(4.dp))
                 }
 
-                // Original vaccine date
                 if (vaccineDate.isNotEmpty()) {
-                    InfoRow(label = "Vaccinated: ", value = vaccineDate)
+                    InfoRow(label = stringResource(Res.string.vaccinated_prefix), value = vaccineDate)
                 }
             }
 
@@ -112,7 +118,7 @@ fun VaccineReminderCardComposable(
             ) {
                 Icon(
                     imageVector = Icons.Default.Delete,
-                    contentDescription = "Remove reminder",
+                    contentDescription = stringResource(Res.string.remove_reminder_description),
                     tint = MaterialTheme.colorScheme.error
                 )
             }
@@ -145,6 +151,6 @@ private fun formatTimestamp(timestamp: Long): String {
             .take(3)
         "$month ${localDateTime.dayOfMonth}, ${localDateTime.year}"
     } catch (_: Exception) {
-        "Unknown"
+        ""
     }
 }

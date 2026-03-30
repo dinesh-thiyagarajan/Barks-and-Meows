@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.app.dataModels.Pet
 import com.app.dataModels.PetCategory
+import com.app.pet.scheduler.BirthdayReminderSchedulerProvider
 import com.app.useCases.AddPetUseCase
 import com.app.useCases.GetPetCategoriesUseCase
 import com.app.useCases.GetPetsUseCase
@@ -19,7 +20,8 @@ class PetViewModel(
     private val addPetUseCase: AddPetUseCase,
     private val updatePetUseCase: UpdatePetUseCase,
     private val getPetsUseCase: GetPetsUseCase,
-    private val getPetCategoriesUseCase: GetPetCategoriesUseCase
+    private val getPetCategoriesUseCase: GetPetCategoriesUseCase,
+    private val birthdaySchedulerProvider: BirthdayReminderSchedulerProvider
 ) : ViewModel() {
 
     val getPetsUiState: StateFlow<GetPetsUiState> get() = _getPetsUiState
@@ -47,6 +49,9 @@ class PetViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 addPetUseCase.invoke(pet)
+                pet.birthDate?.let { date ->
+                    birthdaySchedulerProvider.scheduleBirthday(pet.id, pet.name, date)
+                }
                 _addPetUiState.value = AddPetUiState.Success
             } catch (e: Exception) {
                 _addPetUiState.value = AddPetUiState.Error(e.message ?: "Failed to add pet. Check your permissions.")
@@ -59,6 +64,9 @@ class PetViewModel(
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 updatePetUseCase.invoke(pet)
+                pet.birthDate?.let { date ->
+                    birthdaySchedulerProvider.scheduleBirthday(pet.id, pet.name, date)
+                }
                 _updatePetUiState.value = UpdatePetUiState.Success
             } catch (e: Exception) {
                 _updatePetUiState.value = UpdatePetUiState.Error(e.message ?: "Failed to update pet. Check your permissions.")

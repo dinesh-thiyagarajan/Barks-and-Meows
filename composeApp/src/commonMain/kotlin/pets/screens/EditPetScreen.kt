@@ -7,23 +7,16 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Check
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
+import com.app.uicomponents.composables.buttons.PrimaryFormButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -33,7 +26,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import barksandmeows.composeapp.generated.resources.Res
 import barksandmeows.composeapp.generated.resources.edit_pet_subtitle
@@ -49,7 +41,9 @@ import com.app.viewModels.PetViewModel
 import com.app.viewModels.UpdatePetUiState
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
+import kotlinx.datetime.atStartOfDayIn
 import kotlinx.datetime.toLocalDateTime
 import navigation.NavRouter
 import org.jetbrains.compose.resources.stringResource
@@ -124,8 +118,23 @@ fun EditPetScreen(
                     Instant.fromEpochMilliseconds(kotlin.time.Clock.System.now().toEpochMilliseconds())
                         .toLocalDateTime(TimeZone.currentSystemDefault()).year
                 }
-                var selectedBirthYear by remember(pet.age) {
-                    mutableStateOf<Int?>(currentYear - pet.age)
+
+                val initialBirthDateMillis = remember(pet.birthDate, pet.age) {
+                    pet.birthDate?.let { dateStr ->
+                        val parts = dateStr.split("-")
+                        if (parts.size == 3) {
+                            val year = parts[0].toIntOrNull() ?: (currentYear - pet.age)
+                            val month = parts[1].toIntOrNull() ?: 1
+                            val day = parts[2].toIntOrNull() ?: 1
+                            LocalDate(year, month, day).atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+                        } else {
+                            LocalDate(currentYear - pet.age, 1, 1).atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+                        }
+                    } ?: LocalDate(currentYear - pet.age, 1, 1).atStartOfDayIn(TimeZone.UTC).toEpochMilliseconds()
+                }
+
+                var selectedBirthDateMillis by remember(initialBirthDateMillis) {
+                    mutableStateOf<Long?>(initialBirthDateMillis)
                 }
 
                 LaunchedEffect(petCategories.value.size, hasInitializedCategory) {
@@ -165,8 +174,8 @@ fun EditPetScreen(
                             petCategories = petCategories.value,
                             petName = petName,
                             onPetNameChange = { petName = it },
-                            selectedBirthYear = selectedBirthYear,
-                            onBirthYearSelected = { selectedBirthYear = it },
+                            selectedBirthDateMillis = selectedBirthDateMillis,
+                            onBirthDateSelected = { selectedBirthDateMillis = it },
                             onCategorySelected = { id ->
                                 coroutineScope.launch { petViewModel.updateSelectedCategory(id) }
                             }
@@ -176,15 +185,28 @@ fun EditPetScreen(
 
                         val isLoading = updatePetUiState.value is UpdatePetUiState.Loading
 
-                        Button(
-                            shape = RoundedCornerShape(14.dp),
+                        PrimaryFormButton(
+                            text = if (isLoading) stringResource(Res.string.updating) else stringResource(Res.string.update),
                             onClick = {
                                 coroutineScope.launch {
+                                    val birthDate = selectedBirthDateMillis?.let { millis ->
+                                        val instant = Instant.fromEpochMilliseconds(millis)
+                                        val localDate = instant.toLocalDateTime(TimeZone.UTC).date
+                                        val month = localDate.monthNumber.toString().padStart(2, '0')
+                                        val day = localDate.dayOfMonth.toString().padStart(2, '0')
+                                        "${localDate.year}-$month-$day"
+                                    }
+                                    val age = selectedBirthDateMillis?.let { millis ->
+                                        val year = Instant.fromEpochMilliseconds(millis)
+                                            .toLocalDateTime(TimeZone.UTC).year
+                                        currentYear - year
+                                    } ?: pet.age
                                     val updatedPet = Pet(
                                         id = pet.id,
                                         name = petName,
-                                        age = selectedBirthYear?.let { currentYear - it } ?: pet.age,
-                                        petCategory = petCategories.value.first { it.selected }
+                                        age = age,
+                                        petCategory = petCategories.value.first { it.selected },
+                                        birthDate = birthDate
                                     )
                                     petViewModel.updatePet(updatedPet)
                                 }
@@ -192,31 +214,11 @@ fun EditPetScreen(
                             enabled = !isLoading
                                     && petName.isNotEmpty()
                                     && petCategories.value.any { it.selected }
-                                    && selectedBirthYear != null,
+                                    && selectedBirthDateMillis != null,
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 20.dp)
-                                .height(52.dp),
-                            colors = ButtonDefaults.buttonColors(
-                                containerColor = MaterialTheme.colorScheme.primary
-                            )
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Check,
-                                contentDescription = null,
-                                modifier = Modifier.size(20.dp)
-                            )
-                            Spacer(modifier = Modifier.width(8.dp))
-                            Text(
-                                text = if (isLoading) {
-                                    stringResource(Res.string.updating)
-                                } else {
-                                    stringResource(Res.string.update)
-                                },
-                                style = MaterialTheme.typography.titleMedium,
-                                fontWeight = FontWeight.SemiBold
-                            )
-                        }
+                        )
 
                         Spacer(modifier = Modifier.height(32.dp))
                     }
